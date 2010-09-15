@@ -38,6 +38,8 @@ public interface GanttView {
     public void onTaskMouseOver(Task task);
     public void onTaskMouseOut(Task task);
     public void onScroll(int x, int y);
+    public void onTaskExpand(Task task);
+    public void onTaskCollapse(Task task);
 
 	public void doTaskSelected(Task task);
 	public void doTaskDeselected(Task task);

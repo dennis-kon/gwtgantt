@@ -379,4 +379,14 @@ public class GanttWeekView implements GanttView {
 	public void sortTasks(List<Task> taskList) {
 		Collections.sort(taskList,TaskManager.TASK_ORDER_COMPARATOR);
 	}
+
+	@Override
+	public void onTaskExpand(Task task) {
+		//feature not available
+	}
+
+	@Override
+	public void onTaskCollapse(Task task) {
+		//feature not available
+	}
 }

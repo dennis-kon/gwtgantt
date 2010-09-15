@@ -19,6 +19,8 @@ package com.bradrydzewski.gwtgantt;
 
 import java.util.List;
 
+import com.bradrydzewski.gwtgantt.event.ItemExpandEvent;
+
 public interface HasTasks {
 
     public void addTask(Task task);
@@ -48,4 +50,8 @@ public interface HasTasks {
     public void fireTaskEnterEvent(Task task);
     
     public void fireTaskExitEvent(Task task);
+
+	public void fireTaskExpandEvent(Task task);
+
+	public void fireTaskCollapseEvent(Task task);
 }
