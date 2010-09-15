@@ -231,7 +231,7 @@ public class TaskGridDisplay extends Composite implements Display {
 	        mouseXCurrent = mouseXStart;
 	        // Start the timer and listen for changes
 	        DOM.setCapture(headerTable.getElement());//TODO: may want to set to header panel instead of table
-	        resizeTimer.schedule(10);//20
+	        resizeTimer.schedule(5);//20
 	      }
 	    }
 
@@ -270,6 +270,7 @@ public class TaskGridDisplay extends Composite implements Display {
 	        int currWidth = curCell.getClientWidth()-1;
 	        int newWidth = currWidth + (mouseXCurrent-mouseXLast);
 	        TaskGridDisplay.this.resizeColumn(curCellIndex, newWidth);
+	        mouseXLast = mouseXCurrent;
 	      }
 	    }
 	}
