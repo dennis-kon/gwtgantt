@@ -261,14 +261,12 @@ public class GanttChart extends Composite implements Project, HasLayout, HasZoom
 
 	@Override
 	public void fireTaskExpandEvent(Task task) {
-		view.doTaskExit(task);
 		ItemExpandEvent.fire(this, task);
 	}
 
 	@Override
 	public void fireTaskCollapseEvent(Task task) {
-		view.doTaskExit(task);
-		ItemExpandEvent.fire(this, task);
+		ItemCollapseEvent.fire(this, task);
 	}
 
 	@Override
