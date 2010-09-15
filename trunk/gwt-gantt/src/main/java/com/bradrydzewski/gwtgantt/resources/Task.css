@@ -1,0 +1,16 @@
+@external arrowLeft-blue, arrowRight-blue, arrowLeft-red, arrowRight-red, arrowLeft-green, arrowRight-green;
+@sprite .arrowLeft-blue  {gwt-image: "blueArrowImage"; position:absolute; bottom:-7px;left:-1px;width:7px;height:7px; }
+@sprite .arrowRight-blue {gwt-image: "blueArrowImage"; position:absolute; bottom:-7px;right:-1px;width:7px;height:7px; -webkit-transform: scaleX(-1); -moz-transform: scaleX(-1)}
+@sprite .arrowLeft-red  {gwt-image: "redArrowImage"; position:absolute; bottom:-7px;left:-1px;width:7px;height:7px; }
+@sprite .arrowRight-red {gwt-image: "redArrowImage"; position:absolute; bottom:-7px;right:-1px;width:7px;height:7px; -webkit-transform: scaleX(-1); -moz-transform: scaleX(-1)}
+@sprite .arrowLeft-green  {gwt-image: "greenArrowImage"; position:absolute; bottom:-7px;left:-1px;width:7px;height:7px; }
+@sprite .arrowRight-green {gwt-image: "greenArrowImage"; position:absolute; bottom:-7px;right:-1px;width:7px;height:7px; -webkit-transform: scaleX(-1); -moz-transform: scaleX(-1)}
+
+
+@external summary-default, summary-blue, summary-red, summary-green, summaryHovered, summarySelected;
+.summary-default,
+.summary-blue { border:1px solid #2952A3; background: #2952A3; border-radius: 3px 3px 0px 0px; -moz-border-radius: 3px 3px 0px 0px; -webkit-user-select: none; -moz-user-select: none; opacity:0.75; }
+.summary-red { border:1px solid #A32929; background: #A32929; border-radius: 3px 3px 0px 0px; -moz-border-radius: 3px 3px 0px 0px; -webkit-user-select: none; -moz-user-select: none; opacity:0.75; }
+.summary-green { border:1px solid #0D7813; background: #0D7813; border-radius:3px; -moz-border-radius:3px; -webkit-user-select: none; -moz-user-select: none; opacity:0.75; }
+.summarySelected { opacity:1; -webkit-box-shadow: #B8B8B8 3px 3px 3px; -moz-box-shadow: #B8B8B8 3px 3px 3px;}
+.summaryHovered { -webkit-box-shadow: #B8B8B8 -2px -2px 2px, #B8B8B8 3px 3px 3px; -moz-box-shadow: #B8B8B8 -2px -2px 2px, #B8B8B8 3px 3px 3px; }
