@@ -21,14 +21,20 @@ import java.util.Date;
 import java.util.List;
 
 import com.bradrydzewski.gwtgantt.event.HasItemClickHandlers;
+import com.bradrydzewski.gwtgantt.event.HasItemCollapseHandlers;
 import com.bradrydzewski.gwtgantt.event.HasItemDoubleClickHandlers;
+import com.bradrydzewski.gwtgantt.event.HasItemExpandHandlers;
 import com.bradrydzewski.gwtgantt.event.HasMouseEnterHandlers;
 import com.bradrydzewski.gwtgantt.event.HasMouseExitHandlers;
 import com.bradrydzewski.gwtgantt.event.HasScrollHandlers;
 import com.bradrydzewski.gwtgantt.event.ItemClickEvent;
 import com.bradrydzewski.gwtgantt.event.ItemClickHandler;
+import com.bradrydzewski.gwtgantt.event.ItemCollapseEvent;
+import com.bradrydzewski.gwtgantt.event.ItemCollapseHandler;
 import com.bradrydzewski.gwtgantt.event.ItemDoubleClickEvent;
 import com.bradrydzewski.gwtgantt.event.ItemDoubleClickHandler;
+import com.bradrydzewski.gwtgantt.event.ItemExpandEvent;
+import com.bradrydzewski.gwtgantt.event.ItemExpandHandler;
 import com.bradrydzewski.gwtgantt.event.MouseEnterEvent;
 import com.bradrydzewski.gwtgantt.event.MouseEnterHandler;
 import com.bradrydzewski.gwtgantt.event.MouseExitEvent;
@@ -47,14 +53,15 @@ import com.google.gwt.user.client.ui.FlowPanel;
  */
 public class GanttChart extends Composite implements Project, HasLayout, HasZoom,
 	HasItemClickHandlers<Task>, HasItemDoubleClickHandlers<Task>,
-	HasMouseEnterHandlers<Task>, HasMouseExitHandlers<Task>, HasScrollHandlers {
+	HasMouseEnterHandlers<Task>, HasMouseExitHandlers<Task>, HasScrollHandlers,
+	HasItemCollapseHandlers<Task>, HasItemExpandHandlers<Task> {
 
     private FlowPanel root = new FlowPanel();
     private Date start;
     private Date finish;
     private ZoomLevel zoom;
     private TaskManager tasks = GWT.create(TaskManager.class);
-    private GanttView view = GWT.create(GanttWeekView.class);
+    private GanttView view = null;//GWT.create(TaskGridView.class);//GWT.create(GanttWeekView.class);
     private boolean suspended = false;
     private boolean dirty = false;
 
@@ -63,17 +70,24 @@ public class GanttChart extends Composite implements Project, HasLayout, HasZoom
     }
 
     public GanttChart(Date start, Date finish) {
-        this(ZoomLevel.Default, start, finish);
+        this((GanttView) GWT.create(GanttWeekView.class), start, finish);
+    }
+    
+    public GanttChart(GanttView view) {
+    	this(view, null, null);
     }
 
-    public GanttChart(ZoomLevel zoom, Date start, Date finish) {
+    public GanttChart(GanttView view, Date start, Date finish) {
 
         //initialize the root widget
         initWidget(root);
 
-        this.zoom = zoom;
+        //make sure we aren't given a null view
+        assert(view!=null);
+
+        this.view = view;
         this.start = start;
-        this.zoom = zoom;
+        this.finish = finish;
 
         //load style sheet
         GanttResources.INSTANCE.taskStyle().ensureInjected();
@@ -107,6 +121,11 @@ public class GanttChart extends Composite implements Project, HasLayout, HasZoom
 
     public void refresh(boolean force) {
 
+    	//we automatically refresh once the widget is attached,
+    	//  so if the widget is not yet attached, exit
+    	if(!isAttached())
+    		return;
+    	
         if (suspended && force != true) {
             return;
         }
@@ -115,6 +134,7 @@ public class GanttChart extends Composite implements Project, HasLayout, HasZoom
             return;
         }
         
+        GWT.log("Refershing the GanttChart's view: "+view.getClass().getName());
         view.sortTasks(tasks.getTasks());
         view.refresh();
 
@@ -240,6 +260,18 @@ public class GanttChart extends Composite implements Project, HasLayout, HasZoom
 	}
 
 	@Override
+	public void fireTaskExpandEvent(Task task) {
+		view.doTaskExit(task);
+		ItemExpandEvent.fire(this, task);
+	}
+
+	@Override
+	public void fireTaskCollapseEvent(Task task) {
+		view.doTaskExit(task);
+		ItemExpandEvent.fire(this, task);
+	}
+
+	@Override
 	public void fireScrollEvent(int x, int y) {
 		this.fireEvent(new ScrollEvent(x, y));
 	}
@@ -270,6 +302,18 @@ public class GanttChart extends Composite implements Project, HasLayout, HasZoom
 	@Override
 	public HandlerRegistration addScrollHandler(ScrollHandler handler) {
 		return addHandler(handler, ScrollEvent.getType());
+	}
+
+	@Override
+	public HandlerRegistration addItemExpandHandler(
+			ItemExpandHandler<Task> handler) {
+		return addHandler(handler, ItemExpandEvent.getType());
+	}
+
+	@Override
+	public HandlerRegistration addItemCollapseHandler(
+			ItemCollapseHandler<Task> handler) {
+		return addHandler(handler, ItemCollapseEvent.getType());
 	}
 
 }
