@@ -1,4 +1,4 @@
-package com.bradrydzewski.gwtgantt.svg;
+package com.bradrydzewski.gwtgantt.widget;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;

@@ -17,32 +17,15 @@
  */
 package com.bradrydzewski.gwtgantt;
 
-import java.util.List;
-
+import com.bradrydzewski.gwtgantt.model.Task;
 import com.google.gwt.user.client.ui.HasWidgets;
 
 /**
  *
  * @author Brad Rydzewski
  */
-public interface GanttView {
+public interface TaskPresenter extends ItemPresenter<Task> {
 
-    public void attach(HasWidgets container, Project project);
-    public void refresh();
-	public void sortTasks(List<Task> taskList);
-    public int getHorizontalScrollPosition();
-    public int getVerticalScrollPosition();
-    
-    public void onTaskClicked(Task task);
-    public void onTaskDoubleClicked(Task task);
-    public void onTaskMouseOver(Task task);
-    public void onTaskMouseOut(Task task);
-    public void onScroll(int x, int y);
-    public void onTaskExpand(Task task);
-    public void onTaskCollapse(Task task);
+    public void attach(HasWidgets container, TaskDisplay taskDisplay);
 
-	public void doTaskSelected(Task task);
-	public void doTaskDeselected(Task task);
-	public void doTaskEnter(Task task);
-	public void doTaskExit(Task task);
 }

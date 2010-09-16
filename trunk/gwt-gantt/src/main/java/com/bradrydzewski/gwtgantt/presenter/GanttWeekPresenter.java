@@ -15,25 +15,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/
  */
-package com.bradrydzewski.gwtgantt;
+package com.bradrydzewski.gwtgantt.presenter;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+import com.bradrydzewski.gwtgantt.DateUtil;
+import com.bradrydzewski.gwtgantt.HasItems;
+import com.bradrydzewski.gwtgantt.ItemDataManager;
+import com.bradrydzewski.gwtgantt.TaskDisplay;
+import com.bradrydzewski.gwtgantt.TaskPresenter;
 import com.bradrydzewski.gwtgantt.connector.CalculatorFactory;
 import com.bradrydzewski.gwtgantt.geometry.Point;
 import com.bradrydzewski.gwtgantt.geometry.Rectangle;
+import com.bradrydzewski.gwtgantt.model.Predecessor;
+import com.bradrydzewski.gwtgantt.model.Task;
+import com.bradrydzewski.gwtgantt.view.GanttWeekDisplay;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
 
-public class GanttWeekView implements GanttView {
+public class GanttWeekPresenter implements TaskPresenter {
 
 	public interface Display {
-		void bind(GanttView view);
+		void bind(TaskPresenter view);
 		void renderTask(Task task, Rectangle rectangle);
 		void renderTaskSummary(Task task, Rectangle rectangle);
 		void renderTaskMilestone(Task task, Rectangle rectangle);
@@ -71,17 +78,17 @@ public class GanttWeekView implements GanttView {
 	public static final int SUMMARY_HEIGHT = 7;
 	public static final int SUMMARY_PADDING_TOP = 6;
 	
-	private Project project;
+	private TaskDisplay project;
 	private Display display = GWT.create(GanttWeekDisplay.class);
 	private Date start;
 	private Date finish;
 
-	public GanttWeekView() {
+	public GanttWeekPresenter() {
 		display.bind(this);
 	}
 
 	@Override
-	public void attach(HasWidgets container, Project project) {
+	public void attach(HasWidgets container, TaskDisplay project) {
 		this.project = project;
 		container.clear();
 		container.add(display.asWidget());
@@ -152,9 +159,9 @@ public class GanttWeekView implements GanttView {
 		boolean collapse = false;
 		int collapseLevel = -1;
 
-		for (int i = 0; i < project.getTaskCount(); i++) {
+		for (int i = 0; i < project.getItemCount(); i++) {
 			//get the task
-			Task task = project.getTask(i);
+			Task task = project.getItem(i);
 			
 			collapse = collapse && task.getLevel()>=collapseLevel;
 			
@@ -197,8 +204,8 @@ public class GanttWeekView implements GanttView {
 		display.renderTaskLabel(task, labelBounds);
 		
 		//if task is selected, make sure it is rendered as selected
-		if(project.isSelected(task)) {
-			this.doTaskSelected(task);
+		if(project.isSelectedItem(task)) {
+			this.doItemSelected(task);
 		}
 	}
 
@@ -223,8 +230,8 @@ public class GanttWeekView implements GanttView {
 		display.renderTaskLabel(task, labelBounds);
 		
 		//if task is selected, make sure it is rendered as selected
-		if(project.isSelected(task)) {
-			this.doTaskSelected(task);
+		if(project.isSelectedItem(task)) {
+			this.doItemSelected(task);
 		}
 	}
 
@@ -246,16 +253,16 @@ public class GanttWeekView implements GanttView {
 		display.renderTaskLabel(task, labelBounds);
 		
 		//if task is selected, make sure it is rendered as selected
-		if(project.isSelected(task)) {
-			this.doTaskSelected(task);
+		if(project.isSelectedItem(task)) {
+			this.doItemSelected(task);
 		}
 	}
 	
 	protected void renderConnectors() {
 		
-		for(int i=0; i<project.getTaskCount(); i++) {
+		for(int i=0; i<project.getItemCount(); i++) {
 			
-			Task task = project.getTask(i);
+			Task task = project.getItem(i);
 			for(Predecessor predecessor : task.getPredecessors()) {
 				Point[] path = null;
 				Rectangle fromRect = display.getTaskRectangle(predecessor.getUID());
@@ -287,10 +294,10 @@ public class GanttWeekView implements GanttView {
 
 		//if the first task in the gantt chart is before the gantt charts
 		// project start date ...
-		if(project.getTaskCount()>0 &&
-				project.getTask(0).getStart().before(adjustedStart)) {
+		if(project.getItemCount()>0 &&
+				project.getItem(0).getStart().before(adjustedStart)) {
 			
-			adjustedStart = project.getTask(0).getStart();	
+			adjustedStart = project.getItem(0).getStart();	
 		}
 		
 		adjustedStart = DateUtil.addDays(adjustedStart, -7);
@@ -310,10 +317,10 @@ public class GanttWeekView implements GanttView {
 
 		//if the last task in the gantt chart is after the gantt charts
 		// project finish date ...
-		if(project.getTaskCount()>0 && project.getTask(
-				project.getTaskCount()-1).getFinish().after(adjustedFinish)) {
+		if(project.getItemCount()>0 && project.getItem(
+				project.getItemCount()-1).getFinish().after(adjustedFinish)) {
 			
-			adjustedFinish = project.getTask(project.getTaskCount()-1).getFinish();	
+			adjustedFinish = project.getItem(project.getItemCount()-1).getFinish();	
 		}
 		
 		adjustedFinish = DateUtil.addDays(adjustedFinish, 7);
@@ -323,38 +330,38 @@ public class GanttWeekView implements GanttView {
 
 
 	@Override
-	public void onTaskClicked(Task task) {
-		project.fireTaskClickEvent(task);
+	public void onItemClicked(Task task) {
+		project.fireItemClickEvent(task);
 	}
 
 	@Override
-	public void onTaskDoubleClicked(Task task) {
-		project.fireTaskDoubleClickEvent(task);
+	public void onItemDoubleClicked(Task task) {
+		project.fireItemDoubleClickEvent(task);
 	}
 
 	@Override
-	public void onTaskMouseOver(Task task) {
-		project.fireTaskEnterEvent(task);
+	public void onItemMouseOver(Task task) {
+		project.fireItemEnterEvent(task);
 	}
 
 	@Override
-	public void onTaskMouseOut(Task task) {
-		project.fireTaskExitEvent(task);
+	public void onItemMouseOut(Task task) {
+		project.fireItemExitEvent(task);
 	}
 	
-	public void doTaskSelected(Task task) {
+	public void doItemSelected(Task task) {
 		display.doTaskSelected(task);
 	}
 	
-	public void doTaskDeselected(Task task) {
+	public void doItemDeselected(Task task) {
 		display.doTaskDeselected(task);
 	}
 	
-	public void doTaskEnter(Task task) {
+	public void doItemEnter(Task task) {
 		display.doTaskEnter(task);
 	}
 	
-	public void doTaskExit(Task task) {
+	public void doItemExit(Task task) {
 		display.doTaskExit(task);
 	}
 
@@ -376,17 +383,17 @@ public class GanttWeekView implements GanttView {
 
 	
 	@Override
-	public void sortTasks(List<Task> taskList) {
-		Collections.sort(taskList,TaskManager.TASK_ORDER_COMPARATOR);
+	public void sortItems(List<Task> taskList) {
+		Collections.sort(taskList,ItemDataManager.TASK_ORDER_COMPARATOR);
 	}
 
 	@Override
-	public void onTaskExpand(Task task) {
+	public void onItemExpand(Task task) {
 		//feature not available
 	}
 
 	@Override
-	public void onTaskCollapse(Task task) {
+	public void onItemCollapse(Task task) {
 		//feature not available
 	}
 }

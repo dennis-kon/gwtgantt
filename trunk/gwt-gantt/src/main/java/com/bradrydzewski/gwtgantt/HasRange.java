@@ -18,41 +18,40 @@
 package com.bradrydzewski.gwtgantt;
 
 /**
- * Defines an {@link Widget} that knows how to layout its child components.
+ * Describes an object that displays a range of data
+ * with a start and a finish.
  * 
  * @author Brad Rydzewski
- * 
  */
-public interface HasLayout {
+public interface HasRange<T> {
 
 	/**
-	 * Temporarily suspends the layout logic for the widget.
-	 */
-	public void suspendLayout();
-
-	/**
-	 * Resumes the layout logic for the widget.
-	 */
-	public void resumeLayout();
-
-	/**
-	 * Determines whether the widget has changed since the last layout was
-	 * performed.
+	 * Get the start of the range.
 	 * 
-	 * @return {@code true} if the widget's layout needs to be re-calculated.
+	 * @return the start of the range.
 	 */
-	public boolean isDirty();
+	public T getStart();
 
 	/**
-	 * Requests the widget to redraw itself and any child controls
-	 */
-	public void refresh();
-
-	/**
-	 * Requests the widget to redraw itself and any child controls
+	 * Set the start of the range.
 	 * 
-	 * @param {@code true} to force the widget to redraw, {@code false} to
-	 *        redraw only if the widget is dirty.
+	 * @param start
+	 *            the start of the range.
 	 */
-	public void refresh(boolean force);
+	public void setStart(T start);
+
+	/**
+	 * Get the end of the range.
+	 * 
+	 * @return the end of the range.
+	 */
+	public T getFinish();
+
+	/**
+	 * Set the end of the range.
+	 * 
+	 * @param finish
+	 *            the end of the range.
+	 */
+	public void setFinish(T finish);
 }
