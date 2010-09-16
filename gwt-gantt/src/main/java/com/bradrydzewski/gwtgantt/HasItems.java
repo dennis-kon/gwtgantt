@@ -19,6 +19,11 @@ package com.bradrydzewski.gwtgantt;
 
 import java.util.List;
 
+/**
+ * Describes an object that displays a list of items.
+ * 
+ * @author Brad Rydzewski
+ */
 public interface HasItems<T> {
 
     public void addItem(T item);
