@@ -19,39 +19,37 @@ package com.bradrydzewski.gwtgantt;
 
 import java.util.List;
 
-import com.bradrydzewski.gwtgantt.event.ItemExpandEvent;
+public interface HasItems<T> {
 
-public interface HasTasks {
+    public void addItem(T item);
 
-    public void addTask(Task task);
+    public void addItems(List<T> itemList);
 
-    public void addTasks(List<Task> taskList);
+    public void removeItem(T item);
 
-    public void removeTask(Task task);
-
-    public void removeAllTasks();
+    public void removeAllItems();
     
-    public void setSelectedTask(Task task);
+    public void setSelectedItem(T item);
     
-    public boolean isSelected(Task task);
+    public boolean isSelectedItem(T item);
 
-    public Task getSelectedTask();
+    public T getSelectedItem();
 
-    public int getTaskCount();
+    public int getItemCount();
 
-    public Task getTask(int index);
+    public T getItem(int index);
     
-    public int getTaskIndexOf(Task task);
+    public int getIndexOfItem(T item);
 
-	public void fireTaskClickEvent(Task task);
+	public void fireItemClickEvent(T item);
 
-	public void fireTaskDoubleClickEvent(Task task);
+	public void fireItemDoubleClickEvent(T item);
 
-    public void fireTaskEnterEvent(Task task);
+    public void fireItemEnterEvent(T item);
     
-    public void fireTaskExitEvent(Task task);
+    public void fireItemExitEvent(T item);
 
-	public void fireTaskExpandEvent(Task task);
+	public void fireItemExpandEvent(T item);
 
-	public void fireTaskCollapseEvent(Task task);
+	public void fireItemCollapseEvent(T item);
 }

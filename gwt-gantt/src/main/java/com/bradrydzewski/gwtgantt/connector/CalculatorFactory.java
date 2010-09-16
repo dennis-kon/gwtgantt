@@ -17,7 +17,7 @@
  */
 package com.bradrydzewski.gwtgantt.connector;
 
-import com.bradrydzewski.gwtgantt.PredecessorType;
+import com.bradrydzewski.gwtgantt.model.PredecessorType;
 
 /**
  * Factory to get an instance of a {@link Calculator} based upon

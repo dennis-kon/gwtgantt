@@ -21,11 +21,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import com.bradrydzewski.gwtgantt.model.Task;
+
 /**
  *
  * @author Brad Rydzewski
  */
-public class TaskManager {
+public class ItemDataManager {
 
     /**
      * A reference to the &quot;currently selected task&quot;. Will be

@@ -17,17 +17,16 @@
  */
 package com.bradrydzewski.gwtgantt;
 
-import java.util.Date;
+import com.bradrydzewski.gwtgantt.presenter.TaskGridPresenter;
+import com.google.gwt.core.client.GWT;
 
-public interface Project extends HasTasks {
+public class TaskGrid extends TaskViewer {
 
-	public Date getStart();
-	
-	public void setStart(Date start);
-	
-	public Date getFinish();
-	
-	public void setFinish(Date finish);
-	
-	public void fireScrollEvent(int x, int y);
+    public TaskGrid() {
+    	this((TaskPresenter) GWT.create(TaskGridPresenter.class));
+    }
+    
+    public TaskGrid(TaskPresenter view) {
+    	super(view, null, null);
+    }
 }

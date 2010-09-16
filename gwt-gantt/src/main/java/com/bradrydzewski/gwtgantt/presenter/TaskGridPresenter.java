@@ -1,16 +1,21 @@
-package com.bradrydzewski.gwtgantt;
+package com.bradrydzewski.gwtgantt.presenter;
 
 import java.util.Collections;
 import java.util.List;
 
+import com.bradrydzewski.gwtgantt.TaskPresenter;
+import com.bradrydzewski.gwtgantt.TaskDisplay;
+import com.bradrydzewski.gwtgantt.ItemDataManager;
+import com.bradrydzewski.gwtgantt.model.Task;
+import com.bradrydzewski.gwtgantt.view.TaskGridView;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
 
-public class TaskGridView implements GanttView {
+public class TaskGridPresenter implements TaskPresenter {
 
 	public interface Display {
-		void bind(GanttView view);
+		void bind(TaskPresenter view);
 		void renderTask(Task task, int row, int rowOffset);
 		void onBeforeRendering();
 		void onAfterRendering();
@@ -21,20 +26,20 @@ public class TaskGridView implements GanttView {
 	}
 
 	private Display display;
-	private Project project;
+	private TaskDisplay project;
 	
-	public TaskGridView() {
-		this((Display) GWT.create(TaskGridDisplay.class));
+	public TaskGridPresenter() {
+		this((Display) GWT.create(TaskGridView.class));
 	}
 	
-	public TaskGridView(Display display) {
+	public TaskGridPresenter(Display display) {
 		this.display = display;
 		this.display.bind(this);
 	}
 	
 	
 	@Override
-	public void attach(HasWidgets container, Project project) {
+	public void attach(HasWidgets container, TaskDisplay project) {
 		this.project = project;
 		container.clear();
 		container.add(display.asWidget());
@@ -56,9 +61,9 @@ public class TaskGridView implements GanttView {
 		//some debugging...
 		GWT.log("renderTasks method invoked");
 		
-		for (int i = 0; i < project.getTaskCount(); i++) {
+		for (int i = 0; i < project.getItemCount(); i++) {
 			//get the task
-			Task task = project.getTask(i);
+			Task task = project.getItem(i);
 			
 			//check to make sure this is a child item of a collapsed task
 			collapse = collapse && task.getLevel()>=collapseLevel;
@@ -75,13 +80,13 @@ public class TaskGridView implements GanttView {
 		}
 		
 		//color the selected task, if it is selected
-		if(project.getSelectedTask()!=null)
-			display.doTaskSelected(project.getSelectedTask());
+		if(project.getSelectedItem()!=null)
+			display.doTaskSelected(project.getSelectedItem());
 	}
 
 	@Override
-	public void sortTasks(List<Task> taskList) {
-		Collections.sort(taskList,TaskManager.TASK_ORDER_COMPARATOR);
+	public void sortItems(List<Task> taskList) {
+		Collections.sort(taskList,ItemDataManager.TASK_ORDER_COMPARATOR);
 	}
 
 	@Override
@@ -95,38 +100,38 @@ public class TaskGridView implements GanttView {
 	}
 
 	@Override
-	public void onTaskClicked(Task task) {
-		project.fireTaskClickEvent(task);
+	public void onItemClicked(Task task) {
+		project.fireItemClickEvent(task);
 	}
 
 	@Override
-	public void onTaskDoubleClicked(Task task) {
-		project.fireTaskDoubleClickEvent(task);
+	public void onItemDoubleClicked(Task task) {
+		project.fireItemDoubleClickEvent(task);
 	}
 
 	@Override
-	public void onTaskMouseOver(Task task) {
-		project.fireTaskEnterEvent(task);
+	public void onItemMouseOver(Task task) {
+		project.fireItemEnterEvent(task);
 	}
 
 	@Override
-	public void onTaskMouseOut(Task task) {
-		project.fireTaskExitEvent(task);
+	public void onItemMouseOut(Task task) {
+		project.fireItemExitEvent(task);
 	}
 	
-	public void doTaskSelected(Task task) {
+	public void doItemSelected(Task task) {
 		display.doTaskSelected(task);
 	}
 	
-	public void doTaskDeselected(Task task) {
+	public void doItemDeselected(Task task) {
 		display.doTaskDeselected(task);
 	}
 	
-	public void doTaskEnter(Task task) {
+	public void doItemEnter(Task task) {
 		//not implemented
 	}
 	
-	public void doTaskExit(Task task) {
+	public void doItemExit(Task task) {
 		//not implemented
 	}
 
@@ -136,14 +141,14 @@ public class TaskGridView implements GanttView {
 	}
 
 	@Override
-	public void onTaskExpand(Task task) {
+	public void onItemExpand(Task task) {
 		refresh();
-		project.fireTaskCollapseEvent(task);
+		project.fireItemCollapseEvent(task);
 	}
 
 	@Override
-	public void onTaskCollapse(Task task) {
+	public void onItemCollapse(Task task) {
 		refresh();
-		project.fireTaskExpandEvent(task);
+		project.fireItemExpandEvent(task);
 	}
 }

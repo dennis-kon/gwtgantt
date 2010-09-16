@@ -1,4 +1,4 @@
-package com.bradrydzewski.gwtgantt.svg;
+package com.bradrydzewski.gwtgantt.widget;
 
 import com.bradrydzewski.gwtgantt.geometry.Point;
 

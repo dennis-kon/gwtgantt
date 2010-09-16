@@ -15,18 +15,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/
  */
-package com.bradrydzewski.gwtgantt;
+package com.bradrydzewski.gwtgantt.view;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import com.bradrydzewski.gwtgantt.GanttWeekView.Display;
+import com.bradrydzewski.gwtgantt.TaskPresenter;
 import com.bradrydzewski.gwtgantt.geometry.Point;
 import com.bradrydzewski.gwtgantt.geometry.Rectangle;
-import com.bradrydzewski.gwtgantt.svg.SVGDefs;
-import com.bradrydzewski.gwtgantt.svg.SVGMarker;
-import com.bradrydzewski.gwtgantt.svg.SVGPanel;
-import com.bradrydzewski.gwtgantt.svg.SVGPath;
+import com.bradrydzewski.gwtgantt.model.Task;
+import com.bradrydzewski.gwtgantt.presenter.GanttWeekPresenter;
+import com.bradrydzewski.gwtgantt.presenter.GanttWeekPresenter.Display;
+import com.bradrydzewski.gwtgantt.widget.SVGDefs;
+import com.bradrydzewski.gwtgantt.widget.SVGMarker;
+import com.bradrydzewski.gwtgantt.widget.SVGPanel;
+import com.bradrydzewski.gwtgantt.widget.SVGPath;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Position;
@@ -72,22 +75,22 @@ public class GanttWeekDisplay extends Composite implements Display {
             // No need for call to super.
             switch (DOM.eventGetType(event)) {
                 case Event.ONCLICK:
-                    view.onTaskClicked(task);
+                    view.onItemClicked(task);
                     break;
 
                 case Event.ONDBLCLICK:
-                	view.onTaskDoubleClicked(task);
+                	view.onItemDoubleClicked(task);
                     break;
 
                 case Event.ONKEYDOWN:
                     break;
 
                 case Event.ONMOUSEOVER:
-                    view.onTaskMouseOver(task);
+                    view.onItemMouseOver(task);
                     break;
 
                 case Event.ONMOUSEOUT:
-                    view.onTaskMouseOut(task);
+                    view.onItemMouseOut(task);
                     break;
             }
             super.onBrowserEvent(event);
@@ -122,7 +125,7 @@ public class GanttWeekDisplay extends Composite implements Display {
 	private Map<Integer, TaskWidget> taskWidgetIndex =
 		new HashMap<Integer, TaskWidget>();
 	
-    private GanttView view;
+    private TaskPresenter view;
     private int estimatedWidth = 0;
     private int estimatedHeight = 0;
 
@@ -176,7 +179,7 @@ public class GanttWeekDisplay extends Composite implements Display {
 	}
     
 	@Override
-	public void bind(GanttView view) {
+	public void bind(TaskPresenter view) {
 		assert(view!=null);
 		this.view = view;
 	}

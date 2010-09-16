@@ -15,12 +15,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/
  */
-package com.bradrydzewski.gwtgantt;
+package com.bradrydzewski.gwtgantt.model;
 
 /**
- *
+ * Defines the type of connection between two Tasks.
  * @author Brad Rydzewski
  */
-public enum ZoomLevel {
-    Default, Quarter, Month, Week
+public enum PredecessorType {
+
+    /**
+     * Start to Finish
+     */
+    SF,
+    /**
+     * Start to Start
+     */
+    SS,
+    /**
+     * Finish to Start
+     */
+    FS,
+    /**
+     * Finish to Finish
+     */
+    FF;
 }

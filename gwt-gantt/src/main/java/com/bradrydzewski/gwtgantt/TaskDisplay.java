@@ -17,35 +17,12 @@
  */
 package com.bradrydzewski.gwtgantt;
 
+import java.util.Date;
 
-/**
- * Describes an object that can be zoomed in and out.
- * 
- * @author Brad Rydzewski
- */
-public interface HasZoom {
+import com.bradrydzewski.gwtgantt.model.Task;
 
-	/**
-	 * Requests the object to zoom in.
-	 * @return {@code true} if the object was able to zoom in.
-	 */
-	public boolean zoomIn();
+public interface TaskDisplay extends HasItems<Task>,
+	HasRange<Date>, HasLayout {
 	
-	/**
-	 * Requests the object to zoom out.
-	 * @return {@code true} if the object was able to zoom out.
-	 */
-	public boolean zoomOut();
-	
-	/**
-	 * Sets the zoom level for this object. 
-	 * @param level the zoom level.
-	 */
-	public void setZoomLevel(int level);
-	
-	/**
-	 * Returns the zoom level for this object.
-	 * @return the zoom level.
-	 */
-	public int getZoomLevel();
+	public void fireScrollEvent(int x, int y);
 }
