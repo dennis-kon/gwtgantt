@@ -11,7 +11,7 @@
 
 = Creating a Gantt Chart =
 
-You can add the gannt chart to a 'Panel' just like any standard GWT widget:
+You can add the gannt chart to a `Panel` just like any standard GWT widget:
 {{{
   GanttChart gantt = new GanttChart();
   gantt.setWidth("500px");
