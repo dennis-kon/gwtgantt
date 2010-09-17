@@ -1,0 +1,41 @@
+#summary Getting started with the gwt-gantt widget library.
+
+= Setup =
+
+ # Add the `gwt-gantt` jar file to your project's build path. Right-click on the project node in the Package Explorer and select 'Build Path > Add External Archives...'. Specify the downloaded `gwt-gantt-<version>.jar`
+ # Modify `<Your Application>.gwt.xm`l to inherit the `gwt-gantt` module:
+{{{
+  <inherits name='com.bradrydzewski.Gantt' />
+}}}
+
+
+= Creating a Gantt Chart =
+
+You can add the gannt chart to a 'Panel' just like any standard GWT widget:
+{{{
+  GanttChart gantt = new GanttChart();
+  gantt.setWidth("500px");
+  gantt.setHeight("400px");
+
+  RootPanel.get().add(gantt);
+}}}
+
+= Adding Tasks =
+
+The following code snippet demonstrates how to create and add a `Task` to the `GanttChart` widget. Every time a `Task` is added to the `GanttChart` the layout is re-calculated and refreshed.
+
+{{{
+   TaskImpl task = new TaskImpl();
+   task.setUID(1);
+   task.setSummary(true);
+   task.setName("Test Task 1");
+   task.setLevel(0);
+   task.setOrder(1);
+   task.setPercentComplete(50);
+   task.setStart(new Date());
+   task.setFinish(new Date());
+
+   //add the task to the gantt chart
+   gantt.addItem(task);
+
+}}}
