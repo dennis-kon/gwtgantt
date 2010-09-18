@@ -390,8 +390,8 @@ public class GanttWeekPresenter implements TaskPresenter {
 	public void doScrollToItem(Task item) {
     	Rectangle rect = display.getTaskRectangle(item.getUID());
     	if(rect != null) {
-    		int row = (int)Math.ceil(rect.getTop()/TASK_ROW_HEIGHT);
-    		int top = (row+1)*TASK_ROW_HEIGHT;
+    		int row = (int)Math.floor(rect.getTop()/TASK_ROW_HEIGHT);
+    		int top = (row-1)*TASK_ROW_HEIGHT;
     		int left = rect.getLeft()-ROW2_WIDTH;
     		left = Math.max(0, left);
     		top = Math.max(0, top);
