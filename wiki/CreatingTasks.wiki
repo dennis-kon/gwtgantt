@@ -6,7 +6,7 @@ Coming soon ...
 
 = Creating a Task =
 
-The GanttChart and TaskGrid widget's both take in items of type `Task`, which is a simple interface that defines all the required fields to render a set of `Task`s. You can create your own `Task` implementation, or you can use our default `TaskImpl` that we provide along with the gwt-gantt API.
+The `GanttChart` and `TaskGrid` widgets both take in items of type `Task`, which is a simple interface that defines all the required fields to render a set of `Task`s. You can create your own `Task` implementation, or you can use our default `TaskImpl` that we provide along with the gwt-gantt API.
 
 {{{
    TaskImpl task1 = new TaskImpl();
@@ -56,7 +56,19 @@ In the following example `task5` is considered a parent of `task6`, based on the
    task6.setLevel(1);
 }}}
 
-=== Summary and Milestone ===
+=== IsSummary ===
+
+The `Summary` boolean attribute defines if a `Task` has children and is collapsible. Summary tasks are rendered differently than regular tasks.
+
+=== IsMilestone ===
+
+The `Milestone` boolean attribute defines a task as a milestone, meaning it will be rendered as lasting only one day (regardless of Start and Finish date), and will be displayed as a Diamond shape.
+
+=== IsCollapsed ===
+
+The `Collapsed` boolean attribute defines if a summary `Task` should be collapsed, hiding all of its child tasks. The `TaskGrid` widget will set this property when a user clicks the expand / collapse buttons. This is one of the only times a gwt-gantt widget will update a `Task`'s attribute.
+
+Note: this attribute is only taken into account for Summary tasks (ie `isSummary() == true`).
 
 == Task Predecessors ==
 
