@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import com.bradrydzewski.gwtgantt.DateUtil;
 import com.bradrydzewski.gwtgantt.TaskPresenter;
 import com.bradrydzewski.gwtgantt.model.Task;
-import com.bradrydzewski.gwtgantt.presenter.TaskGridPresenter;
 import com.bradrydzewski.gwtgantt.presenter.TaskGridPresenter.Display;
 import com.bradrydzewski.gwtgantt.resources.GridResources;
 import com.bradrydzewski.gwtgantt.widget.override.FlexTable;
@@ -51,8 +50,8 @@ public class TaskGridView extends Composite implements Display {
 		    boolean collapsed = !item.isCollapsed();
 		    item.setCollapsed(collapsed);
 		    
-		    if(collapsed) view.onItemCollapse(item);
-		    else view.onItemExpand(item);
+		    if(collapsed) presenter.onItemCollapse(item);
+		    else presenter.onItemExpand(item);
 		}
 	}
 	
@@ -288,7 +287,7 @@ public class TaskGridView extends Composite implements Display {
 	protected HeaderTable headerTable = null;// new HeaderTable(1,6);
 	private ScrollPanel bodyPanel = new ScrollPanel();
 	protected FlexTable bodyTable = new FlexTable();
-	private TaskPresenter view;
+	private TaskPresenter presenter;
 	
 	private int[] columnWidthArray = new int[]{40, 200,100,100,100,100};
 	private String[] columnNameArray = new String[]{"&nbsp;","Task Name","Duration","Start","Finish","Predecessors"};
@@ -330,14 +329,14 @@ public class TaskGridView extends Composite implements Display {
 				int x=bodyPanel.getHorizontalScrollPosition();
 				int y=bodyPanel.getScrollPosition();
 				headerTable.getElement().getStyle().setLeft(x*-1, Unit.PX);
-				view.onScroll(bodyPanel.getHorizontalScrollPosition(),y);
+				presenter.onScroll(bodyPanel.getHorizontalScrollPosition(),y);
 			}
 		});
 		bodyTable.addDoubleClickHandler(new DoubleClickHandler(){
 			@Override
 			public void onDoubleClick(DoubleClickEvent event) {
 				int row = bodyTable.getCellForEvent(event).getRowIndex();
-				view.onItemDoubleClicked(visibleItems.get(row));
+				presenter.onItemDoubleClicked(visibleItems.get(row));
 			}
 		});
 		bodyTable.addClickHandler(new ClickHandler(){
@@ -345,14 +344,14 @@ public class TaskGridView extends Composite implements Display {
 			public void onClick(ClickEvent event) {
 				int row = bodyTable.getCellForEvent(event).getRowIndex();
 				GWT.log("Row "+row+" clicked in the TaskGridDisplay");
-				view.onItemClicked(visibleItems.get(row));
+				presenter.onItemClicked(visibleItems.get(row));
 			}
 		});
 	}
 	
 	@Override
-	public void bind(TaskPresenter view) {
-		this.view = view;
+	public void bind(TaskPresenter presenter) {
+		this.presenter = presenter;
 	}
 
 	public static final DateTimeFormat DATE_FORMAT =
@@ -384,13 +383,17 @@ public class TaskGridView extends Composite implements Display {
 		bodyTable.setHTML(rowOffset, 3, "<div>"+((task.getStart()==null)?"--":DATE_FORMAT.format(task.getStart()))+"</div>");
 		bodyTable.setHTML(rowOffset, 4, "<div>"+((task.getStart()==null)?"--":DATE_FORMAT.format(task.getFinish()))+"</div>");
 		
-		//TODO: Render predecessor column
-		bodyTable.setHTML(rowOffset, 5, "<div>--</div>");
+
 		
 		//add task to list of visible tasks
 		//TODO: Move visibleItems list to the View??
 		visibleItems.add(task);
 	}
+
+        @Override
+        public void renderPredecessor(String text, int row, int rowOffset) {
+            bodyTable.setHTML(rowOffset, 5, "<div>"+text+"</div>");
+        }
 
 	@Override
 	public void onBeforeRendering() {

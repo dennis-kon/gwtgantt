@@ -75,22 +75,22 @@ public class GanttWeekDisplay extends Composite implements Display {
             // No need for call to super.
             switch (DOM.eventGetType(event)) {
                 case Event.ONCLICK:
-                    view.onItemClicked(task);
+                    presenter.onItemClicked(task);
                     break;
 
                 case Event.ONDBLCLICK:
-                	view.onItemDoubleClicked(task);
+                	presenter.onItemDoubleClicked(task);
                     break;
 
                 case Event.ONKEYDOWN:
                     break;
 
                 case Event.ONMOUSEOVER:
-                    view.onItemMouseOver(task);
+                    presenter.onItemMouseOver(task);
                     break;
 
                 case Event.ONMOUSEOUT:
-                    view.onItemMouseOut(task);
+                    presenter.onItemMouseOut(task);
                     break;
             }
             super.onBrowserEvent(event);
@@ -125,7 +125,7 @@ public class GanttWeekDisplay extends Composite implements Display {
 	private Map<Integer, TaskWidget> taskWidgetIndex =
 		new HashMap<Integer, TaskWidget>();
 	
-    private TaskPresenter view;
+    private TaskPresenter presenter;
     private int estimatedWidth = 0;
     private int estimatedHeight = 0;
 
@@ -172,16 +172,16 @@ public class GanttWeekDisplay extends Composite implements Display {
 				secondHeaderRow.getElement().getStyle().setLeft(hscroll, Unit.PX);
 				taskBackgroundPanel.getElement().getStyle().setLeft(hscroll, Unit.PX);
 				
-				view.onScroll(taskScrollPanel.getHorizontalScrollPosition(),
+				presenter.onScroll(taskScrollPanel.getHorizontalScrollPosition(),
 						taskScrollPanel.getScrollPosition());
 			}
 		});
 	}
     
 	@Override
-	public void bind(TaskPresenter view) {
-		assert(view!=null);
-		this.view = view;
+	public void bind(TaskPresenter presenter) {
+		assert(presenter!=null);
+		this.presenter = presenter;
 	}
 	
 	@Override
