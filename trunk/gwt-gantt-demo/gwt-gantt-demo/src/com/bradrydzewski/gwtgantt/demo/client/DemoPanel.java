@@ -12,6 +12,8 @@ import com.bradrydzewski.gwtgantt.event.ItemDoubleClickEvent;
 import com.bradrydzewski.gwtgantt.event.ItemDoubleClickHandler;
 import com.bradrydzewski.gwtgantt.event.ItemExpandEvent;
 import com.bradrydzewski.gwtgantt.event.ItemExpandHandler;
+import com.bradrydzewski.gwtgantt.event.ScrollEvent;
+import com.bradrydzewski.gwtgantt.event.ScrollHandler;
 import com.bradrydzewski.gwtgantt.model.Task;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -59,6 +61,13 @@ public class DemoPanel extends Composite {
 			public void onItemDoubleClick(ItemDoubleClickEvent<Task> event) {
 				GWT.log("Task double-clicked in Gantt: "+event.getItem().getName());
 				Window.alert("You double-clicked " + event.getItem().getName());
+				
+			}
+		});
+		gantt.addScrollHandler(new ScrollHandler(){
+			@Override
+			public void onScroll(ScrollEvent event) {
+				grid.setScrollPosition(event.getX(), event.getY());
 			}
 		});
 		grid.addItemClickHandler(new ItemClickHandler<Task>(){
@@ -73,7 +82,8 @@ public class DemoPanel extends Composite {
 			@Override
 			public void onItemDoubleClick(ItemDoubleClickEvent<Task> event) {
 				GWT.log("Task double-clicked in Grid: "+event.getItem().getName());
-				Window.alert("You double-clicked " + event.getItem().getName());
+				//Window.alert("You double-clicked " + event.getItem().getName());
+				gantt.scrollToItem(event.getItem());
 			}
 		});
 		grid.addItemCollapseHandler(new ItemCollapseHandler<Task>(){

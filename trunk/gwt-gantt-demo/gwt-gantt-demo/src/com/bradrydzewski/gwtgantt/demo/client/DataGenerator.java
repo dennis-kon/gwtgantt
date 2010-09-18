@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.bradrydzewski.gwtgantt.DateUtil;
 import com.bradrydzewski.gwtgantt.model.Predecessor;
 import com.bradrydzewski.gwtgantt.model.PredecessorType;
 import com.bradrydzewski.gwtgantt.model.Task;
@@ -79,6 +80,39 @@ public class DataGenerator {
 		task6.setFinish(new Date(new Date().getYear(),new Date().getMonth(), new Date().getDate()+7));
 		task6.getPredecessors().add(new Predecessor(5, PredecessorType.FS));
 		taskList.add(task6);
+		
+		TaskImpl task7 = new TaskImpl();
+		task7.setUID(7);
+		task7.setName("Summary Task (#7)");
+		task7.setLevel(0);
+		task7.setOrder(7);
+		task7.setPercentComplete(0);
+		task7.setStart(new Date());
+		task7.setFinish(DateUtil.addDays(new Date(), 10));
+		task7.setSummary(true);
+		taskList.add(task7);
+		
+		Date date = new Date();
+		for(int i=8;i<18;i++) {
+			
+			TaskImpl taskN = new TaskImpl();
+			taskN.setUID(i);
+			taskN.setName("Test Task "+i);
+			taskN.setLevel(1);
+			taskN.setOrder(i);
+			taskN.setPercentComplete(0);
+			taskN.setStart(date);
+			//increment date
+			date = (Date)date.clone();
+			date = DateUtil.addDays(date, 1);
+			
+			taskN.setFinish(date);
+			if(i>8)
+				taskN.getPredecessors().add(new Predecessor(i-1, PredecessorType.FS));
+			
+			//add task to list
+			taskList.add(taskN);
+		}
 		
 		return taskList;
 	}
