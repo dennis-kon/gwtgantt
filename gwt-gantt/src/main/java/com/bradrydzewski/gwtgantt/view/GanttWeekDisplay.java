@@ -40,6 +40,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -104,7 +105,7 @@ public class GanttWeekDisplay extends Composite implements Display {
             return new Rectangle(
                     DOM.getIntStyleAttribute(this.getElement(),"left"),
                     DOM.getIntStyleAttribute(this.getElement(),"top"),
-                    this.getOffsetWidth()+2, //HACK: add 2px to account for borders
+                    this.getOffsetWidth(), //+2 //HACK: add 2px to account for borders
                     this.getOffsetHeight());
         }
     }

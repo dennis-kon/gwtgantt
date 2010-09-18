@@ -47,7 +47,7 @@ public class StartToFinishCalculator implements Calculator {
         points = new Point[6];
         points[0] = new Point(r1.getLeft(), topLineY);
         points[1] = new Point(r1.getLeft() - 15, topLineY);
-        points[2] = new Point(r2.getLeft() - 15, middleLineY);
+        points[2] = new Point(r1.getLeft() - 15, middleLineY);
         points[3] = new Point(r2.getRight() + 15, middleLineY);
         points[4] = new Point(r2.getRight() + 15, bottomLineY);
         points[5] = new Point(r2.getRight(), bottomLineY);
