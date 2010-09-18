@@ -1,5 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module>
+  <inherits name="com.google.gwt.user.UserAgent"/>
   <inherits name='com.google.gwt.user.User'/>
   <source path='gwtgantt'/>
+	
+	
+  <replace-with class="com.bradrydzewski.gwtgantt.view.GanttWeekDisplay.GanttWeekDisplayImpl">
+    <when-type-is class="com.bradrydzewski.gwtgantt.view.GanttWeekDisplay.GanttWeekDisplayImpl"/>
+  </replace-with>
+
+  <replace-with class="com.bradrydzewski.gwtgantt.view.GanttWeekDisplayNoSVGImpl">
+    <when-type-is class="com.bradrydzewski.gwtgantt.view.GanttWeekDisplayImpl"/>
+    <any>
+	    <when-property-is name="user.agent" value="ie6" />
+	    <when-property-is name="user.agent" value="ie7" />
+	    <when-property-is name="user.agent" value="ie8" />
+    </any>
+  </replace-with>
+
 </module>
