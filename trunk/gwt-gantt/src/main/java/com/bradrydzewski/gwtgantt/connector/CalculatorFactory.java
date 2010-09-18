@@ -27,7 +27,7 @@ import com.bradrydzewski.gwtgantt.model.PredecessorType;
 public class CalculatorFactory {
 
     private static final Calculator START_TO_START = new StartToStartCalculator();
-    private static final Calculator START_TO_FINISH = null;//new StartToFinishCalculator();
+    private static final Calculator START_TO_FINISH = new StartToFinishCalculator();
     private static final Calculator FINISH_TO_START = new FinishToStartCalculator();
     private static final Calculator FINISH_TO_FINISH = new FinishToFinishCalculator();
 

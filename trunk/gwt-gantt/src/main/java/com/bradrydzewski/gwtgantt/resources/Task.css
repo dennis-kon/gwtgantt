@@ -14,3 +14,8 @@
 .summary-green { border:1px solid #0D7813; background: #0D7813; border-radius:3px; -moz-border-radius:3px; -webkit-user-select: none; -moz-user-select: none; opacity:0.75; }
 .summarySelected { opacity:1; -webkit-box-shadow: #B8B8B8 3px 3px 3px; -moz-box-shadow: #B8B8B8 3px 3px 3px;}
 .summaryHovered { -webkit-box-shadow: #B8B8B8 -2px -2px 2px, #B8B8B8 3px 3px 3px; -moz-box-shadow: #B8B8B8 -2px -2px 2px, #B8B8B8 3px 3px 3px; }
+
+
+@external taskLabel;
+.taskLabel { position:absolute;line-height:18px;font-size:12px;font-weight:normal;font-family:arial;padding-left:20px; color:#555;text-shadow:#FFF 1px 1px;white-space:nowrap; cursor: default; -webkit-user-select: none; -moz-user-select: none;}
+	
