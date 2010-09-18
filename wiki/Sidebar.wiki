@@ -1,3 +1,4 @@
  * [Introduction]
  * [GettingStarted Getting Started]
+ * [CreatingTasks Creating Tasks]
  * [HandlingEvents Handling Events]
