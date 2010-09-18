@@ -1,6 +1,6 @@
 #summary Creating Tasks and adding to the Gantt Chart.
 
-Coming soon ...
+This article gives a fairly in-depth overview of working with `Task`s and adding them to `GanttChart` and `TaskGrid` widgets. If you read one gwt-gantt wiki article, I recommend you read this one ...
 
 <wiki:toc max_depth="3" />
 
