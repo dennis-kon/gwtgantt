@@ -361,7 +361,7 @@ public class TaskGridView extends Composite implements Display {
 	@Override
 	public void renderTask(Task task, int row, int rowOffset) {
 		
-		bodyTable.setText(rowOffset, 0, String.valueOf(row+1));
+		bodyTable.setHTML(rowOffset, 0, "<div>"+String.valueOf(row+1)+"</div>");
 
 		int leftPadding = task.getLevel() * 20 + 5;
 		FlowPanel treePanel = new FlowPanel();

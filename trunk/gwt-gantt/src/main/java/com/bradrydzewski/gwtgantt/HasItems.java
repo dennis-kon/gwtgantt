@@ -45,6 +45,8 @@ public interface HasItems<T> {
     public T getItem(int index);
     
     public int getIndexOfItem(T item);
+    
+    public void scrollToItem(T item);
 
 	public void fireItemClickEvent(T item);
 

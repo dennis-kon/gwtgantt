@@ -24,7 +24,6 @@ import com.bradrydzewski.gwtgantt.TaskPresenter;
 import com.bradrydzewski.gwtgantt.geometry.Point;
 import com.bradrydzewski.gwtgantt.geometry.Rectangle;
 import com.bradrydzewski.gwtgantt.model.Task;
-import com.bradrydzewski.gwtgantt.presenter.GanttWeekPresenter;
 import com.bradrydzewski.gwtgantt.presenter.GanttWeekPresenter.Display;
 import com.bradrydzewski.gwtgantt.widget.SVGDefs;
 import com.bradrydzewski.gwtgantt.widget.SVGMarker;
@@ -40,7 +39,6 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -52,14 +50,15 @@ import com.google.gwt.user.client.ui.Widget;
  * 
  * @author Brad Rydzewski
  */
-public class GanttWeekDisplay extends Composite implements Display {
+public abstract class GanttWeekDisplay extends Composite implements Display {
 
 	private static GanttViewImplUiBinder uiBinder = GWT
 			.create(GanttViewImplUiBinder.class);
 
 	interface GanttViewImplUiBinder extends UiBinder<Widget, GanttWeekDisplay> {
 	}
-	
+
+
     public class TaskWidget extends FlowPanel {
 
         private final Task task;
@@ -138,7 +137,28 @@ public class GanttWeekDisplay extends Composite implements Display {
 	public void init() {
 		taskScrollPanel.getElement().getStyle().setPosition(Position.ABSOLUTE);
 		taskScrollPanel.getElement().getStyle().setOverflow(Overflow.SCROLL);
+		
+		//initialize the SVG panel
+		initSVG();
+		
+		//add scroll handler
+		taskScrollPanel.addScrollHandler(new ScrollHandler(){
 
+			@Override
+			public void onScroll(ScrollEvent event) {
+				int hscroll = taskScrollPanel.getHorizontalScrollPosition()*-1;
+
+				firstHeaderRow.getElement().getStyle().setLeft(hscroll, Unit.PX);
+				secondHeaderRow.getElement().getStyle().setLeft(hscroll, Unit.PX);
+				taskBackgroundPanel.getElement().getStyle().setLeft(hscroll, Unit.PX);
+				
+				presenter.onScroll(taskScrollPanel.getHorizontalScrollPosition(),
+						taskScrollPanel.getScrollPosition());
+			}
+		});
+	}
+	
+	public void initSVG() {
 		svgPanel = new SVGPanel();
 		svgPanel.setPointerEvents("none");
 		svgPanel.setShapeRendering("crispEdges");
@@ -161,22 +181,6 @@ public class GanttWeekDisplay extends Composite implements Display {
 		svgDefs = new SVGDefs();
 		svgDefs.add(svgArrowMarker);
 		svgPanel.add(svgDefs);
-		
-		//add scroll handler
-		taskScrollPanel.addScrollHandler(new ScrollHandler(){
-
-			@Override
-			public void onScroll(ScrollEvent event) {
-				int hscroll = taskScrollPanel.getHorizontalScrollPosition()*-1;
-
-				firstHeaderRow.getElement().getStyle().setLeft(hscroll, Unit.PX);
-				secondHeaderRow.getElement().getStyle().setLeft(hscroll, Unit.PX);
-				taskBackgroundPanel.getElement().getStyle().setLeft(hscroll, Unit.PX);
-				
-				presenter.onScroll(taskScrollPanel.getHorizontalScrollPosition(),
-						taskScrollPanel.getScrollPosition());
-			}
-		});
 	}
     
 	@Override
@@ -187,8 +191,10 @@ public class GanttWeekDisplay extends Composite implements Display {
 	
 	@Override
 	public void onBeforeRendering() {
-		svgPanel.clear();
-		svgPanel.add(svgDefs);
+		if(svgPanel!=null) {
+			svgPanel.clear();
+			svgPanel.add(svgDefs);
+		}
 		taskWidgetIndex.clear();
 		taskFlowPanel.clear();
 		firstHeaderRow.clear();
@@ -200,7 +206,7 @@ public class GanttWeekDisplay extends Composite implements Display {
 	@Override
 	public void onAfterRendering() {
 		
-		if(svgPanel.getParent()==null) {
+		if(svgPanel!=null && svgPanel.getParent()==null) {
 			svgPanel.getElement().getStyle().setZIndex(taskFlowPanel.getWidgetCount() + 1);
 			svgPanel.getElement().getStyle().setWidth(estimatedWidth+25, Unit.PX);
 			svgPanel.getElement().getStyle().setHeight(estimatedHeight, Unit.PX);
@@ -309,6 +315,59 @@ public class GanttWeekDisplay extends Composite implements Display {
 		svgPanel.add(line);
 	}
 	
+
+	public void renderConnectorAsDiv(Point[] path) {
+		
+		Point pointA = null;
+		Point pointB = null;
+		int left=0, top=0, height=0, width=0;
+		
+		for(int i=1;i<path.length;i++) {
+			
+			pointA = path[i-1];
+			pointB = path[i];
+			
+			left = Math.min(pointA.getX(), pointB.getX());
+			top = Math.min(pointA.getY(), pointB.getY());
+			height = Math.abs(pointB.getY()-pointA.getY());
+			width = Math.abs(pointB.getX()-pointA.getX());
+			
+			SimplePanel div = new SimplePanel();
+			div.getElement().getStyle().setBackgroundColor("black");
+			div.getElement().getStyle().setPosition(Position.ABSOLUTE);
+			div.getElement().getStyle().setTop(top, Unit.PX);
+			div.getElement().getStyle().setLeft(left, Unit.PX);
+			
+			if(pointA.getX()==pointB.getX()) {
+				//render a vertical line
+				div.getElement().getStyle().setWidth(1, Unit.PX);
+				div.getElement().getStyle().setHeight(height, Unit.PX);
+			} else {
+				//render a horizontal line
+				div.getElement().getStyle().setHeight(1, Unit.PX);
+				div.getElement().getStyle().setWidth(width, Unit.PX);
+			}
+			taskFlowPanel.add(div);
+		}
+		
+		
+		//Dummy code that demonstrates how we could add arrows in
+		// IE. Note: it doesn't correctly render down and left arrows,
+		// only right arrows at the moment
+		
+		//TODO: Add ability to render down and left arrows
+		//TODO: Add style for arrow image
+		
+		SimplePanel arrowPanel = new SimplePanel();
+		arrowPanel.getElement().getStyle().setPosition(Position.ABSOLUTE);
+		arrowPanel.getElement().getStyle().setTop(top+height-(4), Unit.PX);
+		arrowPanel.getElement().getStyle().setLeft(left+width, Unit.PX);
+		arrowPanel.getElement().getStyle().setWidth(6, Unit.PX);
+		arrowPanel.getElement().getStyle().setHeight(8, Unit.PX);
+		arrowPanel.getElement().getStyle().setProperty("background", "transparent url(http://www.inventivetec.com/Images/arrow_black.gif) no-repeat");
+		taskFlowPanel.add(arrowPanel);
+	}
+	
 	protected void calculateEstimatedSize(Rectangle bounds) {
 		estimatedHeight = Math.max(bounds.getBottom(), estimatedHeight);
 		estimatedWidth = Math.max(bounds.getRight(), estimatedWidth);
@@ -412,6 +471,13 @@ public class GanttWeekDisplay extends Composite implements Display {
 	@Override
 	public Widget asWidget() {
 		return this;
+	}
+
+	@Override
+	public void doScroll(int x, int y) {
+	
+		taskScrollPanel.setHorizontalScrollPosition(x);
+		taskScrollPanel.setScrollPosition(y);
 	}
 
 }

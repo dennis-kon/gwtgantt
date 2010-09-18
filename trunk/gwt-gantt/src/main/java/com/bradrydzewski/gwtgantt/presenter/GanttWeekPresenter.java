@@ -22,7 +22,6 @@ import java.util.Date;
 import java.util.List;
 
 import com.bradrydzewski.gwtgantt.DateUtil;
-import com.bradrydzewski.gwtgantt.HasItems;
 import com.bradrydzewski.gwtgantt.ItemDataManager;
 import com.bradrydzewski.gwtgantt.TaskDisplay;
 import com.bradrydzewski.gwtgantt.TaskPresenter;
@@ -31,7 +30,7 @@ import com.bradrydzewski.gwtgantt.geometry.Point;
 import com.bradrydzewski.gwtgantt.geometry.Rectangle;
 import com.bradrydzewski.gwtgantt.model.Predecessor;
 import com.bradrydzewski.gwtgantt.model.Task;
-import com.bradrydzewski.gwtgantt.view.GanttWeekDisplay;
+import com.bradrydzewski.gwtgantt.view.GanttWeekDisplayImpl;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.ui.HasWidgets;
@@ -57,6 +56,7 @@ public class GanttWeekPresenter implements TaskPresenter {
 		void doTaskDeselected(Task task);
 		void doTaskEnter(Task task);
 		void doTaskExit(Task task);
+		void doScroll(int x, int y);
 		Rectangle getTaskRectangle(int UID);
 		int getHorizontalScrollPosition();
 		int getVerticalScrollPosition();
@@ -80,7 +80,7 @@ public class GanttWeekPresenter implements TaskPresenter {
 	public static final int SUMMARY_PADDING_TOP = 6;
 	
 	private TaskDisplay project;
-	private Display display = GWT.create(GanttWeekDisplay.class);
+	private Display display = GWT.create(GanttWeekDisplayImpl.class);
 	private Date start;
 	private Date finish;
 
@@ -386,7 +386,18 @@ public class GanttWeekPresenter implements TaskPresenter {
 		return display.getVerticalScrollPosition();
 	}
 	
-
+    @Override
+	public void doScrollToItem(Task item) {
+    	Rectangle rect = display.getTaskRectangle(item.getUID());
+    	if(rect != null) {
+    		int row = (int)Math.ceil(rect.getTop()/TASK_ROW_HEIGHT);
+    		int top = (row+1)*TASK_ROW_HEIGHT;
+    		int left = rect.getLeft()-ROW2_WIDTH;
+    		left = Math.max(0, left);
+    		top = Math.max(0, top);
+    		display.doScroll(left, top);
+    	}
+    }
 	
 	@Override
 	public void sortItems(List<Task> taskList) {

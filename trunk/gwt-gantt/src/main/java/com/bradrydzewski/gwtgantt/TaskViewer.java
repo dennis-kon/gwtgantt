@@ -219,6 +219,11 @@ public class TaskViewer extends Composite implements TaskDisplay,
     }
 
 	@Override
+	public void scrollToItem(Task item) {
+		view.doScrollToItem(item);
+	}
+
+	@Override
 	public void fireItemClickEvent(Task task) {
 		ItemClickEvent.fire(this,task);
 	}
