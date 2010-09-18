@@ -33,6 +33,7 @@ public class StartToStartCalculator implements Calculator {
 	static final int markerSize = 8;
 	static final int leftPadding = 15;
 
+    @Override
 	public Point[] calculate(Rectangle r1, Rectangle r2) {
 		int left = Math.min(r1.getLeft(), r2.getLeft()) - leftPadding; // - markerSize
 
@@ -46,6 +47,7 @@ public class StartToStartCalculator implements Calculator {
 	}
 
 
+    @Override
     public Point[] calculateWithOffset(Rectangle r1, Rectangle r2) {
         Point[] points = calculate(r1,r2);
         points[3].setX(points[3].getX()-markerSize);

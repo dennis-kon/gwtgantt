@@ -21,7 +21,7 @@ public interface ItemPresenter<T> {
 	public void doItemDeselected(T item);
 	public void doItemEnter(T item);
 	public void doItemExit(T item);
-//	public void doScroll(int x, int y);
+	public void doScroll(int x, int y);
 //	public void doScrollToItem(T item);
 	
 }

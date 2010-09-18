@@ -49,6 +49,7 @@ public class FinishToFinishCalculator implements Calculator {
         return points;
     }
 
+    @Override
     public Point[] calculateWithOffset(Rectangle r1, Rectangle r2) {
         Point[] points = calculate(r1,r2);
         points[3].setX(points[3].getX()+markerSize);

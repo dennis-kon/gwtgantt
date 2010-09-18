@@ -205,6 +205,10 @@ public class TaskViewer extends Composite implements TaskDisplay,
         dirty = true;
         refresh();
     }
+
+    public void setScrollPosition(int x, int y) {
+        view.doScroll(x, y);
+    }
     
     public int getHorizontalScrollPosition() {
     	return view.getHorizontalScrollPosition();

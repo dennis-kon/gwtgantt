@@ -39,6 +39,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class GanttWeekPresenter implements TaskPresenter {
 
+
 	public interface Display {
 		void bind(TaskPresenter view);
 		void renderTask(Task task, Rectangle rectangle);
@@ -364,6 +365,11 @@ public class GanttWeekPresenter implements TaskPresenter {
 	public void doItemExit(Task task) {
 		display.doTaskExit(task);
 	}
+
+        @Override
+        public void doScroll(int x, int y) {
+            //not implemented
+        }
 
 	@Override
 	public void onScroll(int x, int y) {
