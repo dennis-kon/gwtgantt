@@ -1,13 +1,32 @@
 #summary Creating Tasks and adding to the Gantt Chart.
 
-= Introduction =
+Coming soon ...
 
-Add your content here.
+<wiki:toc max_depth="2" />
+
+= Creating a Task =
 
 
-= Details =
+== Task Attributes Explained ==
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+=== Unique Id (UID) ===
+
+=== Order ===
+
+=== Order ===
+
+=== Summary and Milestone ===
+
+== Task Predecessors ==
+
+= Adding a Task =
+
+== Adding Tasks in Batch ==
+
+
+= Editing Tasks =
+
+
+= Selecting Tasks =
+
+
