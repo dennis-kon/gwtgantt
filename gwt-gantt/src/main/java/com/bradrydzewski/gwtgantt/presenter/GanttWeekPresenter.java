@@ -269,7 +269,7 @@ public class GanttWeekPresenter implements TaskPresenter {
 				Rectangle toRect = display.getTaskRectangle(task.getUID());
 				if(fromRect!=null && toRect!=null) {
 					path = CalculatorFactory.get(
-							predecessor.getType()).calculate(fromRect, toRect);
+							predecessor.getType()).calculateWithOffset(fromRect, toRect);
 					renderConnector(path);
 				}
 				

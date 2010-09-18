@@ -16,9 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/
  */
 
-package com.bradrydzewski.gwtgantt.connection;
+package com.bradrydzewski.gwtgantt.connector;
 
-import com.bradrydzewski.gwtgantt.connector.StartToStartCalculator;
 import com.bradrydzewski.gwtgantt.geometry.Point;
 import com.bradrydzewski.gwtgantt.geometry.Rectangle;
 import org.junit.Test;
@@ -51,6 +50,7 @@ public class StartToStartCalculatorTest {
     @Test
     public void testCalculate_SameLeftCoordinates() {
 
+
         Rectangle firstTask = new Rectangle(20,10,100,20); //left, top, width, height
         Rectangle secondTask = new Rectangle(20,30,100,20);
 
@@ -59,9 +59,9 @@ public class StartToStartCalculatorTest {
         assertTrue("Points are not null",points!=null);
         assertTrue("Four points make up connection",points.length==4);
         
-        assertTrue("Point 1 is (10,20)",points[0].getX()==20 && points[0].getY()==20);
-        assertTrue("Point 2 is (20,20)",points[1].getX()==10 && points[1].getY()==20);
-        assertTrue("Point 3 is (20,40)",points[2].getX()==10 && points[2].getY()==40);
-        assertTrue("Point 4 is (10,40)",points[3].getX()==20 && points[3].getY()==40);
+        assertTrue("Point 1 is (20,20)",points[0].getX()==20 && points[0].getY()==20);
+        assertTrue("Point 2 is (5,20) ",points[1].getX()== 5 && points[1].getY()==20);
+        assertTrue("Point 3 is (5,40) ",points[2].getX()== 5 && points[2].getY()==40);
+        assertTrue("Point 4 is (20,40)",points[3].getX()==20 && points[3].getY()==40);
     }
 }

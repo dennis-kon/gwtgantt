@@ -32,14 +32,49 @@ public class FinishToStartCalculator implements Calculator {
 
 	public Point[] calculate(Rectangle r1, Rectangle r2) {
 
-		int top = r1.getTop() + r1.getHeight()/2;
+            Point[] points = null;
+            int top = r1.getTop() + r1.getHeight()/2;
+
+            if(r1.getRight() <= r2.getLeft()) {
+
+                    points = new Point[3];
+                    points[0] = new Point(r1.getRight(), top);
+                    points[1] = new Point(r2.getLeft()+5, top);
+                    points[2] = new Point(r2.getLeft()+5, r2.getTop()); //-10
+
+            } else {
+
+                    /*
+                     *         0--
+                     *           |
+                     *  ----------
+                     *  |
+                     *  ---->
+                     */
+                    points = new Point[6];
+                    points[0] = new Point(r1.getRight(), top);
+                    points[1] = new Point(r1.getRight()+15, top);
+                    points[2] = new Point(r1.getRight()+15, r1.getBottom()+7);
+                    points[3] = new Point(r2.getLeft()-15, r1.getBottom()+7);
+                    points[4] = new Point(r2.getLeft()-15, r2.getTop() + r2.getHeight() / 2);
+                    points[5] = new Point(r2.getLeft(), r2.getTop() + r2.getHeight() / 2);
+
+            }
 		
-		Point[] points = new Point[3];
-		points[0] = new Point(r1.getRight(), top);
-		points[1] = new Point(r2.getLeft()+5, top);
-		points[2] = new Point(r2.getLeft()+5, r2.getTop()-10);
-		
-		return points;
+
+            return points;
 	}
-	
+
+
+    public Point[] calculateWithOffset(Rectangle r1, Rectangle r2) {
+        Point[] points = calculate(r1,r2);
+
+        if(points.length==3) {
+            points[3].setY(points[3].getY()-8);
+        } else {
+            points[5].setX(points[5].getX()-8);
+        }
+
+        return points;
+    }
 }

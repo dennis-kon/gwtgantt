@@ -30,19 +30,25 @@ import com.bradrydzewski.gwtgantt.geometry.Rectangle;
  */
 public class StartToStartCalculator implements Calculator {
 
-	protected static final int markerSize = 10;
-	protected static final int leftPadding = 10;
+	static final int markerSize = 8;
+	static final int leftPadding = 15;
 
 	public Point[] calculate(Rectangle r1, Rectangle r2) {
-		int left = Math.min(r1.getLeft(), r2.getLeft()) - markerSize - leftPadding;
+		int left = Math.min(r1.getLeft(), r2.getLeft()) - leftPadding; // - markerSize
 
 		Point[] points = new Point[4];
 		points[0] = new Point(r1.getLeft(), r1.getTop() + r1.getHeight() / 2);
 		points[1] = new Point(left, r1.getTop() + r1.getHeight() / 2);
 		points[2] = new Point(left, r2.getTop() + r2.getHeight() / 2);
-		points[3] = new Point(r2.getLeft() - leftPadding, r2.getTop() + r2.getHeight() / 2);
+		points[3] = new Point(r2.getLeft(), r2.getTop() + r2.getHeight() / 2);
 
 		return points;
 	}
 
+
+    public Point[] calculateWithOffset(Rectangle r1, Rectangle r2) {
+        Point[] points = calculate(r1,r2);
+        points[3].setX(points[3].getX()-markerSize);
+        return points;
+    }
 }

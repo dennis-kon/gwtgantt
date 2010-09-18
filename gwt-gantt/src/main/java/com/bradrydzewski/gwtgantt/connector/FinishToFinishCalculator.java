@@ -29,8 +29,8 @@ import com.bradrydzewski.gwtgantt.geometry.Rectangle;
  */
 public class FinishToFinishCalculator implements Calculator {
 
-	protected static final int markerSize = 10;
-	protected static final int rightPadding = 10;
+    protected static final int markerSize = 8;
+    protected static final int rightPadding = 15;
 	
     @Override
     public Point[] calculate(Rectangle r1, Rectangle r2) {
@@ -38,14 +38,20 @@ public class FinishToFinishCalculator implements Calculator {
         assert(r1!=null);
         assert(r2!=null);
 
-        int right = Math.max(r1.getRight(), r2.getRight()) + markerSize + rightPadding;
+        int right = Math.max(r1.getRight(), r2.getRight()) + rightPadding; //+ markerSize
 
         Point[] points = new Point[4];
         points[0] = new Point(r1.getRight(), r1.getTop() + r1.getHeight() / 2);
         points[1] = new Point(right, r1.getTop() + r1.getHeight() / 2);
         points[2] = new Point(right, r2.getTop() + r2.getHeight() / 2);
-        points[3] = new Point(r2.getRight()+ markerSize, r2.getTop() + r2.getHeight() / 2);
+        points[3] = new Point(r2.getRight(), r2.getTop() + r2.getHeight() / 2); //+ markerSize
 
+        return points;
+    }
+
+    public Point[] calculateWithOffset(Rectangle r1, Rectangle r2) {
+        Point[] points = calculate(r1,r2);
+        points[3].setX(points[3].getX()+markerSize);
         return points;
     }
 }

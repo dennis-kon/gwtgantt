@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/
  */
 
-package com.bradrydzewski.gwtgantt.connection;
+package com.bradrydzewski.gwtgantt.connector;
 
 import com.bradrydzewski.gwtgantt.connector.FinishToFinishCalculator;
 import com.bradrydzewski.gwtgantt.geometry.Point;
@@ -61,8 +61,8 @@ public class FinishToFinishCalculatorTest {
         assertTrue("Four points make up connection",points.length==4);
 
         assertTrue("Point 1 is (110,20)",points[0].getX()==110 && points[0].getY()==20);
-        assertTrue("Point 2 is (120,20)",points[1].getX()==120 && points[1].getY()==20);
-        assertTrue("Point 3 is (110,40)",points[2].getX()==120 && points[2].getY()==40);
+        assertTrue("Point 2 is (125,20)",points[1].getX()==125 && points[1].getY()==20);
+        assertTrue("Point 3 is (125,40)",points[2].getX()==125 && points[2].getY()==40);
         assertTrue("Point 4 is (110,40)",points[3].getX()==110 && points[3].getY()==40);
     }
 
@@ -92,8 +92,8 @@ public class FinishToFinishCalculatorTest {
         assertTrue("Four points make up connection",points.length==4);
 
         assertTrue("Point 1 is (110,20)",points[0].getX()==110 && points[0].getY()==20);
-        assertTrue("Point 2 is (140,20)",points[1].getX()==140 && points[1].getY()==20);
-        assertTrue("Point 3 is (140,40)",points[2].getX()==140 && points[2].getY()==40);
+        assertTrue("Point 2 is (145,20)",points[1].getX()==145 && points[1].getY()==20);
+        assertTrue("Point 3 is (145,40)",points[2].getX()==145 && points[2].getY()==40);
         assertTrue("Point 4 is (130,40)",points[3].getX()==130 && points[3].getY()==40);
     }
 
@@ -123,8 +123,8 @@ public class FinishToFinishCalculatorTest {
         assertTrue("Four points make up connection",points.length==4);
 
         assertTrue("Point 1 is (130,20)",points[0].getX()==130 && points[0].getY()==20);
-        assertTrue("Point 2 is (140,20)",points[1].getX()==140 && points[1].getY()==20);
-        assertTrue("Point 3 is (140,40)",points[2].getX()==140 && points[2].getY()==40);
+        assertTrue("Point 2 is (145,20)",points[1].getX()==145 && points[1].getY()==20);
+        assertTrue("Point 3 is (145,40)",points[2].getX()==145 && points[2].getY()==40);
         assertTrue("Point 4 is (110,40)",points[3].getX()==110 && points[3].getY()==40);
     }
 
@@ -154,8 +154,8 @@ public class FinishToFinishCalculatorTest {
         assertTrue("Four points make up connection",points.length==4);
 
         assertTrue("Point 1 is (110,40)",points[0].getX()==110 && points[0].getY()==40);
-        assertTrue("Point 2 is (120,40)",points[1].getX()==120 && points[1].getY()==40);
-        assertTrue("Point 3 is (120,20)",points[2].getX()==120 && points[2].getY()==20);
+        assertTrue("Point 2 is (125,40)",points[1].getX()==125 && points[1].getY()==40);
+        assertTrue("Point 3 is (125,20)",points[2].getX()==125 && points[2].getY()==20);
         assertTrue("Point 4 is (110,20)",points[3].getX()==110 && points[3].getY()==20);
     }
 }
