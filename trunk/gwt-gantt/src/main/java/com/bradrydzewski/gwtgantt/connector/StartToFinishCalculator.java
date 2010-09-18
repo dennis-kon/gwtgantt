@@ -29,6 +29,7 @@ import com.bradrydzewski.gwtgantt.geometry.Rectangle;
  */
 public class StartToFinishCalculator implements Calculator {
 
+    @Override
     public Point[] calculate(Rectangle r1, Rectangle r2) {
 
         Point[] points = null;
@@ -54,6 +55,7 @@ public class StartToFinishCalculator implements Calculator {
         return points;
     }
 
+    @Override
     public Point[] calculateWithOffset(Rectangle r1, Rectangle r2) {
         Point[] points = calculate(r1,r2);
         points[5].setX(points[5].getX()+8);

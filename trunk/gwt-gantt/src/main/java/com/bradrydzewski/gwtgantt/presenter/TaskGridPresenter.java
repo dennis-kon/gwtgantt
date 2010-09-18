@@ -167,6 +167,11 @@ public class TaskGridPresenter implements TaskPresenter {
 		//not implemented
 	}
 
+        @Override
+        public void doScroll(int x, int y) {
+            display.doScroll(x, y);
+        }
+
 	@Override
 	public void onScroll(int x, int y) {
 		project.fireScrollEvent(x, y);
