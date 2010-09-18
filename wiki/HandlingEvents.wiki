@@ -43,7 +43,7 @@ The `MouseEnterEvent` is fired when a mouse is hovered over a `Task` in the `Gan
 
 = Task Mouse Out =
 
-The `MouseExitEvent` is fired when a mouse leaves a `Task` in the `GanttChart`. You may want to handle this event in order to hide `Task`'s a tooltip, for example.
+The `MouseExitEvent` is fired when a mouse leaves a `Task` in the `GanttChart`. You may want to handle this event in order to hide a `Task`'s tooltip, for example.
 
 {{{
    gantt.addMouseExitHandler(new MouseExitHandler<Task>(){
@@ -68,7 +68,5 @@ See our [http://code.google.com/p/gwtgantt/source/browse/trunk/gwt-gantt-demo/gw
       }
    });
 }}}
-
-
 
 
