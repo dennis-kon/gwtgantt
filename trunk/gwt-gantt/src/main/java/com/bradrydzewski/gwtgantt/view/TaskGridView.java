@@ -453,9 +453,9 @@ public class TaskGridView extends Composite implements Display {
 
 	@Override
 	public void doScroll(int x, int y) {
-		bodyPanel.setScrollPosition(x);
-		bodyPanel.setHorizontalScrollPosition(y);
-		headerTable.getElement().getStyle().setLeft(x*-1, Unit.PX);
+		bodyPanel.setScrollPosition(y);
+//		bodyPanel.setHorizontalScrollPosition(x);
+//		headerTable.getElement().getStyle().setLeft(x*-1, Unit.PX);
 	}
 
 	

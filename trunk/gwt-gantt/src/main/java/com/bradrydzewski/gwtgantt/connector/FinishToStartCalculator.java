@@ -70,7 +70,7 @@ public class FinishToStartCalculator implements Calculator {
     @Override
     public Point[] calculateWithOffset(Rectangle r1, Rectangle r2) {
         Point[] points = calculate(r1,r2);
-        
+//        points[0].setX(points[0].getX()-2);//offset for borders????
         if(points.length==3) {
             points[2].setY(points[2].getY()-8);
         } else {
