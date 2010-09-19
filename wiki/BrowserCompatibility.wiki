@@ -11,4 +11,4 @@ Our goal is to support all HTML5 compliant browsers:
  * Internet Explorer 9
 
 
-That being said, I create the `GanttWeekDisplayNoSVGImpl` class and substituted using GWT's deferred binding feature. This implementation renders lines a DIVs, as opposed to SVG elements. Initial tests were very promising, as I was able to view the Gantt Chart and rendered pretty well in IE8. I assume it would also work in Opera, Firefox 3.x, etc.
+That being said, I create the `GanttWeekDisplayNoSVGImpl` class and substituted using GWT's deferred binding feature. This implementation renders lines a DIVs, as opposed to SVG elements. Initial tests were very promising, as I was able to view the Gantt Chart in IE8. I assume it would also work in Opera, Firefox 3.x, etc.
