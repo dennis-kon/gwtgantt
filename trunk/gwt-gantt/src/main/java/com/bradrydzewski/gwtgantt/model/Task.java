@@ -22,8 +22,11 @@ import java.util.List;
 
 
 /**
+ * Defines the behaviors that a <code>Task</code> to be displayed
+ * in the gwt-gantt widget.
  *
  * @author Brad Rydzewski
+ * @see com.bradrydzewski.gwtgantt.model.TaskImpl
  */
 public interface Task extends Cloneable, Comparable<Task> {
 
@@ -31,7 +34,7 @@ public interface Task extends Cloneable, Comparable<Task> {
      * Gets the unique ID of this task. For internal use only to compare and
      * link two tasks.
      *
-     * @return
+     * @return A numeric ID identifying each task managed by gwt-gantt
      */
     public int getUID();
 
@@ -104,7 +107,7 @@ public interface Task extends Cloneable, Comparable<Task> {
     /**
      * Sets the finish Date of the task.
      *
-     * @param start
+     * @param finish
      *            Task finish date.
      */
     public void setFinish(Date finish);
@@ -142,7 +145,7 @@ public interface Task extends Cloneable, Comparable<Task> {
     /**
      * Sets whether or not the Task should be visually collapsed,
      * hiding all of its child tasks on the Gantt chart.
-     * @param collapsed
+     * @param collapsed Flag indicating if task should be collapsed
      */
     public void setCollapsed(boolean collapsed);
 

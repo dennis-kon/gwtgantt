@@ -23,15 +23,16 @@ import java.util.List;
 
 
 /**
- * A base implementation of a {@link ITask}.
+ * Default gwt-gantt provided implementation of a {@link Task}.
  *
  * @author Brad Rydzewski
+ * @see com.bradrydzewski.gwtgantt.model.Task
  *
  */
 public class TaskImpl implements Task {
 
-	public static final String STYLE_DEFAULT = "blue";
-	public static final String STYLE_BLUE = "blue";
+    public static final String STYLE_BLUE = "blue";
+    public static final String STYLE_DEFAULT = STYLE_BLUE;
 	public static final String STYLE_RED = "red";
 	public static final String STYLE_GREEN = "green";
 	
@@ -180,7 +181,7 @@ public class TaskImpl implements Task {
         task.finish = this.finish;
         task.level = this.level;
         task.milestone = this.milestone;
-        task.summary = task.summary;
+        task.summary = this.summary;
         task.name = this.name;
         task.notes = this.notes;
         task.order = this.order;
