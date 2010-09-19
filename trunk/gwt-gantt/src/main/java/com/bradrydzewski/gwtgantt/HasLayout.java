@@ -44,14 +44,14 @@ public interface HasLayout {
 	public boolean isDirty();
 
 	/**
-	 * Requests the widget to redraw itself and any child controls
+	 * Requests the widget to redraw itself and any child controls.
 	 */
 	public void refresh();
 
 	/**
-	 * Requests the widget to redraw itself and any child controls
+	 * Requests the widget to redraw itself and any child controls.
 	 * 
-	 * @param {@code true} to force the widget to redraw, {@code false} to
+	 * @param force Flag to force the widget to redraw, <code>false</code> to
 	 *        redraw only if the widget is dirty.
 	 */
 	public void refresh(boolean force);
