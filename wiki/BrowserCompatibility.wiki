@@ -1,7 +1,14 @@
 #summary Brief overview of Browser compatibility.
 
-gwt-gantt uses an inline SVG element to draw lines and arrows on the screen. Inline SVG elements are part of the HTML5 spec, and therefore only work in the newest browser versions. At the time this wiki article was written, only Firefox 4 beta and Google Chrome 6+ support inline SVG elements.
+gwt-gantt uses an inline SVG element to draw lines and arrows on the screen. Inline SVG elements are part of the HTML5 spec, and therefore only work in the newest browser versions. At the time this wiki article was written, gwt-gantt works with:
+ * Firefox 4 beta
+ * Google Chrome 6+
 
-Our goal is to support all HTML5 compliant browsers: Firefox 4, Chrome 6, Safari 5, Internet Explorer 9.
+Our goal is to support all HTML5 compliant browsers:
+ * Firefox 4
+ * Chrome 6 
+ * Safari 5
+ * Internet Explorer 9
 
-That being said, I tested out `GanttWeekDisplayNoSVGImpl` class that I was able to substitute using GWT's deferred binding feature. This implementation renders lines a DIVs, as opposed to SVG elements. I'll definitely try to expand on this a little more, but IE6 compatibility will definitely not be a priority!
+
+That being said, I create the `GanttWeekDisplayNoSVGImpl` class and substituted using GWT's deferred binding feature. This implementation renders lines a DIVs, as opposed to SVG elements. Initial tests were very promising, as I was able to view the Gantt Chart and rendered pretty well in IE8. I assume it would also work in Opera, Firefox 3.x, etc.
