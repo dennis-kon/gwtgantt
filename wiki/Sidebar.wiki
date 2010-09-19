@@ -2,3 +2,4 @@
  * [GettingStarted Getting Started]
  * [CreatingTasks Creating Tasks]
  * [HandlingEvents Handling Events]
+ * [BrowserCompatibility Browser Compatibility]
