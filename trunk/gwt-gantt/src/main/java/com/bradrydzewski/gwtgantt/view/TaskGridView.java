@@ -2,8 +2,8 @@ package com.bradrydzewski.gwtgantt.view;
 
 import java.util.ArrayList;
 
-import com.bradrydzewski.gwtgantt.DateUtil;
 import com.bradrydzewski.gwtgantt.TaskPresenter;
+import com.bradrydzewski.gwtgantt.model.DurationFormat;
 import com.bradrydzewski.gwtgantt.model.Task;
 import com.bradrydzewski.gwtgantt.presenter.TaskGridPresenter.Display;
 import com.bradrydzewski.gwtgantt.resources.GridResources;
@@ -377,7 +377,7 @@ public class TaskGridView extends Composite implements Display {
 		bodyTable.setWidget(rowOffset, 1, treePanel);
 		
 		
-		String duration = DateUtil.differenceInDays(task.getFinish(), task.getStart())+" day(s)";
+		String duration = DurationFormat.format(task.getDurationFormat(), task.getDuration());
 		bodyTable.setHTML(rowOffset, 2, "<div>"+duration+"</div>");
 		
 		bodyTable.setHTML(rowOffset, 3, "<div>"+((task.getStart()==null)?"--":DATE_FORMAT.format(task.getStart()))+"</div>");

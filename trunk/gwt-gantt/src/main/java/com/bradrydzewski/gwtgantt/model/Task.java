@@ -103,6 +103,18 @@ public interface Task extends Cloneable, Comparable<Task> {
      * @return Task finish date.
      */
     public Date getFinish();
+    
+    /**
+     * Gets the duration of the Task.
+     * @return Task duration.
+     */
+    public int getDuration();
+    
+    /**
+     * Gets the unit of measure for expressing a duration of time.
+     * @return Task duration format.
+     */
+    public DurationFormat getDurationFormat();
 
     /**
      * Sets the finish Date of the task.

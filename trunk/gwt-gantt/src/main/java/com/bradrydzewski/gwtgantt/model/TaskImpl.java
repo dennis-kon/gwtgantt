@@ -44,6 +44,8 @@ public class TaskImpl implements Task {
     private int level;
     private Date start;
     private Date finish;
+    private int duration;
+    private DurationFormat durationFormat = DurationFormat.DAYS;
     private int percentComplete;
     private boolean milestone;
     private boolean summary;
@@ -203,5 +205,23 @@ public class TaskImpl implements Task {
 	@Override
 	public int getPercentComplete() {
 		return percentComplete;
+	}
+
+	@Override
+	public int getDuration() {
+		return duration;
+	}
+
+	public void setDuration(int duration) {
+		this.duration = duration;
+	}
+
+	@Override
+	public DurationFormat getDurationFormat() {
+		return durationFormat;
+	}
+
+	public void setDurationFormat(DurationFormat durationFormat) {
+		this.durationFormat = durationFormat;
 	}
 }

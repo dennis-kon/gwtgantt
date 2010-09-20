@@ -15,23 +15,38 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/
  */
-package com.bradrydzewski.gwtgantt.view;
+package com.bradrydzewski.gwtgantt.model;
 
-import com.bradrydzewski.gwtgantt.geometry.Point;
+public enum DurationFormat {
+	MINUTES,
+	HOURS,
+	DAYS,
+	WEEKS,
+	MONTHS,
+	YEARS,
+	PERCENT,
+	NONE;
 
-/**
- * Extend the GanttWeekDisplay so that it is compatible with
- * browsers that do not yet implement inline SVG elements.
- * @author Brad Rydzewski
- */
-public class GanttWeekDisplayNoSVGImpl extends GanttWeekDisplay {
-	@Override
-	public void initSVG() {
-		//do nothing, we can't use SVGs!
-	}
-	
-	@Override
-	public void renderConnector(Point point[]) {
-		renderConnectorAsDiv(point);
+
+	public static String format(DurationFormat timeUnit, int value) {
+		String format;
+		switch (timeUnit) {
+		case HOURS: format="hr"; break;
+		case MINUTES: format="min"; break;
+		case DAYS: format="day"; break;
+		case WEEKS: format="week"; break;
+		case MONTHS: format="month"; break;
+		case YEARS: format="year"; break;
+		case PERCENT: format="%"; break;
+		case NONE:
+		default: format=""; break;
+		}
+		
+		if(timeUnit!=NONE) {
+			format = value + " " + format;
+			format += (timeUnit==PERCENT || value==1)?"":"s";
+		}
+		
+		return format;
 	}
 }
