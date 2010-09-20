@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.bradrydzewski.gwtgantt.DateUtil;
+import com.bradrydzewski.gwtgantt.model.DurationFormat;
 import com.bradrydzewski.gwtgantt.model.Predecessor;
 import com.bradrydzewski.gwtgantt.model.PredecessorType;
 import com.bradrydzewski.gwtgantt.model.Task;
@@ -24,6 +25,7 @@ public class DataGenerator {
 		task1.setPercentComplete(50);
 		task1.setStart(new Date());
 		task1.setFinish(new Date());
+		task1.setDuration(DateUtil.differenceInDays(task1.getStart(), task1.getFinish()));
 		taskList.add(task1);
 		
 		TaskImpl task2 = new TaskImpl();
@@ -34,6 +36,7 @@ public class DataGenerator {
 		task2.setPercentComplete(75);
 		task2.setStart(new Date());
 		task2.setFinish(new Date());
+		task2.setDuration(DateUtil.differenceInDays(task2.getStart(), task2.getFinish()));
 		taskList.add(task2);
 
 		TaskImpl task3 = new TaskImpl();
@@ -44,6 +47,7 @@ public class DataGenerator {
 		task3.setPercentComplete(25);
 		task3.setStart(new Date());
 		task3.setFinish(new Date(new Date().getYear(),new Date().getMonth(), new Date().getDate()+1));
+		task3.setDuration(DateUtil.differenceInDays(task3.getStart(), task3.getFinish()));
 		task3.getPredecessors().add(new Predecessor(2, PredecessorType.SS));
 		taskList.add(task3);
 
@@ -55,6 +59,8 @@ public class DataGenerator {
 		task4.setPercentComplete(0);
 		task4.setStart(new Date());
 		task4.setFinish(new Date());
+		task4.setDuration(3);
+		task4.setDurationFormat(DurationFormat.HOURS);
 		task4.setStyle(TaskImpl.STYLE_RED);
 		task4.getPredecessors().add(new Predecessor(3, PredecessorType.FS));
 		taskList.add(task4);
@@ -67,6 +73,7 @@ public class DataGenerator {
 		task5.setPercentComplete(25);
 		task5.setStart(new Date(new Date().getYear(),new Date().getMonth(), new Date().getDate()+5));
 		task5.setFinish(new Date(new Date().getYear(),new Date().getMonth(), new Date().getDate()+7));
+		task5.setDuration(DateUtil.differenceInDays(task5.getStart(), task5.getFinish()));
 		task5.getPredecessors().add(new Predecessor(4, PredecessorType.FS));
 		taskList.add(task5);
 		
@@ -78,6 +85,7 @@ public class DataGenerator {
 		task6.setPercentComplete(0);
 		task6.setStart(new Date(new Date().getYear(),new Date().getMonth(), new Date().getDate()+5));
 		task6.setFinish(new Date(new Date().getYear(),new Date().getMonth(), new Date().getDate()+7));
+		task6.setDuration(DateUtil.differenceInDays(task6.getStart(), task6.getFinish()));
 		task6.getPredecessors().add(new Predecessor(5, PredecessorType.FS));
 		taskList.add(task6);
 		
@@ -89,6 +97,7 @@ public class DataGenerator {
 		task7.setPercentComplete(0);
 		task7.setStart(new Date());
 		task7.setFinish(DateUtil.addDays(new Date(), 10));
+		task7.setDuration(DateUtil.differenceInDays(task7.getStart(), task7.getFinish()));
 		task7.setSummary(true);
 		taskList.add(task7);
 		
@@ -107,6 +116,10 @@ public class DataGenerator {
 			date = DateUtil.addDays(date, 1);
 			
 			taskN.setFinish(date);
+			taskN.setDuration(DateUtil.differenceInDays(
+					taskN.getStart(), taskN.getFinish()));
+			
+			
 			if(i>8)
 				taskN.getPredecessors().add(new Predecessor(i-1, PredecessorType.FS));
 			
