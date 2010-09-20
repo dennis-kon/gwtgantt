@@ -34,8 +34,8 @@ public enum DurationFormat {
 		case HOURS: format="hr"; break;
 		case MINUTES: format="min"; break;
 		case DAYS: format="day"; break;
-		case WEEKS: format="week"; break;
-		case MONTHS: format="month"; break;
+		case WEEKS: format="wk"; break;
+		case MONTHS: format="mon"; break;
 		case YEARS: format="year"; break;
 		case PERCENT: format="%"; break;
 		case NONE:
