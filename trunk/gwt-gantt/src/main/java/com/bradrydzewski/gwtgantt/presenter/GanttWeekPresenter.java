@@ -22,7 +22,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.bradrydzewski.gwtgantt.DateUtil;
-import com.bradrydzewski.gwtgantt.ItemDataManager;
+import com.bradrydzewski.gwtgantt.TaskDataManager;
 import com.bradrydzewski.gwtgantt.TaskDisplay;
 import com.bradrydzewski.gwtgantt.TaskPresenter;
 import com.bradrydzewski.gwtgantt.connector.CalculatorFactory;
@@ -78,8 +78,13 @@ public class GanttWeekPresenter implements TaskPresenter {
 	public static final int MILESTONE_PADDING_TOP = 4;
 	public static final int SUMMARY_HEIGHT = 7;
 	public static final int SUMMARY_PADDING_TOP = 6;
+
+    public static final int SATURDAY = 6;
+
+    public static final int SUNDAY = 0;
+
 	
-	private TaskDisplay project;
+	private TaskDisplay taskViewer;
 	private Display display = GWT.create(GanttWeekDisplayImpl.class);
 	private Date start;
 	private Date finish;
@@ -90,7 +95,7 @@ public class GanttWeekPresenter implements TaskPresenter {
 
 	@Override
 	public void attach(HasWidgets container, TaskDisplay project) {
-		this.project = project;
+		this.taskViewer = project;
 		container.clear();
 		container.add(display.asWidget());
 	}
@@ -126,7 +131,7 @@ public class GanttWeekPresenter implements TaskPresenter {
 			display.renderTopTimescaleCell(weekHeaderBounds, topTimescaleString);
 
 			// ADD 7 DAYS PER WEEK
-			for (int d = 0; d < 7; d++) {
+			for (int d = 0; d < DateUtil.DAYS_PER_WEEK; d++) {
 				//ADD DAY PANEL
 				Date weekDay = DateUtil.addDays(date, d);
 				int width = ROW2_WIDTH;
@@ -137,7 +142,7 @@ public class GanttWeekPresenter implements TaskPresenter {
 				String bottomTimescaleString = weekDay.getDate() + "";
 				display.renderBottomTimescaleCell(bottomTimescaleBounds, bottomTimescaleString);
 			
-				if (d == 6 || d==0) {
+				if (d == SATURDAY || d== SUNDAY) {
 					//ADD BACKGROUND FOR SAT, SUND
 					int colTop = 0;
 					int colLeft = (ROW1_WIDTH_OFFSET * i)	+ (ROW2_WIDTH_OFFSET * d);
@@ -160,9 +165,9 @@ public class GanttWeekPresenter implements TaskPresenter {
 		boolean collapse = false;
 		int collapseLevel = -1;
 
-		for (int i = 0; i < project.getItemCount(); i++) {
+		for (int i = 0; i < taskViewer.getItemCount(); i++) {
 			//get the task
-			Task task = project.getItem(i);
+			Task task = taskViewer.getItem(i);
 			
 			collapse = collapse && task.getLevel()>=collapseLevel;
 			
@@ -205,7 +210,7 @@ public class GanttWeekPresenter implements TaskPresenter {
 		display.renderTaskLabel(task, labelBounds);
 		
 		//if task is selected, make sure it is rendered as selected
-		if(project.isSelectedItem(task)) {
+		if(taskViewer.isSelectedItem(task)) {
 			this.doItemSelected(task);
 		}
 	}
@@ -231,7 +236,7 @@ public class GanttWeekPresenter implements TaskPresenter {
 		display.renderTaskLabel(task, labelBounds);
 		
 		//if task is selected, make sure it is rendered as selected
-		if(project.isSelectedItem(task)) {
+		if(taskViewer.isSelectedItem(task)) {
 			this.doItemSelected(task);
 		}
 	}
@@ -254,16 +259,16 @@ public class GanttWeekPresenter implements TaskPresenter {
 		display.renderTaskLabel(task, labelBounds);
 		
 		//if task is selected, make sure it is rendered as selected
-		if(project.isSelectedItem(task)) {
+		if(taskViewer.isSelectedItem(task)) {
 			this.doItemSelected(task);
 		}
 	}
 	
 	protected void renderConnectors() {
 		
-		for(int i=0; i<project.getItemCount(); i++) {
+		for(int i=0; i< taskViewer.getItemCount(); i++) {
 			
-			Task task = project.getItem(i);
+			Task task = taskViewer.getItem(i);
 			for(Predecessor predecessor : task.getPredecessors()) {
 				Point[] path = null;
 				Rectangle fromRect = display.getTaskRectangle(predecessor.getUID());
@@ -286,19 +291,19 @@ public class GanttWeekPresenter implements TaskPresenter {
 
 	protected Date calculateStartDate() {
 		
-		Date adjustedStart = project.getStart();
+		Date adjustedStart = taskViewer.getStart();
 		
 		//if the gantt chart's start date is null, let's set one automatically
-		if(project.getStart()==null) {
+		if(taskViewer.getStart()==null) {
 			adjustedStart = new Date();
 		}
 
 		//if the first task in the gantt chart is before the gantt charts
 		// project start date ...
-		if(project.getItemCount()>0 &&
-				project.getItem(0).getStart().before(adjustedStart)) {
+		if(taskViewer.getItemCount()>0 &&
+				taskViewer.getItem(0).getStart().before(adjustedStart)) {
 			
-			adjustedStart = project.getItem(0).getStart();	
+			adjustedStart = taskViewer.getItem(0).getStart();
 		}
 		
 		adjustedStart = DateUtil.addDays(adjustedStart, -7);
@@ -308,7 +313,7 @@ public class GanttWeekPresenter implements TaskPresenter {
 	
 	protected Date calculateFinishDate() {
 		
-		Date adjustedFinish = project.getFinish();
+		Date adjustedFinish = taskViewer.getFinish();
 		
 		//if the gantt chart's finish date is null, let's set one automatically
 		if(adjustedFinish==null) {
@@ -318,10 +323,10 @@ public class GanttWeekPresenter implements TaskPresenter {
 
 		//if the last task in the gantt chart is after the gantt charts
 		// project finish date ...
-		if(project.getItemCount()>0 && project.getItem(
-				project.getItemCount()-1).getFinish().after(adjustedFinish)) {
+		if(taskViewer.getItemCount()>0 && taskViewer.getItem(
+				taskViewer.getItemCount()-1).getFinish().after(adjustedFinish)) {
 			
-			adjustedFinish = project.getItem(project.getItemCount()-1).getFinish();	
+			adjustedFinish = taskViewer.getItem(taskViewer.getItemCount()-1).getFinish();
 		}
 		
 		adjustedFinish = DateUtil.addDays(adjustedFinish, 7);
@@ -332,22 +337,22 @@ public class GanttWeekPresenter implements TaskPresenter {
 
 	@Override
 	public void onItemClicked(Task task) {
-		project.fireItemClickEvent(task);
+		taskViewer.fireItemClickEvent(task);
 	}
 
 	@Override
 	public void onItemDoubleClicked(Task task) {
-		project.fireItemDoubleClickEvent(task);
+		taskViewer.fireItemDoubleClickEvent(task);
 	}
 
 	@Override
 	public void onItemMouseOver(Task task) {
-		project.fireItemEnterEvent(task);
+		taskViewer.fireItemEnterEvent(task);
 	}
 
 	@Override
 	public void onItemMouseOut(Task task) {
-		project.fireItemExitEvent(task);
+		taskViewer.fireItemExitEvent(task);
 	}
 	
 	public void doItemSelected(Task task) {
@@ -366,14 +371,14 @@ public class GanttWeekPresenter implements TaskPresenter {
 		display.doTaskExit(task);
 	}
 
-        @Override
-        public void doScroll(int x, int y) {
+    @Override
+    public void doScroll(int x, int y) {
             //not implemented
-        }
+    }
 
 	@Override
 	public void onScroll(int x, int y) {
-		project.fireScrollEvent(x, y);
+		taskViewer.fireScrollEvent(x, y);
 	}
 
 	@Override
@@ -401,7 +406,7 @@ public class GanttWeekPresenter implements TaskPresenter {
 	
 	@Override
 	public void sortItems(List<Task> taskList) {
-		Collections.sort(taskList,ItemDataManager.TASK_ORDER_COMPARATOR);
+		Collections.sort(taskList, TaskDataManager.TASK_ORDER_COMPARATOR);
 	}
 
 	@Override
