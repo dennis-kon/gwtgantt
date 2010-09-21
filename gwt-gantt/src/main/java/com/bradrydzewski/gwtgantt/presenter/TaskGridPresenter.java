@@ -3,9 +3,9 @@ package com.bradrydzewski.gwtgantt.presenter;
 import java.util.Collections;
 import java.util.List;
 
+import com.bradrydzewski.gwtgantt.TaskDataManager;
 import com.bradrydzewski.gwtgantt.TaskPresenter;
 import com.bradrydzewski.gwtgantt.TaskDisplay;
-import com.bradrydzewski.gwtgantt.ItemDataManager;
 import com.bradrydzewski.gwtgantt.model.Predecessor;
 import com.bradrydzewski.gwtgantt.model.Task;
 import com.bradrydzewski.gwtgantt.view.TaskGridView;
@@ -118,7 +118,7 @@ public class TaskGridPresenter implements TaskPresenter {
 
 	@Override
 	public void sortItems(List<Task> taskList) {
-		Collections.sort(taskList,ItemDataManager.TASK_ORDER_COMPARATOR);
+		Collections.sort(taskList, TaskDataManager.TASK_ORDER_COMPARATOR);
 	}
 
 	@Override

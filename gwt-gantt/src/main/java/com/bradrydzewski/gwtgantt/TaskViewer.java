@@ -49,6 +49,12 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 
 /**
+ * Represents an abstract component capable of displaying {@link Task}s
+ * through an attached presenter and handle user input generated events.
+ *
+ * In order to process these events, client code should subscribe
+ * as a listener for these events. As events are fired, the subscribing/observer
+ * clients will be notified.
  *
  * @author Brad Rydzewski
  */
@@ -57,10 +63,22 @@ public class TaskViewer extends Composite implements TaskDisplay,
 	HasMouseEnterHandlers<Task>, HasMouseExitHandlers<Task>, HasScrollHandlers,
 	HasItemCollapseHandlers<Task>, HasItemExpandHandlers<Task> {
 
+    /**
+     * This <code>TaskViewer</code> component container.
+     */
     private FlowPanel root = new FlowPanel();
+
     private Date start;
     private Date finish;
-    private ItemDataManager tasks = GWT.create(ItemDataManager.class);
+
+    /**
+     * A component to handle the sets of {@link Task}s. Clients
+     * can override the provided implementation through
+     * deferred binding.
+     */
+    private TaskDataManager tasks = GWT.create(TaskDataManager.class);
+
+
     private TaskPresenter view = null;//GWT.create(TaskGridView.class);//GWT.create(GanttWeekView.class);
     private boolean suspended = false;
     private boolean dirty = false;
@@ -114,11 +132,11 @@ public class TaskViewer extends Composite implements TaskDisplay,
     	if(!isAttached())
     		return;
     	
-        if (suspended && force != true) {
+        if (suspended && !force) {
             return;
         }
 
-        if (dirty == false && force != true) {
+        if (!dirty && !force) {
             return;
         }
         
