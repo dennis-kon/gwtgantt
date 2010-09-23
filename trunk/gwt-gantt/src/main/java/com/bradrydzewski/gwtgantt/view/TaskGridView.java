@@ -26,6 +26,8 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.InlineLabel;
@@ -38,7 +40,7 @@ public class TaskGridView extends Composite implements Display {
 	public class CollapseButton extends ToggleButton {
 		private Task item;
 		public CollapseButton(Task item) {
-			super(new Image("http://dev.sencha.com/deploy/dev/resources/images/default/tree/elbow-minus-nl.gif"),new Image("http://dev.sencha.com/deploy/dev/resources/images/default/tree/elbow-plus-nl.gif"));
+			super(new Image(GridResources.INSTANCE.collapseArrowImage()), new Image(GridResources.INSTANCE.expandArrowImage()));
 			this.item = item;
 			this.setDown(item.isCollapsed());
 			getElement().getStyle().setDisplay(
@@ -289,7 +291,7 @@ public class TaskGridView extends Composite implements Display {
 	protected FlexTable bodyTable = new FlexTable();
 	private TaskPresenter presenter;
 	
-	private int[] columnWidthArray = new int[]{40, 200,100,100,100,100};
+	private int[] columnWidthArray = new int[]{40, 200,80,110,110,100};
 	private String[] columnNameArray = new String[]{"&nbsp;","Task Name","Duration","Start","Finish","Predecessors"};
 	
 	/**
@@ -355,7 +357,8 @@ public class TaskGridView extends Composite implements Display {
 	}
 
 	public static final DateTimeFormat DATE_FORMAT =
-		DateTimeFormat.getFormat(PredefinedFormat.DATE_SHORT);
+		DateTimeFormat.getFormat("EEE M/d/yy");
+//	    DateTimeFormat.getFormat(PredefinedFormat.DATE_SHORT);
 	
 	//TODO: I'm thinking we can render each column separately
 	@Override
@@ -369,7 +372,7 @@ public class TaskGridView extends Composite implements Display {
 		if(task.isSummary()) {
 			treePanel.add(new CollapseButton(task));
 		} else {
-			leftPadding += 25; //16 width + padding of toggle button + 1 (why +1? I don't know)
+			leftPadding += 21; //11 width + 10pxpadding of toggle button + 1 (why +1? I don't know)
 		}
 		
 		treePanel.getElement().getStyle().setPaddingLeft(leftPadding, Unit.PX);
@@ -379,11 +382,17 @@ public class TaskGridView extends Composite implements Display {
 		
 		String duration = DurationFormat.format(task.getDurationFormat(), task.getDuration());
 		bodyTable.setHTML(rowOffset, 2, "<div>"+duration+"</div>");
-		
 		bodyTable.setHTML(rowOffset, 3, "<div>"+((task.getStart()==null)?"--":DATE_FORMAT.format(task.getStart()))+"</div>");
 		bodyTable.setHTML(rowOffset, 4, "<div>"+((task.getStart()==null)?"--":DATE_FORMAT.format(task.getFinish()))+"</div>");
 		
-
+		bodyTable.getCellFormatter().setHorizontalAlignment(rowOffset, 2, HasHorizontalAlignment.ALIGN_RIGHT);
+		bodyTable.getCellFormatter().setHorizontalAlignment(rowOffset, 3, HasHorizontalAlignment.ALIGN_RIGHT);
+		bodyTable.getCellFormatter().setHorizontalAlignment(rowOffset, 4, HasHorizontalAlignment.ALIGN_RIGHT);
+		
+		
+		//make summary rows bold
+		if(task.isSummary())
+			bodyTable.getRowFormatter().addStyleName(rowOffset, "summaryRow");
 		
 		//add task to list of visible tasks
 		//TODO: Move visibleItems list to the View??
@@ -441,14 +450,14 @@ public class TaskGridView extends Composite implements Display {
 	public void doTaskSelected(Task task) {
 		int row = visibleItems.indexOf(task);
 		if(row>-1)
-			bodyTable.getRowFormatter().setStyleName(row, "selectedRow");
+			bodyTable.getRowFormatter().addStyleName(row, "selectedRow");
 	}
 
 	@Override
 	public void doTaskDeselected(Task task) {
 		int row = visibleItems.indexOf(task);
 		if(row>-1)
-			bodyTable.getRowFormatter().setStyleName(row, "");
+			bodyTable.getRowFormatter().removeStyleName(row, "selectedRow");
 	}
 
 	@Override

@@ -86,7 +86,7 @@ public class DataGenerator {
 		task6.setStart(new Date(new Date().getYear(),new Date().getMonth(), new Date().getDate()+5));
 		task6.setFinish(new Date(new Date().getYear(),new Date().getMonth(), new Date().getDate()+7));
 		task6.setDuration(DateUtil.differenceInDays(task6.getStart(), task6.getFinish()));
-		task6.getPredecessors().add(new Predecessor(5, PredecessorType.FS));
+		task6.getPredecessors().add(new Predecessor(5, PredecessorType.FF));
 		taskList.add(task6);
 		
 		TaskImpl task7 = new TaskImpl();
