@@ -10,14 +10,14 @@
 		
 		
 		.taskBackgroundPanel { position:absolute;top:50px;bottom:0px;left:0px;right:0px;background-color:#FFF; }
-		.taskFlowPanel { width:auto;height:auto; position:relative;}
+		.taskFlowPanel { width:auto;height:auto; position:relative; }
 		.taskScrollPanel { background:transparent;position:absolute;top:50px;bottom:0px;left:0px;right:0px; }
 	
-		.firstHeaderRow { overflow:hidden;position:absolute;top:0px;left:0px;right:0px;height:25px; }
+		.firstHeaderRow { overflow:hidden;position:absolute;top:0px;left:0px;right:0px;height:25px; -webkit-user-select: none;-moz-user-select: none;}
 		.firstHeaderRow>div { height:24px;top:0px; position:absolute;width:278px;border-left:1px solid #ececec;border-right:1px solid #bebebe;border-bottom:1px solid #bebebe; background:#eee;  -background: literal("-moz-linear-gradient( center top, #FFF 0%, #ececec 100%)");-background-image:literal("-webkit-gradient(linear, left top, left bottom, color-stop(0, #FFF), color-stop(1, #ececec))"); }
 		.firstHeaderRow div div.gwt-Label { line-height:24px; padding-left:5px; -webkit-user-select: none;-moz-user-select: none; }
 		
-		.secondHeaderRow { overflow:hidden;position:absolute;top:25px;left:0px;right:0px;height:25px; }
+		.secondHeaderRow { overflow:hidden;position:absolute;top:25px;left:0px;right:0px;height:25px; -webkit-user-select: none;-moz-user-select: none;}
 		.secondHeaderRow>div { height:24px;top:0px; position:absolute;width:38px;border-left:1px solid #EEE;border-right:1px solid #bebebe;border-bottom:1px solid #bebebe; background:#eee; -background: literal("-moz-linear-gradient( center top, #FFF 0%, #ececec 100%)");-background-image:literal("-webkit-gradient(linear, left top, left bottom, color-stop(0, #FFF), color-stop(1, #ececec))"); }
 		.secondHeaderRow div div.gwt-Label { line-height:24px; text-align:center;-webkit-user-select: none; -moz-user-select: none;}
 
