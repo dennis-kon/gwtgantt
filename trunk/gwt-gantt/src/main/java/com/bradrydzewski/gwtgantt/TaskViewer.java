@@ -41,6 +41,7 @@ import com.bradrydzewski.gwtgantt.event.MouseExitEvent;
 import com.bradrydzewski.gwtgantt.event.MouseExitHandler;
 import com.bradrydzewski.gwtgantt.event.ScrollEvent;
 import com.bradrydzewski.gwtgantt.event.ScrollHandler;
+import com.bradrydzewski.gwtgantt.geometry.Point;
 import com.bradrydzewski.gwtgantt.model.Task;
 import com.bradrydzewski.gwtgantt.resources.GanttResources;
 import com.google.gwt.core.client.GWT;
@@ -242,8 +243,8 @@ public class TaskViewer extends Composite implements TaskDisplay,
 	}
 
 	@Override
-	public void fireItemClickEvent(Task task) {
-		ItemClickEvent.fire(this,task);
+	public void fireItemClickEvent(Task task, Point point) {
+		ItemClickEvent.fire(this, task, point.getX(), point.getY());
 	}
 
 	@Override

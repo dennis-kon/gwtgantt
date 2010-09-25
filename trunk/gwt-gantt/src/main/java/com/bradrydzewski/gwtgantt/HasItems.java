@@ -19,6 +19,8 @@ package com.bradrydzewski.gwtgantt;
 
 import java.util.List;
 
+import com.bradrydzewski.gwtgantt.geometry.Point;
+
 /**
  * Describes an object that displays a list of items.
  * 
@@ -48,7 +50,7 @@ public interface HasItems<T> {
     
     public void scrollToItem(T item);
 
-	public void fireItemClickEvent(T item);
+	public void fireItemClickEvent(T item, Point point);
 
 	public void fireItemDoubleClickEvent(T item);
 
