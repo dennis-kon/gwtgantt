@@ -30,9 +30,19 @@ public class ItemClickEvent<T> extends GwtEvent<ItemClickHandler<T>> {
 	 * Item that was clicked.
 	 */
 	private final T item;
+	
+	private final int x;
+	
+	private final int y;
 
 	public ItemClickEvent(T item) {
+		this(item,0,0);
+	}
+
+	public ItemClickEvent(T item, int x, int y) {
 		this.item = item;
+		this.x = x;
+		this.y = y;
 	}
 
 	public static <T> void fire(HasItemClickHandlers<T> source, T item) {
@@ -42,8 +52,23 @@ public class ItemClickEvent<T> extends GwtEvent<ItemClickHandler<T>> {
 		}
 	}
 
+	public static <T> void fire(HasItemClickHandlers<T> source, T item, int x, int y) {
+		if (TYPE != null) {
+			ItemClickEvent<T> event = new ItemClickEvent<T>(item, x, y);
+			source.fireEvent(event);
+		}
+	}
+
 	public T getItem() {
 		return item;
+	}
+	
+	public int getX() {
+		return x;
+	}
+	
+	public int getY() {
+		return y;
 	}
 
 	/**

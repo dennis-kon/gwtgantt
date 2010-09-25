@@ -336,8 +336,8 @@ public class GanttWeekPresenter implements TaskPresenter {
 
 
 	@Override
-	public void onItemClicked(Task task) {
-		taskViewer.fireItemClickEvent(task);
+	public void onItemClicked(Task task, Point point) {
+		taskViewer.fireItemClickEvent(task, Point.EMPTY);
 	}
 
 	@Override

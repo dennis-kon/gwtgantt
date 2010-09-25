@@ -2,6 +2,8 @@ package com.bradrydzewski.gwtgantt.geometry;
 
 public class Point {
 
+	public static final Point EMPTY = new Point(0,0);
+	
     private int x;
     private int y;
 

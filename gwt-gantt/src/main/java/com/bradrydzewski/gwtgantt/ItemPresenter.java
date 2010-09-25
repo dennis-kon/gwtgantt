@@ -2,6 +2,8 @@ package com.bradrydzewski.gwtgantt;
 
 import java.util.List;
 
+import com.bradrydzewski.gwtgantt.geometry.Point;
+
 /**
  * Defines operations for components responsible for
  * producing and updating rendering descriptions based on
@@ -32,7 +34,7 @@ public interface ItemPresenter<T> {
     public int getHorizontalScrollPosition();
     public int getVerticalScrollPosition();
     
-    public void onItemClicked(T item);
+    public void onItemClicked(T item, Point click);
     public void onItemDoubleClicked(T item);
     public void onItemMouseOver(T item);
     public void onItemMouseOut(T item);

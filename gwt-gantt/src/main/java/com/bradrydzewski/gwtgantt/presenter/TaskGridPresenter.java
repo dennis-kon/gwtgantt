@@ -1,18 +1,19 @@
 package com.bradrydzewski.gwtgantt.presenter;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import com.bradrydzewski.gwtgantt.TaskDataManager;
-import com.bradrydzewski.gwtgantt.TaskPresenter;
 import com.bradrydzewski.gwtgantt.TaskDisplay;
+import com.bradrydzewski.gwtgantt.TaskPresenter;
+import com.bradrydzewski.gwtgantt.geometry.Point;
 import com.bradrydzewski.gwtgantt.model.Predecessor;
 import com.bradrydzewski.gwtgantt.model.Task;
 import com.bradrydzewski.gwtgantt.view.TaskGridView;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
-import java.util.HashMap;
 
 public class TaskGridPresenter implements TaskPresenter {
 
@@ -132,8 +133,8 @@ public class TaskGridPresenter implements TaskPresenter {
 	}
 
 	@Override
-	public void onItemClicked(Task task) {
-		project.fireItemClickEvent(task);
+	public void onItemClicked(Task task, Point click) {
+		project.fireItemClickEvent(task, click);
 	}
 
 	@Override

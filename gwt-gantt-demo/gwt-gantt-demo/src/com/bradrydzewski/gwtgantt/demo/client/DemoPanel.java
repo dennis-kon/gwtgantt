@@ -15,6 +15,8 @@ import com.bradrydzewski.gwtgantt.event.ItemExpandHandler;
 import com.bradrydzewski.gwtgantt.event.ScrollEvent;
 import com.bradrydzewski.gwtgantt.event.ScrollHandler;
 import com.bradrydzewski.gwtgantt.model.Task;
+import com.bradrydzewski.gwtgantt.presenter.TaskGridPresenter;
+import com.bradrydzewski.gwtgantt.view.TaskGridView;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -30,11 +32,17 @@ public class DemoPanel extends Composite {
 	interface DemoPanelUiBinder extends UiBinder<Widget, DemoPanel> {
 	}
 	
+	
 	@UiField GanttChart gantt;
-	@UiField TaskGrid grid;
-
+	@UiField(provided=true) TaskGrid grid;
+	EditableTaskGrid editableGridView;
+	
+	
 	public DemoPanel() {
 
+		editableGridView = new EditableTaskGrid();
+		grid = new TaskGrid(new TaskGridPresenter(editableGridView));
+		
 		//initialize the ui binder
 		initWidget(uiBinder.createAndBindUi(this));
 		
@@ -73,9 +81,14 @@ public class DemoPanel extends Composite {
 		grid.addItemClickHandler(new ItemClickHandler<Task>(){
 			@Override
 			public void onItemClick(ItemClickEvent<Task> event) {
-				GWT.log("Task clicked in Grid: "+event.getItem().getName());
-				gantt.setSelectedItem(event.getItem());
-				grid.setSelectedItem(event.getItem());
+				
+				if(!grid.isSelectedItem(event.getItem())) {
+					gantt.setSelectedItem(event.getItem());
+					grid.setSelectedItem(event.getItem());
+					editableGridView.reset();
+				} else if(!editableGridView.isEditing(event.getItem(), event.getY())){
+					editableGridView.makeNameEditable(event.getItem(), event.getX());
+				}
 			}
 		});
 		grid.addItemDoubleClickHandler(new ItemDoubleClickHandler<Task>(){

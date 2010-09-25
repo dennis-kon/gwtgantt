@@ -3,13 +3,14 @@ package com.bradrydzewski.gwtgantt.view;
 import java.util.ArrayList;
 
 import com.bradrydzewski.gwtgantt.TaskPresenter;
+import com.bradrydzewski.gwtgantt.geometry.Point;
 import com.bradrydzewski.gwtgantt.model.DurationFormat;
 import com.bradrydzewski.gwtgantt.model.Task;
 import com.bradrydzewski.gwtgantt.presenter.TaskGridPresenter.Display;
 import com.bradrydzewski.gwtgantt.resources.GridResources;
 import com.bradrydzewski.gwtgantt.widget.override.FlexTable;
 import com.bradrydzewski.gwtgantt.widget.override.Grid;
-import com.google.gwt.core.client.GWT;
+import com.bradrydzewski.gwtgantt.widget.override.HTMLTable.Cell;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -19,7 +20,6 @@ import com.google.gwt.event.dom.client.DoubleClickHandler;
 import com.google.gwt.event.dom.client.ScrollEvent;
 import com.google.gwt.event.dom.client.ScrollHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Event;
@@ -27,7 +27,6 @@ import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.InlineLabel;
@@ -287,7 +286,7 @@ public class TaskGridView extends Composite implements Display {
 	private FlowPanel root = new FlowPanel();
 	private FlowPanel headerPanel = new FlowPanel();
 	protected HeaderTable headerTable = null;// new HeaderTable(1,6);
-	private ScrollPanel bodyPanel = new ScrollPanel();
+	protected ScrollPanel bodyPanel = new ScrollPanel();
 	protected FlexTable bodyTable = new FlexTable();
 	private TaskPresenter presenter;
 	
@@ -344,11 +343,15 @@ public class TaskGridView extends Composite implements Display {
 		bodyTable.addClickHandler(new ClickHandler(){
 			@Override
 			public void onClick(ClickEvent event) {
-				int row = bodyTable.getCellForEvent(event).getRowIndex();
-				GWT.log("Row "+row+" clicked in the TaskGridDisplay");
-				presenter.onItemClicked(visibleItems.get(row));
+				Cell cell = bodyTable.getCellForEvent(event);
+
+				int row = cell.getRowIndex();
+				int col = cell.getCellIndex();
+				presenter.onItemClicked(
+						visibleItems.get(row), new Point(row,col));
 			}
 		});
+		
 	}
 	
 	@Override
@@ -486,6 +489,4 @@ public class TaskGridView extends Composite implements Display {
 	public Widget asWidget() {
 		return this;
 	}
-
-
 }

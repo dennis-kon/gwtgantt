@@ -75,7 +75,8 @@ public abstract class GanttWeekDisplay extends Composite implements Display {
             // No need for call to super.
             switch (DOM.eventGetType(event)) {
                 case Event.ONCLICK:
-                    presenter.onItemClicked(task);
+                    presenter.onItemClicked(task, new Point(
+                    		event.getClientX(), event.getClientY()));
                     break;
 
                 case Event.ONDBLCLICK:
