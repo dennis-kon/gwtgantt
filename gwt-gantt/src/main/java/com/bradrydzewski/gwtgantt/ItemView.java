@@ -27,7 +27,7 @@ import com.bradrydzewski.gwtgantt.geometry.Point;
  *
  * @param <T>
  */
-public interface ItemPresenter<T> {
+public interface ItemView<T> {
 
 	public void refresh();
 	public void sortItems(List<T> itemList);

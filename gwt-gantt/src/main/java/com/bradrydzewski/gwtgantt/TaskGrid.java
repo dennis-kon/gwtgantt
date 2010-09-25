@@ -17,16 +17,16 @@
  */
 package com.bradrydzewski.gwtgantt;
 
-import com.bradrydzewski.gwtgantt.presenter.TaskGridPresenter;
+import com.bradrydzewski.gwtgantt.view.TaskGridView;
 import com.google.gwt.core.client.GWT;
 
 public class TaskGrid extends TaskViewer {
 
     public TaskGrid() {
-    	this((TaskPresenter) GWT.create(TaskGridPresenter.class));
+    	this((TaskView) GWT.create(TaskGridView.class));
     }
     
-    public TaskGrid(TaskPresenter view) {
+    public TaskGrid(TaskView view) {
     	super(view, null, null);
     }
 }

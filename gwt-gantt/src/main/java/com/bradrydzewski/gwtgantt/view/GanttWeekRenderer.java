@@ -15,16 +15,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/
  */
-package com.bradrydzewski.gwtgantt.view;
+package com.bradrydzewski.gwtgantt.renderer;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import com.bradrydzewski.gwtgantt.TaskPresenter;
+import com.bradrydzewski.gwtgantt.TaskView;
 import com.bradrydzewski.gwtgantt.geometry.Point;
 import com.bradrydzewski.gwtgantt.geometry.Rectangle;
 import com.bradrydzewski.gwtgantt.model.Task;
-import com.bradrydzewski.gwtgantt.presenter.GanttWeekPresenter.Display;
+import com.bradrydzewski.gwtgantt.view.GanttWeekView;
 import com.bradrydzewski.gwtgantt.widget.SVGDefs;
 import com.bradrydzewski.gwtgantt.widget.SVGMarker;
 import com.bradrydzewski.gwtgantt.widget.SVGPanel;
@@ -50,12 +50,12 @@ import com.google.gwt.user.client.ui.Widget;
  * 
  * @author Brad Rydzewski
  */
-public abstract class GanttWeekDisplay extends Composite implements Display {
+public abstract class GanttWeekRenderer extends Composite implements GanttWeekView.Renderer {
 
-	private static GanttViewImplUiBinder uiBinder = GWT
-			.create(GanttViewImplUiBinder.class);
+	private static GanttWeekRendererImplUiBinder uiBinder = GWT
+			.create(GanttWeekRendererImplUiBinder.class);
 
-	interface GanttViewImplUiBinder extends UiBinder<Widget, GanttWeekDisplay> {
+	interface GanttWeekRendererImplUiBinder extends UiBinder<Widget, GanttWeekRenderer> {
 	}
 
 
@@ -75,23 +75,23 @@ public abstract class GanttWeekDisplay extends Composite implements Display {
             // No need for call to super.
             switch (DOM.eventGetType(event)) {
                 case Event.ONCLICK:
-                    presenter.onItemClicked(task, new Point(
+                    view.onItemClicked(task, new Point(
                     		event.getClientX(), event.getClientY()));
                     break;
 
                 case Event.ONDBLCLICK:
-                	presenter.onItemDoubleClicked(task);
+                	view.onItemDoubleClicked(task);
                     break;
 
                 case Event.ONKEYDOWN:
                     break;
 
                 case Event.ONMOUSEOVER:
-                    presenter.onItemMouseOver(task);
+                    view.onItemMouseOver(task);
                     break;
 
                 case Event.ONMOUSEOUT:
-                    presenter.onItemMouseOut(task);
+                    view.onItemMouseOut(task);
                     break;
             }
             super.onBrowserEvent(event);
@@ -123,14 +123,14 @@ public abstract class GanttWeekDisplay extends Composite implements Display {
 	private SVGPanel svgPanel;
 	private SVGDefs svgDefs;
 	private SVGMarker svgArrowMarker;
-	private Map<Integer, TaskWidget> taskWidgetIndex =
+	private Map<Integer, TaskWidget> taskWidgetsById =
 		new HashMap<Integer, TaskWidget>();
 	
-    private TaskPresenter presenter;
+    private TaskView view;
     private int estimatedWidth = 0;
     private int estimatedHeight = 0;
 
-	public GanttWeekDisplay() {
+	public GanttWeekRenderer() {
 		initWidget(uiBinder.createAndBindUi(this));
 		init();
 	}
@@ -153,7 +153,7 @@ public abstract class GanttWeekDisplay extends Composite implements Display {
 				secondHeaderRow.getElement().getStyle().setLeft(hscroll, Unit.PX);
 				taskBackgroundPanel.getElement().getStyle().setLeft(hscroll, Unit.PX);
 				
-				presenter.onScroll(taskScrollPanel.getHorizontalScrollPosition(),
+				view.onScroll(taskScrollPanel.getHorizontalScrollPosition(),
 						taskScrollPanel.getScrollPosition());
 			}
 		});
@@ -185,9 +185,9 @@ public abstract class GanttWeekDisplay extends Composite implements Display {
 	}
     
 	@Override
-	public void bind(TaskPresenter presenter) {
-		assert(presenter!=null);
-		this.presenter = presenter;
+	public void bind(TaskView view) {
+		assert(view !=null);
+		this.view = view;
 	}
 	
 	@Override
@@ -196,14 +196,20 @@ public abstract class GanttWeekDisplay extends Composite implements Display {
 			svgPanel.clear();
 			svgPanel.add(svgDefs);
 		}
-		taskWidgetIndex.clear();
+		taskWidgetsById.clear();
 		taskFlowPanel.clear();
 		firstHeaderRow.clear();
 		secondHeaderRow.clear();
 		estimatedWidth = 0;
 		estimatedHeight = 0;
 	}
-	
+
+    /**
+     * Updates the SVG Panel's dimensions to match those of the Gantt Chart.
+     * The SVG Panel does not expand automatically as widgets are drawn or removed,
+     * so we have to manually set the width and height.
+     *
+     */
 	@Override
 	public void onAfterRendering() {
 		
@@ -226,8 +232,8 @@ public abstract class GanttWeekDisplay extends Composite implements Display {
 		taskWidget.getElement().getStyle().setHeight(bounds.getHeight(), Unit.PX);
 		taskWidget.getElement().getStyle().setTop(bounds.getTop(), Unit.PX);
 		taskWidget.getElement().getStyle().setLeft(bounds.getLeft(), Unit.PX);
-		taskWidget.getElement().getStyle().setZIndex(taskWidgetIndex.size() + 1);
-		taskWidgetIndex.put(task.getUID(), taskWidget);
+		taskWidget.getElement().getStyle().setZIndex(taskWidgetsById.size() + 1);
+		taskWidgetsById.put(task.getUID(), taskWidget);
 		taskFlowPanel.add(taskWidget);
 		
 		//add the percentage complete panel
@@ -256,8 +262,8 @@ public abstract class GanttWeekDisplay extends Composite implements Display {
 		taskWidget.getElement().getStyle().setHeight(bounds.getHeight(), Unit.PX);
 		taskWidget.getElement().getStyle().setTop(bounds.getTop(), Unit.PX);
 		taskWidget.getElement().getStyle().setLeft(bounds.getLeft(), Unit.PX);
-		taskWidget.getElement().getStyle().setZIndex(taskWidgetIndex.size() + 1);
-		taskWidgetIndex.put(task.getUID(), taskWidget);
+		taskWidget.getElement().getStyle().setZIndex(taskWidgetsById.size() + 1);
+		taskWidgetsById.put(task.getUID(), taskWidget);
 		taskFlowPanel.add(taskWidget);
 		
 		SimplePanel leftArrow = new SimplePanel();
@@ -287,8 +293,8 @@ public abstract class GanttWeekDisplay extends Composite implements Display {
 		taskWidget.getElement().getStyle().setHeight(bounds.getHeight(), Unit.PX);
 		taskWidget.getElement().getStyle().setTop(bounds.getTop(), Unit.PX);
 		taskWidget.getElement().getStyle().setLeft(bounds.getLeft(), Unit.PX);
-		taskWidget.getElement().getStyle().setZIndex(taskWidgetIndex.size() + 1);
-		taskWidgetIndex.put(task.getUID(), taskWidget);
+		taskWidget.getElement().getStyle().setZIndex(taskWidgetsById.size() + 1);
+		taskWidgetsById.put(task.getUID(), taskWidget);
 		taskFlowPanel.add(taskWidget);
 		
 		//calculate the estimated size of the task area
@@ -408,7 +414,7 @@ public abstract class GanttWeekDisplay extends Composite implements Display {
 
 	@Override
 	public void doTaskSelected(Task task) {
-    	TaskWidget widget = taskWidgetIndex.get(task.getUID());
+    	TaskWidget widget = taskWidgetsById.get(task.getUID());
     	String style = "taskSelected";
     	if(task.isMilestone())
     		style="milestoneSelected";
@@ -419,7 +425,7 @@ public abstract class GanttWeekDisplay extends Composite implements Display {
 
 	@Override
 	public void doTaskDeselected(Task task) {
-	  	TaskWidget widget = taskWidgetIndex.get(task.getUID());
+	  	TaskWidget widget = taskWidgetsById.get(task.getUID());
 	  	String style = "taskSelected";
 	  	if(task.isMilestone())
 	  		style="milestoneSelected";
@@ -430,7 +436,7 @@ public abstract class GanttWeekDisplay extends Composite implements Display {
 
 	@Override
 	public void doTaskEnter(Task task) {
-	  	TaskWidget widget = taskWidgetIndex.get(task.getUID());
+	  	TaskWidget widget = taskWidgetsById.get(task.getUID());
 	  	String style = "taskHovered";
 	  	if(task.isMilestone())
 	  		style="milestoneHovered";
@@ -441,7 +447,7 @@ public abstract class GanttWeekDisplay extends Composite implements Display {
 
 	@Override
 	public void doTaskExit(Task task) {
-	  	TaskWidget widget = taskWidgetIndex.get(task.getUID());
+	  	TaskWidget widget = taskWidgetsById.get(task.getUID());
 	  	String style = "taskHovered";
 	  	if(task.isMilestone())
 	  		style="milestoneHovered";
@@ -452,9 +458,9 @@ public abstract class GanttWeekDisplay extends Composite implements Display {
 	
 	@Override
 	public Rectangle getTaskRectangle(int UID) {
-		TaskWidget taskWidget =  taskWidgetIndex.get(UID);
+		TaskWidget taskWidget =  taskWidgetsById.get(UID);
 		if(taskWidget!=null)
-			return taskWidgetIndex.get(UID).getRectangle();
+			return taskWidgetsById.get(UID).getRectangle();
 		else return null;
 	}
 

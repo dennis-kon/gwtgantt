@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/
  */
-package com.bradrydzewski.gwtgantt.presenter;
+package com.bradrydzewski.gwtgantt.view;
 
 import java.util.Collections;
 import java.util.Date;
@@ -24,23 +24,23 @@ import java.util.List;
 import com.bradrydzewski.gwtgantt.DateUtil;
 import com.bradrydzewski.gwtgantt.TaskDataManager;
 import com.bradrydzewski.gwtgantt.TaskDisplay;
-import com.bradrydzewski.gwtgantt.TaskPresenter;
+import com.bradrydzewski.gwtgantt.TaskView;
 import com.bradrydzewski.gwtgantt.connector.CalculatorFactory;
 import com.bradrydzewski.gwtgantt.geometry.Point;
 import com.bradrydzewski.gwtgantt.geometry.Rectangle;
 import com.bradrydzewski.gwtgantt.model.Predecessor;
 import com.bradrydzewski.gwtgantt.model.Task;
-import com.bradrydzewski.gwtgantt.view.GanttWeekDisplayImpl;
+import com.bradrydzewski.gwtgantt.renderer.GanttWeekRendererImpl;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
 
-public class GanttWeekPresenter implements TaskPresenter {
+public class GanttWeekView implements TaskView {
 
 
-	public interface Display {
-		void bind(TaskPresenter view);
+	public interface Renderer {
+		void bind(TaskView view);
 		void renderTask(Task task, Rectangle rectangle);
 		void renderTaskSummary(Task task, Rectangle rectangle);
 		void renderTaskMilestone(Task task, Rectangle rectangle);
@@ -85,30 +85,30 @@ public class GanttWeekPresenter implements TaskPresenter {
 
 	
 	private TaskDisplay taskViewer;
-	private Display display = GWT.create(GanttWeekDisplayImpl.class);
+	private Renderer renderer = GWT.create(GanttWeekRendererImpl.class);
 	private Date start;
 	private Date finish;
 
-	public GanttWeekPresenter() {
-		display.bind(this);
+	public GanttWeekView() {
+		renderer.bind(this);
 	}
 
 	@Override
 	public void attach(HasWidgets container, TaskDisplay project) {
 		this.taskViewer = project;
 		container.clear();
-		container.add(display.asWidget());
+		container.add(renderer.asWidget());
 	}
 
 	@Override
 	public void refresh() {
 		this.start = calculateStartDate();
 		this.finish = calculateFinishDate();
-		display.onBeforeRendering();
+		renderer.onBeforeRendering();
 		renderBackground();
 		renderTasks();
 		renderConnectors();
-		display.onAfterRendering();
+		renderer.onAfterRendering();
 	}
 
 	@SuppressWarnings("deprecation")
@@ -128,7 +128,7 @@ public class GanttWeekPresenter implements TaskPresenter {
 			
 			//ADD WEEK PANEL
 			Rectangle weekHeaderBounds = new Rectangle(ROW1_WIDTH_OFFSET * i,0,ROW1_WIDTH,25);
-			display.renderTopTimescaleCell(weekHeaderBounds, topTimescaleString);
+			renderer.renderTopTimescaleCell(weekHeaderBounds, topTimescaleString);
 
 			// ADD 7 DAYS PER WEEK
 			for (int d = 0; d < DateUtil.DAYS_PER_WEEK; d++) {
@@ -140,7 +140,7 @@ public class GanttWeekPresenter implements TaskPresenter {
 				int top = 0;
 				Rectangle bottomTimescaleBounds = new Rectangle(left, top, width, height);
 				String bottomTimescaleString = weekDay.getDate() + "";
-				display.renderBottomTimescaleCell(bottomTimescaleBounds, bottomTimescaleString);
+				renderer.renderBottomTimescaleCell(bottomTimescaleBounds, bottomTimescaleString);
 			
 				if (d == SATURDAY || d== SUNDAY) {
 					//ADD BACKGROUND FOR SAT, SUND
@@ -149,7 +149,7 @@ public class GanttWeekPresenter implements TaskPresenter {
 					int colWidth = 38;
 					int colHeight = -1; //not used... 100% defined by style
 					Rectangle colBounds = new Rectangle(colLeft, colTop, colWidth, colHeight);
-					display.renderColumn(colBounds, d);
+					renderer.renderColumn(colBounds, d);
 				}
 			}
 
@@ -203,11 +203,11 @@ public class GanttWeekPresenter implements TaskPresenter {
 
 		//render the task
 		Rectangle taskBounds = new Rectangle(left, top, width, height);
-		display.renderTask(task, taskBounds);
+		renderer.renderTask(task, taskBounds);
 		
 		//render the label
 		Rectangle labelBounds = new Rectangle(taskBounds.getRight(), top-2, -1, -1);
-		display.renderTaskLabel(task, labelBounds);
+		renderer.renderTaskLabel(task, labelBounds);
 		
 		//if task is selected, make sure it is rendered as selected
 		if(taskViewer.isSelectedItem(task)) {
@@ -229,11 +229,11 @@ public class GanttWeekPresenter implements TaskPresenter {
 
 		//render the task
 		Rectangle taskBounds = new Rectangle(left, top, width, height);
-		display.renderTaskSummary(task, taskBounds);
+		renderer.renderTaskSummary(task, taskBounds);
 		
 		//render the label
 		Rectangle labelBounds = new Rectangle(taskBounds.getRight(), top-2, -1, -1);
-		display.renderTaskLabel(task, labelBounds);
+		renderer.renderTaskLabel(task, labelBounds);
 		
 		//if task is selected, make sure it is rendered as selected
 		if(taskViewer.isSelectedItem(task)) {
@@ -252,11 +252,11 @@ public class GanttWeekPresenter implements TaskPresenter {
 
 		//render the task
 		Rectangle taskBounds = new Rectangle(left, top, width, height);
-		display.renderTaskMilestone(task, taskBounds);
+		renderer.renderTaskMilestone(task, taskBounds);
 		
 		//render the label
 		Rectangle labelBounds = new Rectangle(taskBounds.getRight(), top-2, -1, -1);
-		display.renderTaskLabel(task, labelBounds);
+		renderer.renderTaskLabel(task, labelBounds);
 		
 		//if task is selected, make sure it is rendered as selected
 		if(taskViewer.isSelectedItem(task)) {
@@ -271,8 +271,8 @@ public class GanttWeekPresenter implements TaskPresenter {
 			Task task = taskViewer.getItem(i);
 			for(Predecessor predecessor : task.getPredecessors()) {
 				Point[] path = null;
-				Rectangle fromRect = display.getTaskRectangle(predecessor.getUID());
-				Rectangle toRect = display.getTaskRectangle(task.getUID());
+				Rectangle fromRect = renderer.getTaskRectangle(predecessor.getUID());
+				Rectangle toRect = renderer.getTaskRectangle(task.getUID());
 				if(fromRect!=null && toRect!=null) {
 					path = CalculatorFactory.get(
 							predecessor.getType()).calculateWithOffset(fromRect, toRect);
@@ -286,7 +286,7 @@ public class GanttWeekPresenter implements TaskPresenter {
 	}
 
 	protected void renderConnector(Point[] path) {
-		display.renderConnector(path);
+		renderer.renderConnector(path);
 	}
 
 	protected Date calculateStartDate() {
@@ -356,19 +356,19 @@ public class GanttWeekPresenter implements TaskPresenter {
 	}
 	
 	public void doItemSelected(Task task) {
-		display.doTaskSelected(task);
+		renderer.doTaskSelected(task);
 	}
 	
 	public void doItemDeselected(Task task) {
-		display.doTaskDeselected(task);
+		renderer.doTaskDeselected(task);
 	}
 	
 	public void doItemEnter(Task task) {
-		display.doTaskEnter(task);
+		renderer.doTaskEnter(task);
 	}
 	
 	public void doItemExit(Task task) {
-		display.doTaskExit(task);
+		renderer.doTaskExit(task);
 	}
 
     @Override
@@ -383,24 +383,24 @@ public class GanttWeekPresenter implements TaskPresenter {
 
 	@Override
 	public int getHorizontalScrollPosition() {
-		return display.getHorizontalScrollPosition();
+		return renderer.getHorizontalScrollPosition();
 	}
 
 	@Override
 	public int getVerticalScrollPosition() {
-		return display.getVerticalScrollPosition();
+		return renderer.getVerticalScrollPosition();
 	}
 	
     @Override
 	public void doScrollToItem(Task item) {
-    	Rectangle rect = display.getTaskRectangle(item.getUID());
+    	Rectangle rect = renderer.getTaskRectangle(item.getUID());
     	if(rect != null) {
     		int row = (int)Math.floor(rect.getTop()/TASK_ROW_HEIGHT);
     		int top = (row-1)*TASK_ROW_HEIGHT;
     		int left = rect.getLeft()-ROW2_WIDTH;
     		left = Math.max(0, left);
     		top = Math.max(0, top);
-    		display.doScroll(left, top);
+    		renderer.doScroll(left, top);
     	}
     }
 	

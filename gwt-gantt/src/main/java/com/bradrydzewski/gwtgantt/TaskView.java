@@ -21,10 +21,11 @@ import com.bradrydzewski.gwtgantt.model.Task;
 import com.google.gwt.user.client.ui.HasWidgets;
 
 /**
- *
+ * Task specialization of the <code>ItemView</code> interface.
+ * 
  * @author Brad Rydzewski
  */
-public interface TaskPresenter extends ItemPresenter<Task> {
+public interface TaskView extends ItemView<Task> {
 
     public void attach(HasWidgets container, TaskDisplay taskDisplay);
 

@@ -1,12 +1,12 @@
-package com.bradrydzewski.gwtgantt.view;
+package com.bradrydzewski.gwtgantt.renderer;
 
 import java.util.ArrayList;
 
-import com.bradrydzewski.gwtgantt.TaskPresenter;
+import com.bradrydzewski.gwtgantt.TaskView;
 import com.bradrydzewski.gwtgantt.geometry.Point;
 import com.bradrydzewski.gwtgantt.model.DurationFormat;
 import com.bradrydzewski.gwtgantt.model.Task;
-import com.bradrydzewski.gwtgantt.presenter.TaskGridPresenter.Display;
+import com.bradrydzewski.gwtgantt.view.TaskGridView;
 import com.bradrydzewski.gwtgantt.resources.GridResources;
 import com.bradrydzewski.gwtgantt.widget.override.FlexTable;
 import com.bradrydzewski.gwtgantt.widget.override.Grid;
@@ -34,7 +34,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.ToggleButton;
 import com.google.gwt.user.client.ui.Widget;
 
-public class TaskGridView extends Composite implements Display {
+public class TaskGridRenderer extends Composite implements TaskGridView.Renderer {
 
 	public class CollapseButton extends ToggleButton {
 		private Task item;
@@ -51,8 +51,8 @@ public class TaskGridView extends Composite implements Display {
 		    boolean collapsed = !item.isCollapsed();
 		    item.setCollapsed(collapsed);
 		    
-		    if(collapsed) presenter.onItemCollapse(item);
-		    else presenter.onItemExpand(item);
+		    if(collapsed) view.onItemCollapse(item);
+		    else view.onItemExpand(item);
 		}
 	}
 	
@@ -273,7 +273,7 @@ public class TaskGridView extends Composite implements Display {
 	        
 	        int currWidth = curCell.getClientWidth()-1;
 	        int newWidth = currWidth + (mouseXCurrent-mouseXLast);
-	        TaskGridView.this.resizeColumn(curCellIndex, newWidth);
+	        TaskGridRenderer.this.resizeColumn(curCellIndex, newWidth);
 	        mouseXLast = mouseXCurrent;
 	      }
 	    }
@@ -288,7 +288,7 @@ public class TaskGridView extends Composite implements Display {
 	protected HeaderTable headerTable = null;// new HeaderTable(1,6);
 	protected ScrollPanel bodyPanel = new ScrollPanel();
 	protected FlexTable bodyTable = new FlexTable();
-	private TaskPresenter presenter;
+	private TaskView view;
 	
 	private int[] columnWidthArray = new int[]{40, 200,80,110,110,100};
 	private String[] columnNameArray = new String[]{"&nbsp;","Task Name","Duration","Start","Finish","Predecessors"};
@@ -298,7 +298,7 @@ public class TaskGridView extends Composite implements Display {
 	 */
 	private ArrayList<Task> visibleItems = new ArrayList<Task>();
 	
-	public TaskGridView() {
+	public TaskGridRenderer() {
 		initWidget(root);
 		
 		//load table css
@@ -330,14 +330,14 @@ public class TaskGridView extends Composite implements Display {
 				int x=bodyPanel.getHorizontalScrollPosition();
 				int y=bodyPanel.getScrollPosition();
 				headerTable.getElement().getStyle().setLeft(x*-1, Unit.PX);
-				presenter.onScroll(bodyPanel.getHorizontalScrollPosition(),y);
+				view.onScroll(bodyPanel.getHorizontalScrollPosition(),y);
 			}
 		});
 		bodyTable.addDoubleClickHandler(new DoubleClickHandler(){
 			@Override
 			public void onDoubleClick(DoubleClickEvent event) {
 				int row = bodyTable.getCellForEvent(event).getRowIndex();
-				presenter.onItemDoubleClicked(visibleItems.get(row));
+				view.onItemDoubleClicked(visibleItems.get(row));
 			}
 		});
 		bodyTable.addClickHandler(new ClickHandler(){
@@ -347,7 +347,7 @@ public class TaskGridView extends Composite implements Display {
 
 				int row = cell.getRowIndex();
 				int col = cell.getCellIndex();
-				presenter.onItemClicked(
+				view.onItemClicked(
 						visibleItems.get(row), new Point(row,col));
 			}
 		});
@@ -355,8 +355,8 @@ public class TaskGridView extends Composite implements Display {
 	}
 	
 	@Override
-	public void bind(TaskPresenter presenter) {
-		this.presenter = presenter;
+	public void bind(TaskView view) {
+		this.view = view;
 	}
 
 	public static final DateTimeFormat DATE_FORMAT =
