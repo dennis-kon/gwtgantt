@@ -51,7 +51,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 
 /**
  * Represents an abstract component capable of displaying {@link Task}s
- * through an attached presenter and handle user input generated events.
+ * through an attached view and handle user input generated events.
  *
  * In order to process these events, client code should subscribe
  * as a listener for these events. As events are fired, the subscribing/observer
@@ -80,11 +80,11 @@ public class TaskViewer extends Composite implements TaskDisplay,
     private TaskDataManager tasks = GWT.create(TaskDataManager.class);
 
 
-    private TaskPresenter view = null;//GWT.create(TaskGridView.class);//GWT.create(GanttWeekView.class);
+    private TaskView view = null;//GWT.create(TaskGridRenderer.class);//GWT.create(GanttWeekView.class);
     private boolean suspended = false;
     private boolean dirty = false;
 
-    public TaskViewer(TaskPresenter view, Date start, Date finish) {
+    public TaskViewer(TaskView view, Date start, Date finish) {
 
         //initialize the root widget
         initWidget(root);

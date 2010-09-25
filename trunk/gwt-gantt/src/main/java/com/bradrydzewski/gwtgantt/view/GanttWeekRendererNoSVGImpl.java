@@ -15,16 +15,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/
  */
-package com.bradrydzewski.gwtgantt.view;
+package com.bradrydzewski.gwtgantt.renderer;
 
 import com.bradrydzewski.gwtgantt.geometry.Point;
 
 /**
- * Extend the GanttWeekDisplay so that it is compatible with
+ * Extend the GanttWeekRenderer so that it is compatible with
  * browsers that do not yet implement inline SVG elements.
  * @author Brad Rydzewski
  */
-public class GanttWeekDisplayNoSVGImpl extends GanttWeekDisplay {
+public class GanttWeekRendererNoSVGImpl extends GanttWeekRenderer {
 	@Override
 	public void initSVG() {
 		//do nothing, we can't use SVGs!

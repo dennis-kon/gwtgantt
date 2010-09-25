@@ -17,14 +17,14 @@
  */
 package com.bradrydzewski.gwtgantt;
 
-import com.bradrydzewski.gwtgantt.presenter.GanttWeekPresenter;
+import com.bradrydzewski.gwtgantt.view.GanttWeekView;
 import com.google.gwt.core.client.GWT;
 
 /**
  * A GanttChart widget that extends the {@link TaskViewer}
  * component. This is basically a Facade that prevents the
  * developer from having to initialize the {@link TaskViewer}
- * component and manually set its {@link TaskPresenter}.
+ * component and manually set its {@link TaskView}.
  * 
  * @author Brad Rydzewski
  */
@@ -36,11 +36,11 @@ public class GanttChart extends TaskViewer implements HasZoom {
 	private int zoomLevel = 0;
 	
 	/**
-	 * Initializes the TaskViewer with the {@link GanttWeekPresenter}
+	 * Initializes the TaskViewer with the {@link com.bradrydzewski.gwtgantt.view.GanttWeekView}
 	 * as the default Presenter / View combination.
 	 */
 	public GanttChart() {
-		super((TaskPresenter)GWT.create(GanttWeekPresenter.class), null, null);
+		super((TaskView)GWT.create(GanttWeekView.class), null, null);
 	}
 
     /**

@@ -1,4 +1,4 @@
-package com.bradrydzewski.gwtgantt.presenter;
+package com.bradrydzewski.gwtgantt.view;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -6,19 +6,19 @@ import java.util.List;
 
 import com.bradrydzewski.gwtgantt.TaskDataManager;
 import com.bradrydzewski.gwtgantt.TaskDisplay;
-import com.bradrydzewski.gwtgantt.TaskPresenter;
+import com.bradrydzewski.gwtgantt.TaskView;
 import com.bradrydzewski.gwtgantt.geometry.Point;
 import com.bradrydzewski.gwtgantt.model.Predecessor;
 import com.bradrydzewski.gwtgantt.model.Task;
-import com.bradrydzewski.gwtgantt.view.TaskGridView;
+import com.bradrydzewski.gwtgantt.renderer.TaskGridRenderer;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
 
-public class TaskGridPresenter implements TaskPresenter {
+public class TaskGridView implements TaskView {
 
-	public interface Display {
-		void bind(TaskPresenter view);
+	public interface Renderer {
+		void bind(TaskView view);
 		void renderTask(Task task, int row, int rowOffset);
                 void renderPredecessor(String predecessors, int row, int rowOffset);
 		void onBeforeRendering();
@@ -29,17 +29,17 @@ public class TaskGridPresenter implements TaskPresenter {
 		Widget asWidget();
 	}
 
-	private Display display;
+	private Renderer renderer;
 	private TaskDisplay project;
         private HashMap<Integer,Task> taskIndex = new HashMap<Integer,Task>();
 	
-	public TaskGridPresenter() {
-		this((Display) GWT.create(TaskGridView.class));
+	public TaskGridView() {
+		this((Renderer) GWT.create(TaskGridRenderer.class));
 	}
 	
-	public TaskGridPresenter(Display display) {
-		this.display = display;
-		this.display.bind(this);
+	public TaskGridView(Renderer display) {
+		this.renderer = display;
+		this.renderer.bind(this);
 	}
 	
 	
@@ -47,14 +47,14 @@ public class TaskGridPresenter implements TaskPresenter {
 	public void attach(HasWidgets container, TaskDisplay project) {
 		this.project = project;
 		container.clear();
-		container.add(display.asWidget());
+		container.add(renderer.asWidget());
 	}
 
 	@Override
 	public void refresh() {
-		display.onBeforeRendering();
+		renderer.onBeforeRendering();
 		this.renderTasks();
-		display.onAfterRendering();
+		renderer.onAfterRendering();
 	}
 	
 
@@ -86,15 +86,15 @@ public class TaskGridPresenter implements TaskPresenter {
 					collapseLevel = task.getLevel()+1;
 				}
                                 String predecessors = getPredecessorString(task);
-				display.renderTask(task, i, count);
-				display.renderPredecessor(predecessors, i, count);
+				renderer.renderTask(task, i, count);
+				renderer.renderPredecessor(predecessors, i, count);
 				count++;
 			}
 		}
 		
 		//color the selected task, if it is selected
 		if(project.getSelectedItem()!=null)
-			display.doTaskSelected(project.getSelectedItem());
+			renderer.doTaskSelected(project.getSelectedItem());
 
                 //release task index from memory
                 taskIndex.clear();
@@ -153,11 +153,11 @@ public class TaskGridPresenter implements TaskPresenter {
 	}
 	
 	public void doItemSelected(Task task) {
-		display.doTaskSelected(task);
+		renderer.doTaskSelected(task);
 	}
 	
 	public void doItemDeselected(Task task) {
-		display.doTaskDeselected(task);
+		renderer.doTaskDeselected(task);
 	}
 	
 	public void doItemEnter(Task task) {
@@ -170,7 +170,7 @@ public class TaskGridPresenter implements TaskPresenter {
 
     @Override
     public void doScroll(int x, int y) {
-        display.doScroll(x, y);
+        renderer.doScroll(x, y);
     }
     
     @Override
