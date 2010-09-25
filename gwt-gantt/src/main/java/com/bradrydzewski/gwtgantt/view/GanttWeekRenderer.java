@@ -47,7 +47,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
- * 
+ * Renders a set of tasks as a Gantt chart to a Screen.
  * @author Brad Rydzewski
  */
 public abstract class GanttWeekRenderer extends Composite implements GanttWeekView.Renderer {
