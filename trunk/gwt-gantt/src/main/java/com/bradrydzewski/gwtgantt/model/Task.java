@@ -39,6 +39,12 @@ public interface Task extends Cloneable, Comparable<Task> {
     public int getUID();
 
     /**
+     * Sets the unique ID of this task.
+     * @param UID
+     */
+    public void setUID(int UID);
+
+    /**
      * Gets the Name of the task.
      *
      * @return Task name.

@@ -22,6 +22,7 @@ import com.bradrydzewski.gwtgantt.model.Task;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -115,7 +116,7 @@ public class TaskUtil {
 //        if(priorTask==null)
 //            return false;
 
-        if(task.getLevel()>1) {
+        if(task.getLevel()>0) {
 
             List<Task> taskChildren = getChildTasks(task, tasks);
             task.setLevel(task.getLevel()-1);
@@ -212,11 +213,45 @@ public class TaskUtil {
         if(assertTasksExist(tasks)==false)
             return false;
 
-        //if has children, add to end of list
-        //else, just add after
+        //get the max UID
+        int maxUID = 1;
+        for(Task t : tasks) {
+            maxUID = Math.max(maxUID, t.getUID());
+        }
+
+        //increment the max by 1
+        maxUID++;
+
+        int taskOrder = tasks.size()+1;
+        int taskLevel = (tasks.isEmpty())?0:tasks.get(tasks.size()-1).getLevel();
+        Date taskStart = new Date();
+        Date taskFinish = new Date();
+
+        if(task!=null) {
         
+            //increment the task orders
+            int taskIndex = tasks.indexOf(task);
+            taskOrder = task.getOrder();
+            taskLevel = task.getLevel();
+            taskStart = task.getStart();
+            taskFinish = DateUtil.clone(taskStart);
+
+            for(int i=taskIndex;i<tasks.size();i++) {
+                Task t = tasks.get(i);
+                t.setOrder(t.getOrder()+1);
+            }
+        }
+        
+        //set the task's data
+        newTask.setUID(maxUID);
+        newTask.setLevel(taskLevel);
+        newTask.setOrder(taskOrder);
+        newTask.setStart(taskStart);
+        newTask.setFinish(taskFinish);
+
+
         //add the task to the list
-        if(tasks.contains(task)==false)
+        if(tasks.contains(newTask)==false)
             tasks.add(newTask);
 
         //re-order
