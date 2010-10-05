@@ -77,7 +77,7 @@ public class TaskViewer extends Composite implements TaskDisplay,
      * can override the provided implementation through
      * deferred binding.
      */
-    private TaskDataManager tasks = GWT.create(TaskDataManager.class);
+    protected TaskDataManager tasks = GWT.create(TaskDataManager.class);
 
 
     private TaskView view = null;//GWT.create(TaskGridRenderer.class);//GWT.create(GanttWeekView.class);
@@ -163,13 +163,23 @@ public class TaskViewer extends Composite implements TaskDisplay,
         refresh();
     }
 
+    public void removeAllItems(List<Task> taskList) {
+        tasks.resetSelectedTask();
+        tasks.getTasks().removeAll(taskList);
+        dirty = true;
+        refresh();
+    }
+
     public void removeItem(Task task) {
+        if(tasks.isTheSelectedTask(task))
+            tasks.resetSelectedTask();
         tasks.removeTask(task);
         dirty = true;
         refresh();
     }
 
     public void removeAllItems() {
+        tasks.resetSelectedTask();
         tasks.clearTasks();
         dirty = true;
         refresh();
@@ -180,8 +190,12 @@ public class TaskViewer extends Composite implements TaskDisplay,
     		if(tasks.getSelectedTask()!=null) {
     			view.doItemDeselected(tasks.getSelectedTask());
     		}
-    		tasks.setSelectedTask(task);
-    		view.doItemSelected(task);
+                if(task==null) {
+                    tasks.resetSelectedTask();
+                } else {
+                    tasks.setSelectedTask(task);
+                    view.doItemSelected(task);
+                }
     	}
     }
     

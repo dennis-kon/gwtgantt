@@ -108,7 +108,7 @@ public interface Task extends Cloneable, Comparable<Task> {
      * Gets the duration of the Task.
      * @return Task duration.
      */
-    public int getDuration();
+    public double getDuration();
     
     /**
      * Gets the unit of measure for expressing a duration of time.
@@ -144,7 +144,14 @@ public interface Task extends Cloneable, Comparable<Task> {
      * @return True or False if the task is a summary.
      */
     public boolean isSummary();
-    
+
+    /**
+     * Sets whether the task is a summary (i.e. has child tasks).
+     * @param summary True or False if the task is a summary
+     */
+    public void setSummary(boolean summary);
+
+
     /**
      * Whether the task is Hidden and should not be displayed on the Gantt
      * chart. This is used for UI rendering only, and has no other use
