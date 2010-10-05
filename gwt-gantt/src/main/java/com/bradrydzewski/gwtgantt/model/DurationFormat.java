@@ -28,7 +28,7 @@ public enum DurationFormat {
 	NONE;
 
 
-	public static String format(DurationFormat timeUnit, int value) {
+	public static String format(DurationFormat timeUnit, double value) {
 		String format;
 		switch (timeUnit) {
 		case HOURS: format="hr"; break;
@@ -43,7 +43,8 @@ public enum DurationFormat {
 		}
 		
 		if(timeUnit!=NONE) {
-			format = value + " " + format;
+                        String valueString = (value%1==0)?Integer.toString((int)value):Double.toString(value);
+			format = valueString + " " + format;
 			format += (timeUnit==PERCENT || value==1)?"":"s";
 		}
 		

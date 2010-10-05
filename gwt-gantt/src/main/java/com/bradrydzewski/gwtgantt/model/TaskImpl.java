@@ -18,6 +18,7 @@
 package com.bradrydzewski.gwtgantt.model;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -44,7 +45,7 @@ public class TaskImpl implements Task {
     private int level;
     private Date start;
     private Date finish;
-    private int duration;
+    private double duration;
     private DurationFormat durationFormat = DurationFormat.DAYS;
     private int percentComplete;
     private boolean milestone;
@@ -137,7 +138,7 @@ public class TaskImpl implements Task {
     }
     
     public boolean addPredecessor(int UID, PredecessorType type) {
-    	return predecessors.add(new Predecessor(UID, type));
+    	return predecessors.add((Predecessor) new PredecessorImpl(UID, type));
     }
 
     public void setUID(int UID) {
@@ -208,11 +209,11 @@ public class TaskImpl implements Task {
 	}
 
 	@Override
-	public int getDuration() {
+	public double getDuration() {
 		return duration;
 	}
 
-	public void setDuration(int duration) {
+	public void setDuration(double duration) {
 		this.duration = duration;
 	}
 
