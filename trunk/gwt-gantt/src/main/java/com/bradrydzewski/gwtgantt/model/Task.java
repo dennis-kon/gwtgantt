@@ -52,6 +52,13 @@ public interface Task extends Cloneable, Comparable<Task> {
     public String getName();
 
     /**
+     * Sets the Name of the task.
+     * 
+     * @param name Task name.
+     */
+    public void setName(String name);
+
+    /**
      * Gets the Text notes associated with the task.
      *
      * @return Task notes.
@@ -138,6 +145,13 @@ public interface Task extends Cloneable, Comparable<Task> {
     public int getPercentComplete();
     
     /**
+     * Set the percentage of the task duration completed, as a whole number
+     * between 0 and 100.
+     * @param percentComplete Percent complete.
+     */
+    public void setPercentComplete(int percentComplete);
+
+    /**
      * Whether the task is a milestone.
      *
      * @return True or False if the task is a milestone.
@@ -185,4 +199,9 @@ public interface Task extends Cloneable, Comparable<Task> {
      * Gets the CSS Style used when rendering this Task.
      */
     public String getStyle();
+
+    /**
+     * Sets the CSS Style used when rendering this Task.
+     */
+    public void setStyle(String style);
 }
