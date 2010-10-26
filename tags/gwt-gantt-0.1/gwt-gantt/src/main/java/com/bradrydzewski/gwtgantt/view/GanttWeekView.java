@@ -1,0 +1,421 @@
+/*
+ * This file is part of gwt-gantt
+ * Copyright (C) 2010  Scottsdale Software LLC
+ *
+ * gwt-gantt is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/
+ */
+package com.bradrydzewski.gwtgantt.view;
+
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+
+import com.bradrydzewski.gwtgantt.DateUtil;
+import com.bradrydzewski.gwtgantt.TaskDataManager;
+import com.bradrydzewski.gwtgantt.TaskDisplay;
+import com.bradrydzewski.gwtgantt.TaskView;
+import com.bradrydzewski.gwtgantt.connector.CalculatorFactory;
+import com.bradrydzewski.gwtgantt.geometry.Point;
+import com.bradrydzewski.gwtgantt.geometry.Rectangle;
+import com.bradrydzewski.gwtgantt.model.Predecessor;
+import com.bradrydzewski.gwtgantt.model.Task;
+import com.bradrydzewski.gwtgantt.renderer.GanttWeekRendererImpl;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.user.client.ui.HasWidgets;
+import com.google.gwt.user.client.ui.Widget;
+
+public class GanttWeekView implements TaskView {
+
+
+	public interface Renderer {
+		void bind(TaskView view);
+		void renderTask(Task task, Rectangle rectangle);
+		void renderTaskSummary(Task task, Rectangle rectangle);
+		void renderTaskMilestone(Task task, Rectangle rectangle);
+		void renderTaskLabel(Task task, Rectangle rectangle);
+		void renderConnector(Point[] path);
+		void renderTopTimescaleCell(Rectangle bounds, String text);
+		void renderBottomTimescaleCell(Rectangle bounds, String text);
+		void renderRow(Rectangle bounds, int rowNumber);
+		void renderColumn(Rectangle bounds, int dayOfWeek);
+		void onBeforeRendering();
+		void onAfterRendering();
+		void doTaskSelected(Task task);
+		void doTaskDeselected(Task task);
+		void doTaskEnter(Task task);
+		void doTaskExit(Task task);
+		void doScroll(int x, int y);
+		Rectangle getTaskRectangle(int UID);
+		int getHorizontalScrollPosition();
+		int getVerticalScrollPosition();
+		Widget asWidget();
+	}
+	
+	protected int ROW1_WIDTH = 278;
+	protected int ROW1_WIDTH_OFFSET = 280;
+	protected int ROW1_HEIGHT = 23;
+	protected int ROW1_HEIGHT_OFFSET = 25;
+	protected int ROW2_WIDTH = 38;
+	protected int ROW2_WIDTH_OFFSET = 40;
+	protected int ROW2_HEIGHT = 23;
+	protected int ROW2_HEIGHT_OFFSET = 25;
+	public static final int TASK_ROW_HEIGHT = 24;
+	public static final int TASK_HEIGHT = 10;
+	public static final int TASK_PADDING_TOP = 6;
+	public static final int MILESTONE_WIDTH = 16;
+	public static final int MILESTONE_PADDING_TOP = 4;
+	public static final int SUMMARY_HEIGHT = 7;
+	public static final int SUMMARY_PADDING_TOP = 6;
+
+    public static final int SATURDAY = 6;
+
+    public static final int SUNDAY = 0;
+
+	
+	private TaskDisplay taskViewer;
+	private Renderer renderer = GWT.create(GanttWeekRendererImpl.class);
+	private Date start;
+	private Date finish;
+
+	public GanttWeekView() {
+		renderer.bind(this);
+	}
+
+	@Override
+	public void attach(HasWidgets container, TaskDisplay project) {
+		this.taskViewer = project;
+		container.clear();
+		container.add(renderer.asWidget());
+	}
+
+	@Override
+	public void refresh() {
+		this.start = calculateStartDate();
+		this.finish = calculateFinishDate();
+		renderer.onBeforeRendering();
+		renderBackground();
+		renderTasks();
+		renderConnectors();
+		renderer.onAfterRendering();
+	}
+
+	@SuppressWarnings("deprecation")
+	protected void renderBackground() {
+
+		Date date = (Date)start.clone();
+		
+		int diff = DateUtil.differenceInDays(start, finish);
+		int weeks = (int) Math.ceil(diff / 7);
+
+		// FOR EACH WEEK
+		for (int i = 0; i < weeks; i++) {
+
+			//TODO: Remove reference to DateTimeFormat, which requires GWT Test Case
+			Date firstDayOfWeek =  DateUtil.getFirstDayOfWeek(date);
+			String topTimescaleString = DateTimeFormat.getMediumDateFormat().format(firstDayOfWeek);
+			
+			//ADD WEEK PANEL
+			Rectangle weekHeaderBounds = new Rectangle(ROW1_WIDTH_OFFSET * i,0,ROW1_WIDTH,25);
+			renderer.renderTopTimescaleCell(weekHeaderBounds, topTimescaleString);
+
+			// ADD 7 DAYS PER WEEK
+			for (int d = 0; d < DateUtil.DAYS_PER_WEEK; d++) {
+				//ADD DAY PANEL
+				Date weekDay = DateUtil.addDays(date, d);
+				int width = ROW2_WIDTH;
+				int height = 24;
+				int left = (ROW1_WIDTH_OFFSET * i) + (ROW2_WIDTH_OFFSET * d);
+				int top = 0;
+				Rectangle bottomTimescaleBounds = new Rectangle(left, top, width, height);
+				String bottomTimescaleString = weekDay.getDate() + "";
+				renderer.renderBottomTimescaleCell(bottomTimescaleBounds, bottomTimescaleString);
+			
+				if (d == SATURDAY || d== SUNDAY) {
+					//ADD BACKGROUND FOR SAT, SUND
+					int colTop = 0;
+					int colLeft = (ROW1_WIDTH_OFFSET * i)	+ (ROW2_WIDTH_OFFSET * d);
+					int colWidth = 38;
+					int colHeight = -1; //not used... 100% defined by style
+					Rectangle colBounds = new Rectangle(colLeft, colTop, colWidth, colHeight);
+					renderer.renderColumn(colBounds, d);
+				}
+			}
+
+			date = DateUtil.addDays(date, DateUtil.DAYS_PER_WEEK);
+		}
+	}
+
+	protected void renderTasks() {
+		//clear task panel
+		//clear lookup Map
+		
+		int count = 0;
+		boolean collapse = false;
+		int collapseLevel = -1;
+
+		for (int i = 0; i < taskViewer.getItemCount(); i++) {
+			//get the task
+			Task task = taskViewer.getItem(i);
+			
+			collapse = collapse && task.getLevel()>=collapseLevel;
+			
+			if(!collapse) {
+				if(task.isSummary()) {
+					//render the summary widget
+					renderTaskSummary(task, count);
+					collapse = task.isCollapsed();
+					collapseLevel = task.getLevel()+1;
+				} else if(task.isMilestone()) {
+					//render the milestone widget
+					renderTaskMilestone(task, count);
+				} else {
+					//render the task widget
+					renderTask(task, count);
+				}
+				count++;
+			}
+		}
+	}
+
+	protected void renderTask(Task task, int order) {
+
+		int daysFromStart = DateUtil.differenceInDays(start, task.getStart());//+1;
+		int daysInLength = DateUtil.differenceInDays(task.getStart(), task.getFinish())+1;
+
+		daysInLength = Math.max(daysInLength, 1);
+		
+		int top = TASK_ROW_HEIGHT*order+TASK_PADDING_TOP;//order * TASK_HEIGHT + ((order+1) * TASK_PADDING) + (order * TASK_PADDING);
+		int left = daysFromStart * ROW2_WIDTH_OFFSET;
+		int width = daysInLength * ROW2_WIDTH_OFFSET-4;
+		int height = TASK_HEIGHT;
+
+		//render the task
+		Rectangle taskBounds = new Rectangle(left, top, width, height);
+		renderer.renderTask(task, taskBounds);
+		
+		//render the label
+		Rectangle labelBounds = new Rectangle(taskBounds.getRight(), top-2, -1, -1);
+		renderer.renderTaskLabel(task, labelBounds);
+		
+		//if task is selected, make sure it is rendered as selected
+		if(taskViewer.isSelectedItem(task)) {
+			this.doItemSelected(task);
+		}
+	}
+
+	protected void renderTaskSummary(Task task, int order) {
+
+		int daysFromStart = DateUtil.differenceInDays(start, task.getStart());//+1
+		int daysInLength = DateUtil.differenceInDays(task.getStart(), task.getFinish())+1;
+
+		daysInLength = Math.max(daysInLength, 1);
+
+		int top = TASK_ROW_HEIGHT*order+SUMMARY_PADDING_TOP;;//order * TASK_HEIGHT + ((order+1) * TASK_PADDING) + (order * TASK_PADDING);
+		int left = daysFromStart * ROW2_WIDTH_OFFSET;
+		int width = daysInLength * ROW2_WIDTH_OFFSET-4;
+		int height = SUMMARY_HEIGHT;
+
+		//render the task
+		Rectangle taskBounds = new Rectangle(left, top, width, height);
+		renderer.renderTaskSummary(task, taskBounds);
+		
+		//render the label
+		Rectangle labelBounds = new Rectangle(taskBounds.getRight(), top-2, -1, -1);
+		renderer.renderTaskLabel(task, labelBounds);
+		
+		//if task is selected, make sure it is rendered as selected
+		if(taskViewer.isSelectedItem(task)) {
+			this.doItemSelected(task);
+		}
+	}
+
+	protected void renderTaskMilestone(Task task, int order) {
+
+		int daysFromStart = DateUtil.differenceInDays(start, task.getStart());//+1;
+
+		int top = TASK_ROW_HEIGHT*order+MILESTONE_PADDING_TOP;//order * TASK_HEIGHT + ((order+1) * TASK_PADDING) + (order * TASK_PADDING);
+		int left = daysFromStart * ROW2_WIDTH_OFFSET;
+		int width = MILESTONE_WIDTH;
+		int height = TASK_HEIGHT;
+
+		//render the task
+		Rectangle taskBounds = new Rectangle(left, top, width, height);
+		renderer.renderTaskMilestone(task, taskBounds);
+		
+		//render the label
+		Rectangle labelBounds = new Rectangle(taskBounds.getRight(), top-2, -1, -1);
+		renderer.renderTaskLabel(task, labelBounds);
+		
+		//if task is selected, make sure it is rendered as selected
+		if(taskViewer.isSelectedItem(task)) {
+			this.doItemSelected(task);
+		}
+	}
+	
+	protected void renderConnectors() {
+		
+		for(int i=0; i< taskViewer.getItemCount(); i++) {
+			
+			Task task = taskViewer.getItem(i);
+			for(Predecessor predecessor : task.getPredecessors()) {
+				Point[] path = null;
+				Rectangle fromRect = renderer.getTaskRectangle(predecessor.getUID());
+				Rectangle toRect = renderer.getTaskRectangle(task.getUID());
+				if(fromRect!=null && toRect!=null) {
+					path = CalculatorFactory.get(
+							predecessor.getType()).calculateWithOffset(fromRect, toRect);
+					renderConnector(path);
+				}
+				
+			}
+			
+		}
+		
+	}
+
+	protected void renderConnector(Point[] path) {
+		renderer.renderConnector(path);
+	}
+
+	protected Date calculateStartDate() {
+		
+		Date adjustedStart = taskViewer.getStart();
+		
+		//if the gantt chart's start date is null, let's set one automatically
+		if(taskViewer.getStart()==null) {
+			adjustedStart = new Date();
+		}
+
+		//if the first task in the gantt chart is before the gantt charts
+		// project start date ...
+		if(taskViewer.getItemCount()>0 &&
+				taskViewer.getItem(0).getStart().before(adjustedStart)) {
+			
+			adjustedStart = taskViewer.getItem(0).getStart();
+		}
+		
+		adjustedStart = DateUtil.addDays(adjustedStart, -7);
+		adjustedStart = DateUtil.getFirstDayOfWeek(adjustedStart);
+		return adjustedStart;
+	}
+	
+	protected Date calculateFinishDate() {
+		
+		Date adjustedFinish = taskViewer.getFinish();
+		
+		//if the gantt chart's finish date is null, let's set one automatically
+		if(adjustedFinish==null) {
+			adjustedFinish = new Date();
+			adjustedFinish = DateUtil.addDays(adjustedFinish, 7*48);
+		}
+
+		//if the last task in the gantt chart is after the gantt charts
+		// project finish date ...
+		if(taskViewer.getItemCount()>0 && taskViewer.getItem(
+				taskViewer.getItemCount()-1).getFinish().after(adjustedFinish)) {
+			
+			adjustedFinish = taskViewer.getItem(taskViewer.getItemCount()-1).getFinish();
+		}
+		
+		adjustedFinish = DateUtil.addDays(adjustedFinish, 7);
+		adjustedFinish = DateUtil.getFirstDayOfWeek(adjustedFinish);
+		return adjustedFinish;
+	}
+
+
+	@Override
+	public void onItemClicked(Task task, Point point) {
+		taskViewer.fireItemClickEvent(task, Point.EMPTY);
+	}
+
+	@Override
+	public void onItemDoubleClicked(Task task) {
+		taskViewer.fireItemDoubleClickEvent(task);
+	}
+
+	@Override
+	public void onItemMouseOver(Task task) {
+		taskViewer.fireItemEnterEvent(task);
+	}
+
+	@Override
+	public void onItemMouseOut(Task task) {
+		taskViewer.fireItemExitEvent(task);
+	}
+	
+	public void doItemSelected(Task task) {
+		renderer.doTaskSelected(task);
+	}
+	
+	public void doItemDeselected(Task task) {
+		renderer.doTaskDeselected(task);
+	}
+	
+	public void doItemEnter(Task task) {
+		renderer.doTaskEnter(task);
+	}
+	
+	public void doItemExit(Task task) {
+		renderer.doTaskExit(task);
+	}
+
+    @Override
+    public void doScroll(int x, int y) {
+            //not implemented
+    }
+
+	@Override
+	public void onScroll(int x, int y) {
+		taskViewer.fireScrollEvent(x, y);
+	}
+
+	@Override
+	public int getHorizontalScrollPosition() {
+		return renderer.getHorizontalScrollPosition();
+	}
+
+	@Override
+	public int getVerticalScrollPosition() {
+		return renderer.getVerticalScrollPosition();
+	}
+	
+    @Override
+	public void doScrollToItem(Task item) {
+    	Rectangle rect = renderer.getTaskRectangle(item.getUID());
+    	if(rect != null) {
+    		int row = (int)Math.floor(rect.getTop()/TASK_ROW_HEIGHT);
+    		int top = (row-1)*TASK_ROW_HEIGHT;
+    		int left = rect.getLeft()-ROW2_WIDTH;
+    		left = Math.max(0, left);
+    		top = Math.max(0, top);
+    		renderer.doScroll(left, top);
+    	}
+    }
+	
+	@Override
+	public void sortItems(List<Task> taskList) {
+		Collections.sort(taskList, TaskDataManager.TASK_ORDER_COMPARATOR);
+	}
+
+	@Override
+	public void onItemExpand(Task task) {
+		//feature not available
+	}
+
+	@Override
+	public void onItemCollapse(Task task) {
+		//feature not available
+	}
+}
