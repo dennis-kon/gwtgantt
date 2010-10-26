@@ -69,8 +69,6 @@ public class TaskGridView implements TaskView {
                     taskIndex.put(task.getUID(),task);
                 }
 		
-		//some debugging...
-		GWT.log("renderTasks method invoked");
 		
 		for (int i = 0; i < project.getItemCount(); i++) {
 			//get the task
