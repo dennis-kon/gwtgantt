@@ -34,7 +34,7 @@ import com.google.gwt.user.datepicker.client.DatePicker;
  * means that the call to {@code ValueUpdater.update} will occur after {@code
  * onBrowserEvent} has returned. Pressing the 'escape' key dismisses the {@code
  * DatePicker} popup without calling {@code ValueUpdater.update}.
- * 
+ *
  * <p>
  * Each {@code DatePickerCell} has a unique {@code DatePicker} popup associated
  * with it; thus, if a single {@code DatePickerCell} is used as the cell for a
@@ -48,7 +48,9 @@ public class DateCell extends AbstractEditableCell<Date, Date> {
 		@Template("<div style='text-align:right;'>{0}</div>")
 		SafeHtml div(String value);
 	}
-	
+
+        Template template = GWT.create(Template.class);
+
   private static final int ESCAPE = 27;
 
   private final DatePicker datePicker;
@@ -61,7 +63,6 @@ public class DateCell extends AbstractEditableCell<Date, Date> {
   private PopupPanel panel;
   private final SafeHtmlRenderer<String> renderer;
   private ValueUpdater<Date> valueUpdater;
-  private Template template = GWT.create(Template.class);
 
   /**
    * Constructs a new DatePickerCell that uses the date/time format given by
@@ -76,6 +77,8 @@ public class DateCell extends AbstractEditableCell<Date, Date> {
   /**
    * Constructs a new DatePickerCell that uses the given date/time format and a
    * {@link SimpleSafeHtmlRenderer}.
+   *
+   * @param format a {@link DateTimeFormat} instance
    */
   public DateCell(DateTimeFormat format) {
     this(format, SimpleSafeHtmlRenderer.getInstance());
@@ -85,6 +88,8 @@ public class DateCell extends AbstractEditableCell<Date, Date> {
    * Constructs a new DatePickerCell that uses the date/time format given by
    * {@link DateTimeFormat#getFullDateFormat} and the given
    * {@link SafeHtmlRenderer}.
+   *
+   * @param renderer a {@link SafeHtmlRenderer SafeHtmlRenderer<String>} instance
    */
   public DateCell(SafeHtmlRenderer<String> renderer) {
     this(DateTimeFormat.getFormat(PredefinedFormat.DATE_FULL), renderer);
@@ -93,6 +98,9 @@ public class DateCell extends AbstractEditableCell<Date, Date> {
   /**
    * Constructs a new DatePickerCell that uses the given date/time format and
    * {@link SafeHtmlRenderer}.
+   *
+   * @param format a {@link DateTimeFormat} instance
+   * @param renderer a {@link SafeHtmlRenderer SafeHtmlRenderer<String>} instance
    */
   public DateCell(DateTimeFormat format, SafeHtmlRenderer<String> renderer) {
     super("click", "keydown");
@@ -134,10 +142,16 @@ public class DateCell extends AbstractEditableCell<Date, Date> {
     // Hide the panel and call valueUpdater.update when a date is selected
     datePicker.addValueChangeHandler(new ValueChangeHandler<Date>() {
       public void onValueChange(ValueChangeEvent<Date> event) {
+        // Remember the values before hiding the popup.
+        Element cellParent = lastParent;
+        Date oldValue = lastValue;
+        Object key = lastKey;
         panel.hide();
+
+        // Update the cell and value updater.
         Date date = event.getValue();
-        setViewData(lastKey, date);
-        setValue(lastParent, lastValue, lastKey);
+        setViewData(key, date);
+        setValue(cellParent, oldValue, key);
         if (valueUpdater != null) {
           valueUpdater.update(date);
         }
@@ -177,7 +191,7 @@ public class DateCell extends AbstractEditableCell<Date, Date> {
     if (s != null) {
     	SafeHtml html = renderer.render(s);
         sb.append(template.div(html.asString()));
-//      sb.append("<div>"+renderer.render(s)+"</div>");
+//      sb.append(renderer.render(s));
     }
   }
 
@@ -201,4 +215,3 @@ public class DateCell extends AbstractEditableCell<Date, Date> {
     });
   }
 }
-

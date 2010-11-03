@@ -19,6 +19,7 @@ package com.bradrydzewski.gwtgantt;
 
 import com.bradrydzewski.gwtgantt.view.GanttWeekView;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.view.client.ListDataProvider;
 
 /**
  * A GanttChart widget that extends the {@link TaskViewer}

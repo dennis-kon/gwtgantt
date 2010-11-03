@@ -30,9 +30,11 @@ import java.util.List;
 public class TaskImpl implements Task {
 
     public static final String STYLE_BLUE = "blue";
-    public static final String STYLE_DEFAULT = STYLE_BLUE;
     public static final String STYLE_RED = "red";
     public static final String STYLE_GREEN = "green";
+    public static final String STYLE_ORANGE = "orange";
+    public static final String STYLE_PURPLE = "purple";
+    public static final String STYLE_DEFAULT = STYLE_BLUE;
     private int UID;
     private String name;
     private String notes;
@@ -344,8 +346,8 @@ public class TaskImpl implements Task {
 //               ((Task)o).getUID() == this.UID;
 //    }
 
-    @Override
-    public Object clone() {
+//    @Override
+    public TaskImpl clone() { //throws CloneNotSupportedException {
         TaskImpl task = new TaskImpl();
         task.UID = this.UID;
         task.finish = this.finish;

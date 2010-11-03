@@ -19,6 +19,11 @@ public interface GanttResources extends ClientBundle {
 	@Source("arrowGreen.gif")
 	ImageResource greenArrowImage();
 	
+	@Source("arrowPurple.gif")
+	ImageResource purpleArrowImage();
+	@Source("arrowOrange.gif")
+	ImageResource orangeArrowImage();
+	
 	public interface TaskStyle extends CssResource {
 		
 	}

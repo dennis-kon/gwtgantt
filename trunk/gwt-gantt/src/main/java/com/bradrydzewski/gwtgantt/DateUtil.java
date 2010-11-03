@@ -108,4 +108,11 @@ public class DateUtil {
 	public static Date clone(Date date) {
 		return (Date)date.clone();
 	}
+	
+	public static Date reset(Date date) {
+		date.setHours(0);
+		date.setMinutes(0);
+		date.setSeconds(0);
+		return date;
+	}
 }

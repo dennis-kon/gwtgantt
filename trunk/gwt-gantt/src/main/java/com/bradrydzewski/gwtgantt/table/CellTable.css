@@ -62,10 +62,11 @@
   border-right: 1px solid #CCC;
   white-space:nowrap;
   overflow:hidden;
-  height: 24px;
+  height: 23px;/*24 in firefox*/
   font-family:arial;
   font-size:12px;
 }
+
 
 
 .cellTableEvenRow {

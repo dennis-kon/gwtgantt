@@ -97,4 +97,13 @@ public class ItemClickEvent<T> extends GwtEvent<ItemClickHandler<T>> {
 		handler.onItemClick(this);
 	}
 
+  @Override
+  public String toDebugString() {
+    return super.toDebugString();
+  }
+
+//  @Override
+//  protected void dispatch(ValueChangeHandler<T> handler) {
+//    handler.onValueChange(this);
+//  }
 }
