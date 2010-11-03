@@ -24,6 +24,30 @@
 		.taskBackgroundPanel .weekendPanel-Saturday {background:#ececec; position:absolute; top:0px;bottom:0px;border-left:1px solid #ececec; border-right:1px solid #bebebe; }
 		.taskBackgroundPanel .weekendPanel-Sunday {background:#ececec; position:absolute; top:0px;bottom:0px;border-left:1px solid #fff; border-right:1px solid #ececec; }
 	
+		@external task-default, task-blue, task-red, task-green, pctComplete, taskSelected, taskHovered, pctComplete;
+		
+		.task-default,
+		.task-blue { border:1px solid #2952A3; background: #668CD9; border-radius:3px; -moz-border-radius:3px; -webkit-user-select: none; -moz-user-select: none; opacity:0.75; }
+		.task-red { border:1px solid #A32929; background: #D96666; border-radius:3px; -moz-border-radius:3px; -webkit-user-select: none; -moz-user-select: none; opacity:0.75; }
+		.task-green { border:1px solid #0D7813; background: #4CB052; border-radius:3px; -moz-border-radius:3px; -webkit-user-select: none; -moz-user-select: none; opacity:0.75; }
+		.taskSelected { opacity:1; -webkit-box-shadow: #B8B8B8 3px 3px 3px; -moz-box-shadow: #B8B8B8 3px 3px 3px;}
+		.taskHovered { -webkit-box-shadow: #B8B8B8 -2px -2px 2px, #B8B8B8 3px 3px 3px; -moz-box-shadow: #B8B8B8 -2px -2px 2px, #B8B8B8 3px 3px 3px; }
+		.pctComplete { position:absolute; pointer-events:none; background: transparent url(http://gwt-web-calendar.appspot.com/Main/line-pattern-template-inverse.gif); -webkit-user-select: none; -moz-user-select: none; }
+		
+
+	
+		@external milestone-default, milestone-blue, milestone-red, milestone-green, milestoneLabel, milestoneHovered, milestoneSelected;
+		.milestone-default,
+		.milestone-blue { font-size:17px; line-height:14px; color:#2952A3;opacity:0.75; -webkit-user-select: none; -moz-user-select: none; cursor: default; }
+		.milestone-red { font-size:17px; line-height:14px; color:#A32929;opacity:0.75; -webkit-user-select: none; -moz-user-select: none; cursor: default; }
+		.milestone-green { font-size:17px; line-height:14px; color:#0D7813;opacity:0.75; -webkit-user-select: none; -moz-user-select: none; cursor: default; }
+		
+		.milestoneLabel { position:absolute;line-height:18px;font-size:12px;font-weight:normal;font-family:arial;padding-left:3px; color:#555;text-shadow:#FFF 1px 1px;white-space:nowrap; cursor: default; -webkit-user-select: none; -moz-user-select: none;}
+	
+		.milestoneHovered { text-shadow: 2px 3px 3px #B8B8B8; }
+		.milestoneSelected { text-shadow: 2px 3px 3px #B8B8B8; opacity:1; }
+		
+		
 
 	</ui:style>
 	<g:FlowPanel styleName="{style.container}">

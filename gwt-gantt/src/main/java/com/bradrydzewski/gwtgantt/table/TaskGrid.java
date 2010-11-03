@@ -1,22 +1,16 @@
 package com.bradrydzewski.gwtgantt.table;
 
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.bradrydzewski.gwtgantt.model.Task;
-import com.bradrydzewski.gwtgantt.table.override.DateCell;
 import com.bradrydzewski.gwtgantt.table.override.Grid;
-import com.google.gwt.cell.client.EditTextCell;
-import com.google.gwt.cell.client.FieldUpdater;
-import com.google.gwt.cell.client.TextCell;
-import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.TableColElement;
 import com.google.gwt.dom.client.TableElement;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.cellview.client.CellTable;
-import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy.KeyboardSelectionPolicy;
 import com.google.gwt.user.cellview.client.RowStyles;
 import com.google.gwt.user.client.DOM;
@@ -26,6 +20,7 @@ import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.Range;
 import com.google.gwt.view.client.RangeChangeEvent.Handler;
@@ -301,19 +296,42 @@ public class TaskGrid extends Composite implements HasData<Task> {
 			
 		}
 	}
-	
-	private String[] columnNameArray = new String[]{"&nbsp;","Task Name","Duration","Start","Finish","Predecessors","Resources"};
-	private int[] columnWidthArray = new int[]{50, 350,80,110,110,100, 100};
-	private TableColElement[] columnGroupArray = new TableColElement[columnWidthArray.length];
+
+    class BodyPanel extends SimplePanel {
+            public BodyPanel() {
+                sinkEvents(Event.ONSCROLL);
+            }
+            @Override
+            public void onBrowserEvent(Event event) {
+                switch (DOM.eventGetType(event)) {
+                    case Event.ONSCROLL:
+
+			int left = DOM.getElementPropertyInt(
+                                getElement(), "scrollLeft");
+			headerTable.getElement().getStyle().setLeft(left*-1, Unit.PX);
+                        break;
+                }
+                super.onBrowserEvent(event);
+            }
+        }
+
+
+    
+//	private String[] columnNameArray = new String[]{"&nbsp;","Task Name","Duration","Start","Finish","Predecessors","Resources"};
+//	private int[] columnWidthArray = new int[]{50, 350,80,110,110,100, 100};
+	private TableColElement[] columnGroupArray = null;
 	private FlowPanel container = new FlowPanel();
-	private FlowPanel body = new FlowPanel();
+	private BodyPanel body = new BodyPanel();
 	private FlowPanel header = new FlowPanel();
-	private HeaderTable headerTable = new HeaderTable(1,columnWidthArray.length);
+	private HeaderTable headerTable = new HeaderTable(1,1);
 	private CellTable<Task> taskTable = null;
 	private CollapsibleRowStyle rowStyle = new CollapsibleRowStyle();
 	private ColumnResizeWorker resizeWorker = new ColumnResizeWorker();
 	private TableElement tableElement = null;
 	
+	private List<TaskGridColumn> columns =
+		new ArrayList<TaskGridColumn>();
+
 	public TaskGrid() {
 		initWidget(container);
 		
@@ -337,7 +355,7 @@ public class TaskGrid extends Composite implements HasData<Task> {
 		container.add(header);
 		container.add(body);
 		
-		initTableColumns();
+//		initTableColumns();
 		
 		
 		taskTable.setRowStyles(rowStyle);
@@ -346,7 +364,14 @@ public class TaskGrid extends Composite implements HasData<Task> {
 		
 	}
 	
-	protected void initTableColumns() {
+
+	
+	public void addColumns(List<TaskGridColumn> columns) {
+		this.columns.clear();
+		this.columns.addAll(columns);
+		headerTable.clear();
+		headerTable.resizeColumns(columns.size());
+		columnGroupArray = new TableColElement[columns.size()];
 		
 		String shortFormatPattern = "MM/dd/yy";//DateTimeFormat.getFormat(PredefinedFormat.DATE_SHORT).getPattern();
 		String dayFormatPattern = "EEE";
@@ -354,119 +379,130 @@ public class TaskGrid extends Composite implements HasData<Task> {
 				dayFormatPattern + " " + shortFormatPattern);
 		
 		//set width of each column
-		for(int i=0;i<columnWidthArray.length;i++) {
-			TableColElement colgroup = Document.get().createColElement();
-			colgroup.setWidth(columnWidthArray[i]+"px");
-			columnGroupArray[i] = colgroup;
-			headerTable.setHTML(0, i, "<div>"+columnNameArray[i]+"</div>");
-			headerTable.getCellFormatter().setWidth(0, i, columnWidthArray[i]+"px");
+		for(int i=0;i<columns.size();i++) {
+			
+//			TableColElement colgroup = Document.get().createColElement();
+//			colgroup.setWidth(columns.get(i).getWidth()+"px");
+//			columnGroupArray[i] = colgroup;
+			TaskGridColumn column = columns.get(i);
+			headerTable.setHTML(0, i, "<div>"+column.getName()+"</div>");
+			headerTable.getCellFormatter().setWidth(0, i, column.getWidth()+"px");
 			headerTable.getCellFormatter().setVerticalAlignment(0, i, HasVerticalAlignment.ALIGN_TOP);
+			taskTable.addColumn(column.getColumn());
+			taskTable.addColumnStyleName(i, (column.getStyle()==null)?"no-header":column.getStyle());
+
 		}
 		
-		//add each column group to the table
-		for(int i=columnGroupArray.length-1;i>=0;i--) {
-			tableElement.insertFirst(columnGroupArray[i]);
+		for(int i=0;i<columns.size();i++) {
+			headerTable.getElement().getFirstChild().getChild(i).<TableColElement>cast().setWidth(columns.get(i).getWidth()+"px");
+			tableElement.getElementsByTagName("colgroup").getItem(0).getChild(i).<TableColElement>cast().setWidth(columns.get(i).getWidth()+"px");
 		}
 		
-
-		//ORDER COLUMN
-		Column<Task, String> orderColumn = new Column<Task, String>(new TextCell()) {
-
-			@Override
-			public String getValue(Task object) {
-				return String.valueOf(object.getOrder());
-			}
-		};
+//		//add each column group to the table
+//		for(int i=columns.size()-1;i>=0;i--) {
+//			tableElement.getTFoot()
+//			taskTable.getElement().getFirstChildElement().get
+//		}
 		
-		//NAME COLUMN
-		Column<Task, Task> nameColumn = new Column<Task, Task>(new TaskGridNameCellImpl()) {
-
-			@Override
-			public Task getValue(Task object) {
-				return object;
-			}
-		};
-		nameColumn.setFieldUpdater(new FieldUpdater<Task, Task>() {
-			public void update(int index, Task object, Task value) {
-				// Called when the user changes the value.
-				//object.setName(value);
-			}
-		});
-				
-		//DURATION COLUMN
-		Column<Task, String> durationColumn = new Column<Task, String>(new EditTextCell()) {
-
-			@Override
-			public String getValue(Task object) {
-				return String.valueOf(object.getDuration());
-			}
-		};
-		durationColumn.setFieldUpdater(new FieldUpdater<Task, String>() {
-			public void update(int index, Task object, String value) {
-				// Called when the user changes the value.
-//				object.setper
-			}
-		});
-		
-		//START COLUMN
-		Column<Task, Date> startColumn = new Column<Task, Date>(new DateCell(format)) {
-			@Override
-			public Date getValue(Task object) {
-				return object.getStart();
-			}
-		};
-		startColumn.setFieldUpdater(new FieldUpdater<Task, Date>() {
-			public void update(int index, Task object, Date value) {
-				object.setStart(value);
-			}
-		});
-		
-		//FINISH COLUMN
-		Column<Task, Date> finishColumn = new Column<Task, Date>(new DateCell(format)) {
-			@Override
-			public Date getValue(Task object) {
-				return object.getFinish();
-			}
-		};
-		finishColumn.setFieldUpdater(new FieldUpdater<Task, Date>() {
-			public void update(int index, Task object, Date value) {
-				object.setFinish(value);
-			}
-		});
-		
-		//PREDECESSOR COLUMN
-	    Column<Task, String> predecessorColumn = new Column<Task, String>(new EditTextCell()) {
-	    	@Override
-	    	public String getValue(Task object) {
-	    		return "";
-	    	}
-	    };
-	    predecessorColumn.setFieldUpdater(new FieldUpdater<Task, String>() {
-	    	public void update(int index, Task object, String value) {
-	    		
-	    	}
-	    });
-		
-		//RESOURCE COLUMN
-	    Column<Task, String> resourceColumn = new Column<Task, String>(new EditTextCell()) {
-	    	@Override
-	    	public String getValue(Task object) {
-	    		return "";
-	    	}
-	    };
-	    resourceColumn.setFieldUpdater(new FieldUpdater<Task, String>() {
-	    	public void update(int index, Task object, String value) {
-	    		
-	    	}
-	    });
-	    
-		taskTable.addColumn(orderColumn);
-		taskTable.addColumn(nameColumn);
-		taskTable.addColumn(durationColumn);
-		taskTable.addColumn(startColumn);
-		taskTable.addColumn(finishColumn);
-		taskTable.addColumn(predecessorColumn);
-		taskTable.addColumn(resourceColumn);
+//
+//		//ORDER COLUMN
+//		Column<Task, String> orderColumn = new Column<Task, String>(new TextCell()) {
+//
+//			@Override
+//			public String getValue(Task object) {
+//				return String.valueOf(object.getOrder());
+//			}
+//		};
+//		
+//		//NAME COLUMN
+//		Column<Task, Task> nameColumn = new Column<Task, Task>(new TaskGridNameCellImpl()) {
+//
+//			@Override
+//			public Task getValue(Task object) {
+//				return object;
+//			}
+//		};
+//		nameColumn.setFieldUpdater(new FieldUpdater<Task, Task>() {
+//			public void update(int index, Task object, Task value) {
+//				// Called when the user changes the value.
+//				//object.setName(value);
+//			}
+//		});
+//				
+//		//DURATION COLUMN
+//		Column<Task, String> durationColumn = new Column<Task, String>(new EditTextCell()) {
+//
+//			@Override
+//			public String getValue(Task object) {
+//				return String.valueOf(object.getDuration());
+//			}
+//		};
+//		durationColumn.setFieldUpdater(new FieldUpdater<Task, String>() {
+//			public void update(int index, Task object, String value) {
+//				// Called when the user changes the value.
+////				object.setper
+//			}
+//		});
+//		
+//		//START COLUMN
+//		Column<Task, Date> startColumn = new Column<Task, Date>(new DateCell(format)) {
+//			@Override
+//			public Date getValue(Task object) {
+//				return object.getStart();
+//			}
+//		};
+//		startColumn.setFieldUpdater(new FieldUpdater<Task, Date>() {
+//			public void update(int index, Task object, Date value) {
+//				object.setStart(value);
+//			}
+//		});
+//		
+//		//FINISH COLUMN
+//		Column<Task, Date> finishColumn = new Column<Task, Date>(new DateCell(format)) {
+//			@Override
+//			public Date getValue(Task object) {
+//				return object.getFinish();
+//			}
+//		};
+//		finishColumn.setFieldUpdater(new FieldUpdater<Task, Date>() {
+//			public void update(int index, Task object, Date value) {
+//				object.setFinish(value);
+//			}
+//		});
+//		
+//		//PREDECESSOR COLUMN
+//	    Column<Task, String> predecessorColumn = new Column<Task, String>(new EditTextCell()) {
+//	    	@Override
+//	    	public String getValue(Task object) {
+//	    		return "";
+//	    	}
+//	    };
+//	    predecessorColumn.setFieldUpdater(new FieldUpdater<Task, String>() {
+//	    	public void update(int index, Task object, String value) {
+//	    		
+//	    	}
+//	    });
+//		
+//		//RESOURCE COLUMN
+//	    Column<Task, String> resourceColumn = new Column<Task, String>(new EditTextCell()) {
+//	    	@Override
+//	    	public String getValue(Task object) {
+//	    		return "";
+//	    	}
+//	    };
+//	    resourceColumn.setFieldUpdater(new FieldUpdater<Task, String>() {
+//	    	public void update(int index, Task object, String value) {
+//	    		
+//	    	}
+//	    });
+//	    
+//		taskTable.addColumn(orderColumn);
+//		taskTable.addColumn(nameColumn);
+//		taskTable.addColumn(durationColumn);
+//		taskTable.addColumn(startColumn);
+//		taskTable.addColumn(finishColumn);
+//		taskTable.addColumn(predecessorColumn);
+//		taskTable.addColumn(resourceColumn);
 	}
 	
 	void resizeColumn(int columnIndex, int width) {
@@ -475,25 +511,38 @@ public class TaskGrid extends Composite implements HasData<Task> {
 			return;
 		
 		//store the width
-		columnWidthArray[columnIndex] = width;
+		columns.get(columnIndex).setWidth(width);
 		//update the table
-		headerTable.getCellFormatter().setWidth(
-				0, columnIndex, width+"px");
+//		headerTable.getCellFormatter().setWidth(
+//				0, columnIndex, width+"px");
 //		bodyTable.getCellFormatter().setWidth(
 //				0, columnIndex, width+"px");
 		
-
-		columnGroupArray[columnIndex].getStyle().setProperty("width",width, Unit.PX);
+		headerTable.getElement().getFirstChild().getChild(columnIndex).<TableColElement>cast().setWidth(columns.get(columnIndex).getWidth()+"px");
+		tableElement.getElementsByTagName("colgroup").getItem(0).getChild(columnIndex).<TableColElement>cast().setWidth(columns.get(columnIndex).getWidth()+"px");
+		
+//		headerTable.getElement().getFirstChild().getChild(columnIndex).<TableColElement>cast().setWidth(columns.get(columnIndex).getWidth()+"px");
+//		tableElement.getFirstChild().getChild(columnIndex).<TableColElement>cast().setWidth(columns.get(columnIndex).getWidth()+"px");
+//		columnGroupArray[columnIndex].getStyle().setProperty("width",width, Unit.PX);
 	}
 
 	
 	
 	public void enableVerticalScrolling(boolean enabled) {
-            body.getElement().getStyle().setProperty("overflow-y", (enabled)?"scroll":"hidden");
+            body.getElement().getStyle().setProperty("overflowY", (enabled)?"scroll":"hidden");
         }
 	
-	
-	
+	public void enableHorizontalScrolling(boolean enabled) {
+           
+            body.getElement().getStyle().setProperty("overflowX", (enabled)?"scroll":"hidden");
+        }
+//	public void setHorizontalScrollPosition(int position) {
+//            DOM.setElementPropertyInt(body.getElement(), "scrollLeft", position);
+//        }
+	public void setVerticalScrollPosition(int position) {
+//            DOM.setElementPropertyInt(body.getElement(), "scrollTop", position);
+            taskTable.getElement().getStyle().setTop(position*-1, Unit.PX);
+        }
 	
 	@Override
 	public HandlerRegistration addRangeChangeHandler(Handler handler) {
@@ -547,7 +596,7 @@ public class TaskGrid extends Composite implements HasData<Task> {
 	}
 
 	@Override
-	public void setRowData(int start, List<Task> values) {
+	public void setRowData(int start, List<? extends Task> values) {
 		taskTable.setRowData(start, values);
 	}
 
