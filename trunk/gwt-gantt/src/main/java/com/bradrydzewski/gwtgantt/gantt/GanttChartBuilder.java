@@ -1,10 +1,9 @@
 package com.bradrydzewski.gwtgantt.gantt;
 
-import java.util.Date;
 
 import com.bradrydzewski.gwtgantt.DateUtil;
-import com.bradrydzewski.gwtgantt.date.DateRange;
 import com.bradrydzewski.gwtgantt.geometry.Rectangle;
+import com.bradrydzewski.gwtgantt.model.DateRange;
 
 public class GanttChartBuilder {
 
@@ -26,7 +25,7 @@ public class GanttChartBuilder {
     public static final int SATURDAY = 6;
     public static final int SUNDAY = 0;
 	
-	public Rectangle calculateHeaderCell(int row, int column) {
+	public Rectangle calculateHeasderCell(int row, int column) {
 		return null;
 	}
 	

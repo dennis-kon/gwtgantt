@@ -1,6 +1,5 @@
 package com.bradrydzewski.gwtgantt;
 
-import com.bradrydzewski.gwtgantt.model.TaskImpl;
 import com.bradrydzewski.gwtgantt.model.Task;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,14 +16,14 @@ public class TaskUtilTest {
         List<Task> taskList = new ArrayList<Task>();
 
         //1.0
-        TaskImpl task1 = new TaskImpl();
+        Task task1 = new Task();
         task1.setUID(1);
         task1.setName("Task 1");
         task1.setOrder(1);
         task1.setLevel(1);
         taskList.add(task1);
         //2.0
-        TaskImpl task2 = new TaskImpl();
+        Task task2 = new Task();
         task2.setUID(2);
         task2.setName("Task 2");
         task2.setOrder(2);
@@ -32,21 +31,21 @@ public class TaskUtilTest {
         task2.setSummary(true);
         taskList.add(task2);
         //2.1
-        TaskImpl task3 = new TaskImpl();
+        Task task3 = new Task();
         task3.setUID(3);
         task3.setName("Task 3");
         task3.setOrder(3);
         task3.setLevel(2);
         taskList.add(task3);
         //2.2
-        TaskImpl task4 = new TaskImpl();
+        Task task4 = new Task();
         task4.setUID(4);
         task4.setName("Task 4");
         task4.setOrder(4);
         task4.setLevel(2);
         taskList.add(task4);
         //3.0
-        TaskImpl task5 = new TaskImpl();
+        Task task5 = new Task();
         task5.setUID(5);
         task5.setName("Task 5");
         task5.setOrder(5);
