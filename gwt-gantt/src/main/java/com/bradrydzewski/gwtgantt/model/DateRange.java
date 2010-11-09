@@ -15,18 +15,40 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/
  */
-package com.bradrydzewski.gwtgantt;
+package com.bradrydzewski.gwtgantt.model;
 
-import com.bradrydzewski.gwtgantt.model.Task;
-import com.google.gwt.user.client.ui.HasWidgets;
+import java.util.Date;
 
 /**
- * Task specialization of the <code>ItemView</code> interface.
- * 
+ *
  * @author Brad Rydzewski
  */
-public interface TaskView extends ItemView<Task> {
+public class DateRange {
 
-    public void attach(HasWidgets container, TaskDisplay taskDisplay);
+    private Date start;
+    private Date finish;
 
+    public DateRange() {
+    }
+
+    public DateRange(Date start, Date finish) {
+        this.start = start;
+        this.finish = finish;
+    }
+
+    public Date getStart() {
+        return start;
+    }
+
+    public void setStart(Date start) {
+        this.start = start;
+    }
+
+    public Date getFinish() {
+        return finish;
+    }
+
+    public void setFinish(Date finish) {
+        this.finish = finish;
+    }
 }
