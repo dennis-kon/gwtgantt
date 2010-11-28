@@ -51,9 +51,9 @@ public class GanttChartPresenter<T> extends TaskDisplayPresenter<T> {
     protected static final int SUMMARY_PADDING_TOP = 6;
     public static final int SATURDAY = 6;
     public static final int SUNDAY = 0;
-    private Date start;
-    private Date finish;
-    private ProvidesTask<T> provider;
+    protected Date start;
+    protected Date finish;
+    protected ProvidesTask<T> provider;
 
 
     
@@ -68,10 +68,10 @@ public class GanttChartPresenter<T> extends TaskDisplayPresenter<T> {
         Date newFinish = calculateFinishDate(rowData);
 
         
-        if(start==null ||
-        		finish==null ||
-        		!DateUtil.areOnTheSameDay(start, newStart) ||
-        		!DateUtil.areOnTheSameDay(finish, newFinish)) {
+//        if(start==null ||
+//        		finish==null) {// ||
+//        		!DateUtil.areOnTheSameDay(start, newStart) ||
+//        		!DateUtil.areOnTheSameDay(finish, newFinish)) {
 
         	this.start = newStart;
             this.finish = newFinish;
@@ -79,7 +79,7 @@ public class GanttChartPresenter<T> extends TaskDisplayPresenter<T> {
         	view.beforeRenderHeaders();
         	renderBackground();
         	view.afterRenderHeaders();
-        }
+//        }
 
         view.beforeRenderTasks();
         if(rowData!=null && !rowData.isEmpty()) {

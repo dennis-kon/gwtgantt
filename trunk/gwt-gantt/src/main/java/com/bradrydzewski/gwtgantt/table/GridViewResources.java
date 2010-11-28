@@ -6,12 +6,12 @@ import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.resources.client.ClientBundle.Source;
 
-public interface TaskGridResources extends ClientBundle {
+public interface GridViewResources extends ClientBundle {
 
-	public static final TaskGridResources INSTANCE = GWT
-			.create(TaskGridResources.class);
+	public static final GridViewResources INSTANCE = GWT
+			.create(GridViewResources.class);
 
-	@Source("TaskGridResources.css")
+	@Source("GridViewResources.css")
 	TaskGridStyle style();
 
 	@Source("expandArrow.png")

@@ -494,6 +494,7 @@ public class GanttChartView<T> extends Composite implements TaskDisplayView<T> {
 			svgPanel.clear();
 			svgPanel.add(svgDefs);
 		}
+		
 		taskWidgetsById.clear();
 		taskFlowPanel.clear();
 
@@ -533,7 +534,7 @@ public class GanttChartView<T> extends Composite implements TaskDisplayView<T> {
 	public void beforeRenderHeaders() {
 		firstHeaderHtmlBuilder = new SafeHtmlBuilder();
 		secondHeaderHtmlBuilder = new SafeHtmlBuilder();
-		
+		taskBackgroundPanel.clear();
 		firstHeaderRow.clear();
 		secondHeaderRow.clear();
 	}

@@ -52,7 +52,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
     /**
      * Creates a cell.
-     * 
+     *
      * @param rowIndex the cell's row
      * @param cellIndex the cell's index
      */
@@ -63,7 +63,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
     /**
      * Gets the cell index.
-     * 
+     *
      * @return the cell index
      */
     public int getCellIndex() {
@@ -72,7 +72,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
     /**
      * Gets the cell's element.
-     * 
+     *
      * @return the cell's element.
      */
     public Element getElement() {
@@ -81,7 +81,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
     /**
      * Get row index.
-     * 
+     *
      * @return the row index
      */
     public int getRowIndex() {
@@ -94,7 +94,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
   public class CellFormatter {
     /**
      * Adds a style to the specified cell.
-     * 
+     *
      * @param row the cell's row
      * @param column the cell's column
      * @param styleName the style name to be added
@@ -108,7 +108,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
     /**
      * Gets the TD element representing the specified cell.
-     * 
+     *
      * @param row the row of the cell to be retrieved
      * @param column the column of the cell to be retrieved
      * @return the column's TD element
@@ -121,7 +121,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
     /**
      * Gets the style of a specified cell.
-     * 
+     *
      * @param row the cell's row
      * @param column the cell's column
      * @see UIObject#getStyleName()
@@ -134,7 +134,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
     /**
      * Gets the primary style of a specified cell.
-     * 
+     *
      * @param row the cell's row
      * @param column the cell's column
      * @see UIObject#getStylePrimaryName()
@@ -147,7 +147,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
     /**
      * Determines whether or not this cell is visible.
-     * 
+     *
      * @param row the row of the cell whose visibility is to be set
      * @param column the column of the cell whose visibility is to be set
      * @return <code>true</code> if the object is visible
@@ -159,7 +159,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
     /**
      * Removes a style from the specified cell.
-     * 
+     *
      * @param row the cell's row
      * @param column the cell's column
      * @param styleName the style name to be removed
@@ -175,7 +175,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
     /**
      * Sets the horizontal and vertical alignment of the specified cell's
      * contents.
-     * 
+     *
      * @param row the row of the cell whose alignment is to be set
      * @param column the column of the cell whose alignment is to be set
      * @param hAlign the cell's new horizontal alignment as specified in
@@ -192,7 +192,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
     /**
      * Sets the height of the specified cell.
-     * 
+     *
      * @param row the row of the cell whose height is to be set
      * @param column the column of the cell whose height is to be set
      * @param height the cell's new height, in CSS units
@@ -206,7 +206,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
     /**
      * Sets the horizontal alignment of the specified cell.
-     * 
+     *
      * @param row the row of the cell whose alignment is to be set
      * @param column the column of the cell whose alignment is to be set
      * @param align the cell's new horizontal alignment as specified in
@@ -222,7 +222,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
     /**
      * Sets the style name associated with the specified cell.
-     * 
+     *
      * @param row the row of the cell whose style name is to be set
      * @param column the column of the cell whose style name is to be set
      * @param styleName the new style name
@@ -236,7 +236,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
     /**
      * Sets the primary style name associated with the specified cell.
-     * 
+     *
      * @param row the row of the cell whose style name is to be set
      * @param column the column of the cell whose style name is to be set
      * @param styleName the new style name
@@ -250,7 +250,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
     /**
      * Sets the vertical alignment of the specified cell.
-     * 
+     *
      * @param row the row of the cell whose alignment is to be set
      * @param column the column of the cell whose alignment is to be set
      * @param align the cell's new vertical alignment as specified in
@@ -268,7 +268,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
      * Sets whether this cell is visible via the display style property. The
      * other cells in the row will all shift left to fill the cell's space. So,
      * for example a table with (0,1,2) will become (1,2) if cell 1 is hidden.
-     * 
+     *
      * @param row the row of the cell whose visibility is to be set
      * @param column the column of the cell whose visibility is to be set
      * @param visible <code>true</code> to show the cell, <code>false</code> to
@@ -281,7 +281,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
     /**
      * Sets the width of the specified cell.
-     * 
+     *
      * @param row the row of the cell whose width is to be set
      * @param column the column of the cell whose width is to be set
      * @param width the cell's new width, in CSS units
@@ -296,7 +296,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
     /**
      * Sets whether the specified cell will allow word wrapping of its contents.
-     * 
+     *
      * @param row the row of the cell whose word-wrap is to be set
      * @param column the column of the cell whose word-wrap is to be set
      * @param wrap <code>false </code> to disable word wrapping in this cell
@@ -311,7 +311,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
     /**
      * Gets the element associated with a cell. If it does not exist and the
      * subtype allows creation of elements, creates it.
-     * 
+     *
      * @param row the cell's row
      * @param column the cell's column
      * @return the cell's element
@@ -324,7 +324,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
     /**
      * Convenience methods to get an attribute on a cell.
-     * 
+     *
      * @param row cell's row
      * @param column cell's column
      * @param attr attribute to get
@@ -338,7 +338,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
     /**
      * Convenience methods to set an attribute on a cell.
-     * 
+     *
      * @param row cell's row
      * @param column cell's column
      * @param attrName attribute to set
@@ -352,7 +352,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
     /**
      * Native method to get a cell's element.
-     * 
+     *
      * @param table the table element
      * @param row the row of the cell
      * @param col the column of the cell
@@ -366,7 +366,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
      * Gets the TD element representing the specified cell unsafely (meaning
      * that it doesn't ensure that <code>row</code> and <code>column</code> are
      * valid).
-     * 
+     *
      * @param row the row of the cell to be retrieved
      * @param column the column of the cell to be retrieved
      * @return the cell's TD element
@@ -385,7 +385,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
     /**
      * Adds a style to the specified column.
-     * 
+     *
      * @param col the col to which the style will be added
      * @param styleName the style name to be added
      * @see UIObject#addStyleName(String)
@@ -397,7 +397,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
     /**
      * Get the col element for the column.
-     * 
+     *
      * @param column the column index
      * @return the col element
      */
@@ -407,7 +407,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
     /**
      * Gets the style of the specified column.
-     * 
+     *
      * @param column the column to be queried
      * @return the style name
      * @see UIObject#getStyleName()
@@ -419,7 +419,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
     /**
      * Gets the primary style of the specified column.
-     * 
+     *
      * @param column the column to be queried
      * @return the style name
      * @see UIObject#getStylePrimaryName()
@@ -431,7 +431,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
     /**
      * Removes a style from the specified column.
-     * 
+     *
      * @param column the column from which the style will be removed
      * @param styleName the style name to be removed
      * @see UIObject#removeStyleName(String)
@@ -443,7 +443,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
     /**
      * Sets the style name associated with the specified column.
-     * 
+     *
      * @param column the column whose style name is to be set
      * @param styleName the new style name
      * @see UIObject#setStyleName(String)
@@ -455,7 +455,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
     /**
      * Sets the primary style name associated with the specified column.
-     * 
+     *
      * @param column the column whose style name is to be set
      * @param styleName the new style name
      * @see UIObject#setStylePrimaryName(String)
@@ -467,7 +467,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
     /**
      * Sets the width of the specified column.
-     * 
+     *
      * @param column the column of the cell whose width is to be set
      * @param width the cell's new width, in percentage or pixel units
      * @throws IndexOutOfBoundsException
@@ -478,7 +478,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
     /**
      * Resize the column group element.
-     * 
+     *
      * @param columns the number of columns
      * @param growOnly true to only grow, false to shrink if needed
      */
@@ -528,7 +528,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
     /**
      * Adds a style to the specified row.
-     * 
+     *
      * @param row the row to which the style will be added
      * @param styleName the style name to be added
      * @see UIObject#addStyleName(String)
@@ -540,7 +540,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
     /**
      * Gets the TR element representing the specified row.
-     * 
+     *
      * @param row the row whose TR element is to be retrieved
      * @return the row's TR element
      * @throws IndexOutOfBoundsException
@@ -552,7 +552,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
     /**
      * Gets the style of the specified row.
-     * 
+     *
      * @param row the row to be queried
      * @return the style name
      * @see UIObject#getStyleName()
@@ -564,7 +564,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
     /**
      * Gets the primary style of the specified row.
-     * 
+     *
      * @param row the row to be queried
      * @return the style name
      * @see UIObject#getStylePrimaryName()
@@ -577,7 +577,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
     /**
      * Determines whether or not this row is visible via the display style
      * attribute.
-     * 
+     *
      * @param row the row whose visibility is to be set
      * @return <code>true</code> if the row is visible
      */
@@ -588,7 +588,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
     /**
      * Removes a style from the specified row.
-     * 
+     *
      * @param row the row from which the style will be removed
      * @param styleName the style name to be removed
      * @see UIObject#removeStyleName(String)
@@ -600,7 +600,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
     /**
      * Sets the style name associated with the specified row.
-     * 
+     *
      * @param row the row whose style name is to be set
      * @param styleName the new style name
      * @see UIObject#setStyleName(String)
@@ -612,7 +612,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
     /**
      * Sets the primary style name associated with the specified row.
-     * 
+     *
      * @param row the row whose style name is to be set
      * @param styleName the new style name
      * @see UIObject#setStylePrimaryName(String)
@@ -624,7 +624,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
     /**
      * Sets the vertical alignment of the specified row.
-     * 
+     *
      * @param row the row whose alignment is to be set
      * @param align the row's new vertical alignment as specified in
      *          {@link HasVerticalAlignment}
@@ -637,7 +637,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
     /**
      * Sets whether this row is visible.
-     * 
+     *
      * @param row the row whose visibility is to be set
      * @param visible <code>true</code> to show the row, <code>false</code> to
      *          hide it
@@ -650,7 +650,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
     /**
      * Ensure the TR element representing the specified row exists for
      * subclasses that allow dynamic addition of elements.
-     * 
+     *
      * @param row the row whose TR element is to be retrieved
      * @return the row's TR element
      * @throws IndexOutOfBoundsException
@@ -666,7 +666,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
     /**
      * Convenience methods to set an attribute on a row.
-     * 
+     *
      * @param row cell's row
      * @param attrName attribute to set
      * @param value value to set
@@ -725,7 +725,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
   /**
    * Adds a listener to the current table.
-   * 
+   *
    * @param listener listener to add
    * @deprecated add a click handler instead and use
    *             {@link HTMLTable#getCellForEvent(ClickEvent)} to get the cell
@@ -748,7 +748,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
   /**
    * Removes all widgets from this table, optionally clearing the inner HTML of
    * each cell.  Note that this method does not remove any cells or rows.
-   * 
+   *
    * @param clearInnerHTML should the cell's inner html be cleared?
    */
   public void clear(boolean clearInnerHTML) {
@@ -763,7 +763,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
    * Clears the cell at the given row and column. If it contains a Widget, it
    * will be removed from the table. If not, its contents will simply be
    * cleared.
-   * 
+   *
    * @param row the widget's row
    * @param column the widget's column
    * @return true if a widget was removed
@@ -776,7 +776,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
   /**
    * Gets the number of cells in a given row.
-   * 
+   *
    * @param row the row whose cells are to be counted
    * @return the number of cells present in the row
    */
@@ -786,7 +786,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
    * Given a click event, return the Cell that was clicked, or null if the event
    * did not hit this table.  The cell can also be null if the click event does
    * not occur on a specific cell.
-   * 
+   *
    * @param event A click event of indeterminate origin
    * @return The appropriate cell, or null
    */
@@ -804,7 +804,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
   /**
    * Gets the {@link CellFormatter} associated with this table. Use casting to
    * get subclass-specific functionality
-   * 
+   *
    * @return this table's cell formatter
    */
   public CellFormatter getCellFormatter() {
@@ -813,7 +813,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
   /**
    * Gets the amount of padding that is added around all cells.
-   * 
+   *
    * @return the cell padding, in pixels
    */
   public int getCellPadding() {
@@ -822,7 +822,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
   /**
    * Gets the amount of spacing that is added around all cells.
-   * 
+   *
    * @return the cell spacing, in pixels
    */
   public int getCellSpacing() {
@@ -831,7 +831,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
   /**
    * Gets the column formatter.
-   * 
+   *
    * @return the column formatter
    */
   public ColumnFormatter getColumnFormatter() {
@@ -840,7 +840,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
   /**
    * Gets the HTML contents of the specified cell.
-   * 
+   *
    * @param row the cell's row
    * @param column the cell's column
    * @return the cell's HTML contents
@@ -852,14 +852,14 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
   /**
    * Gets the number of rows present in this table.
-   * 
+   *
    * @return the table's row count
    */
   public abstract int getRowCount();
 
   /**
    * Gets the RowFormatter associated with this table.
-   * 
+   *
    * @return the table's row formatter
    */
   public RowFormatter getRowFormatter() {
@@ -868,7 +868,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
   /**
    * Gets the text within the specified cell.
-   * 
+   *
    * @param row the cell's row
    * @param column the cell's column
    * @return the cell's text contents
@@ -882,7 +882,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
   /**
    * Gets the widget in the specified cell.
-   * 
+   *
    * @param row the cell's row
    * @param column the cell's column
    * @return the widget in the specified cell, or <code>null</code> if none is
@@ -896,7 +896,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
   /**
    * Determines whether the specified cell exists.
-   * 
+   *
    * @param row the cell's row
    * @param column the cell's column
    * @return <code>true</code> if the specified cell exists
@@ -914,7 +914,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
   /**
    * Returns an iterator containing all the widgets in this table.
-   * 
+   *
    * @return the iterator
    */
   public Iterator<Widget> iterator() {
@@ -962,7 +962,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
   /**
    * Remove the specified widget from the table.
-   * 
+   *
    * @param widget widget to remove
    * @return was the widget removed from the table.
    */
@@ -980,7 +980,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
       // Physical detach.
       Element elem = widget.getElement();
       DOM.removeChild(DOM.getParent(elem), elem);
-  
+
       // Logical detach.
       widgetMap.removeByElement(elem);
     }
@@ -989,7 +989,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
   /**
    * Removes the specified table listener.
-   * 
+   *
    * @param listener listener to remove
    *
    * @deprecated Use the {@link HandlerRegistration#removeHandler}
@@ -1003,7 +1003,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
   /**
    * Sets the width of the table's border. This border is displayed around all
    * cells in the table.
-   * 
+   *
    * @param width the width of the border, in pixels
    */
   public void setBorderWidth(int width) {
@@ -1012,7 +1012,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
   /**
    * Sets the amount of padding to be added around all cells.
-   * 
+   *
    * @param padding the cell padding, in pixels
    */
   public void setCellPadding(int padding) {
@@ -1021,7 +1021,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
   /**
    * Sets the amount of spacing to be added around all cells.
-   * 
+   *
    * @param spacing the cell spacing, in pixels
    */
   public void setCellSpacing(int spacing) {
@@ -1030,7 +1030,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
   /**
    * Sets the HTML contents of the specified cell.
-   * 
+   *
    * @param row the cell's row
    * @param column the cell's column
    * @param html the cell's HTML contents
@@ -1046,7 +1046,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
   /**
    * Sets the text within the specified cell.
-   * 
+   *
    * @param row the cell's row
    * @param column cell's column
    * @param text the cell's text contents
@@ -1072,7 +1072,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
    * then set the widget. Grid will set the widget if and only if the cell is
    * within the Grid's bounding box.
    * </p>
-   * 
+   *
    * @param widget The widget to be added
    * @param row the cell's row
    * @param column the cell's column
@@ -1098,7 +1098,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
   /**
    * Bounds checks that the cell exists at the specified location.
-   * 
+   *
    * @param row cell's row
    * @param column cell's column
    * @throws IndexOutOfBoundsException
@@ -1118,7 +1118,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
   /**
    * Checks that the row is within the correct bounds.
-   * 
+   *
    * @param row row index to check
    * @throws IndexOutOfBoundsException
    */
@@ -1133,7 +1133,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
   /**
    * Creates a new cell. Override this method if the cell should have initial
    * contents.
-   * 
+   *
    * @return the newly created TD
    */
   protected Element createCell() {
@@ -1142,7 +1142,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
   /**
    * Gets the table's TBODY element.
-   * 
+   *
    * @return the TBODY element
    */
   protected Element getBodyElement() {
@@ -1151,7 +1151,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
   /**
    * Directly ask the underlying DOM what the cell count on the given row is.
-   * 
+   *
    * @param tableBody the element
    * @param row the row
    * @return number of columns in the row
@@ -1162,7 +1162,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
   /**
    * Directly ask the underlying DOM what the cell count on the given row is.
-   * 
+   *
    * @param row the row
    * @return number of columns in the row
    */
@@ -1172,7 +1172,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
   /**
    * Directly ask the underlying DOM what the row count is.
-   * 
+   *
    * @return Returns the number of rows in the table
    */
   protected int getDOMRowCount() {
@@ -1185,7 +1185,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
   /**
    * Determines the TD associated with the specified event.
-   * 
+   *
    * @param event the event to be queried
    * @return the TD associated with the event, or <code>null</code> if none is
    *         found.
@@ -1213,7 +1213,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
   /**
    * Inserts a new cell into the specified row.
-   * 
+   *
    * @param row the row into which the new cell will be inserted
    * @param column the column before which the cell will be inserted
    * @throws IndexOutOfBoundsException
@@ -1226,7 +1226,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
   /**
    * Inserts a number of cells before the specified cell.
-   * 
+   *
    * @param row the row into which the new cells will be inserted
    * @param column the column before which the new cells will be inserted
    * @param count number of cells to be inserted
@@ -1242,7 +1242,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
   /**
    * Inserts a new row into the table.
-   * 
+   *
    * @param beforeRow the index before which the new row will be inserted
    * @return the index of the newly-created row
    * @throws IndexOutOfBoundsException
@@ -1261,7 +1261,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
    * Does actual clearing, used by clearCell and cleanCell. All HTMLTable
    * methods should use internalClearCell rather than clearCell, as clearCell
    * may be overridden in subclasses to format an empty cell.
-   * 
+   *
    * @param td element to clear
    * @param clearInnerHTML should the cell's inner html be cleared?
    * @return returns whether a widget was cleared
@@ -1290,7 +1290,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
    * <ul>
    * <li>-(row)#-(cell)# = the cell at the given row and cell index.</li>
    * </ul>
-   * 
+   *
    * @see UIObject#onEnsureDebugId(String)
    */
   @Override
@@ -1312,7 +1312,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
    * just before a cell is accessed. If the cell already exists, this method
    * must do nothing. Otherwise, a subclass must either ensure that the cell
    * exists or throw an {@link IndexOutOfBoundsException}.
-   * 
+   *
    * @param row the cell's row
    * @param column the cell's column
    */
@@ -1323,7 +1323,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
    * just before a column is accessed. For classes, such as
    * <code>FlexTable</code>, that do not have a concept of a global column
    * length can ignore this method.
-   * 
+   *
    * @param column the cell's column
    * @throws IndexOutOfBoundsException
    */
@@ -1339,14 +1339,14 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
    * Subclasses must implement this method. If the row already exists, this
    * method must do nothing. Otherwise, a subclass must either ensure that the
    * row exists or throw an {@link IndexOutOfBoundsException}.
-   * 
+   *
    * @param row the cell's row
    */
   protected abstract void prepareRow(int row);
 
   /**
    * Removes the specified cell from the table.
-   * 
+   *
    * @param row the row of the cell to remove
    * @param column the column of cell to remove
    * @throws IndexOutOfBoundsException
@@ -1360,7 +1360,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
   /**
    * Removes the specified row from the table.
-   * 
+   *
    * @param row the index of the row to be removed
    * @throws IndexOutOfBoundsException
    */
@@ -1374,7 +1374,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
   /**
    * Sets the table's CellFormatter.
-   * 
+   *
    * @param cellFormatter the table's cell formatter
    */
   protected void setCellFormatter(CellFormatter cellFormatter) {
@@ -1393,7 +1393,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
   /**
    * Sets the table's RowFormatter.
-   * 
+   *
    * @param rowFormatter the table's row formatter
    */
   protected void setRowFormatter(RowFormatter rowFormatter) {
@@ -1403,7 +1403,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
   /**
    * Removes any widgets, text, and HTML within the cell. This method assumes
    * that the requested cell already exists.
-   * 
+   *
    * @param row the cell's row
    * @param column the cell's column
    * @param clearInnerHTML should the cell's inner html be cleared?
@@ -1418,7 +1418,7 @@ public abstract class HTMLTable extends Panel implements SourcesTableEvents,
 
   /**
    * Gets the Widget associated with the given cell.
-   * 
+   *
    * @param row the cell's row
    * @param column the cell's column
    * @return the widget

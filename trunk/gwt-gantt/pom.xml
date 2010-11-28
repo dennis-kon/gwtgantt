@@ -5,7 +5,7 @@
     <groupId>com.bradrydzewski</groupId>
     <artifactId>gwt-gantt</artifactId>
     <packaging>jar</packaging>
-    <version>0.1-SNAPSHOT</version>
+    <version>0.2-SNAPSHOT</version>
     <name>gwt-gantt</name>
     <url>http://code.google.com/p/gwtgantt</url>
     <licenses>

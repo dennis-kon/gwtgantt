@@ -19,6 +19,7 @@ package com.bradrydzewski.gwtgantt.gantt;
 
 import java.util.Date;
 
+import com.bradrydzewski.gwtgantt.model.ZoomLevel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.SelectionModel;
@@ -97,4 +98,12 @@ public interface TaskDisplay<T> extends HasData<T>, IsWidget {
    */
     @Override
     SelectionModel<? super T> getSelectionModel();
+    
+    
+    void setZoomLevel(ZoomLevel zoom);
+    
+    ZoomLevel getZoomLevel();
+    
+    boolean zoomOut();
+    boolean zoomIn();
 }

@@ -3,7 +3,6 @@ package com.bradrydzewski.gwtgantt.table;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.bradrydzewski.gwtgantt.model.Task;
 import com.bradrydzewski.gwtgantt.table.override.Grid;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.TableColElement;
@@ -26,45 +25,45 @@ import com.google.gwt.view.client.Range;
 import com.google.gwt.view.client.RangeChangeEvent.Handler;
 import com.google.gwt.view.client.SelectionModel;
 
-public class TaskGrid extends Composite implements HasData<Task> {
+public class GridView<T> extends Composite implements HasData<T> {
 
 
-	class CollapsibleRowStyle implements RowStyles<Task> {
-		private boolean collapse = false;
-		private int collapseLevel = -1;
-		
-		public CollapsibleRowStyle() {
-			
-		}
-		
-		public void reset() {
-			collapseLevel = -1;
-			collapse = false;
-		}
-		
-		@Override
-		public String getStyleNames(Task row, int rowIndex) {
-			
-			if(rowIndex==0) {
-				reset();
-			}
-			
-			String style = null;
-			collapse = collapse && row.getLevel()>=collapseLevel;
-			
-			if(!collapse) {
-				if(row.isSummary()) {
-					collapse = row.isCollapsed();
-					collapseLevel = row.getLevel()+1;
-					style = "cellTableSummaryRow";
-				}
-				
-			} else {
-				style = "cellTableRowIsCollapsed";
-			}
-			return style;
-		}
-	}
+//	class CollapsibleRowStyle implements RowStyles<Task> {
+//		private boolean collapse = false;
+//		private int collapseLevel = -1;
+//
+//		public CollapsibleRowStyle() {
+//
+//		}
+//
+//		public void reset() {
+//			collapseLevel = -1;
+//			collapse = false;
+//		}
+//
+//		@Override
+//		public String getStyleNames(Task row, int rowIndex) {
+//
+//			if(rowIndex==0) {
+//				reset();
+//			}
+//
+//			String style = null;
+//			collapse = collapse && row.getLevel()>=collapseLevel;
+//
+//			if(!collapse) {
+//				if(row.isSummary()) {
+//					collapse = row.isCollapsed();
+//					collapseLevel = row.getLevel()+1;
+//					style = "cellTableSummaryRow";
+//				}
+//
+//			} else {
+//				style = "cellTableRowIsCollapsed";
+//			}
+//			return style;
+//		}
+//	}
 
 	class HeaderTable extends Grid {
 		
@@ -283,19 +282,19 @@ public class TaskGrid extends Composite implements HasData<Task> {
 	        
 	        int currWidth = curCell.getClientWidth()-1;
 	        int newWidth = currWidth + (mouseXCurrent-mouseXLast);
-	        TaskGrid.this.resizeColumn(curCellIndex, newWidth);
+	        GridView.this.resizeColumn(curCellIndex, newWidth);
 	        mouseXLast = mouseXCurrent;
 	      }
 	    }
 	}
 	
-	class TaskGridNameCellImpl extends TaskGridNameCell {
-		@Override
-		public void onExpandCollapse(Task task) {
-			taskTable.redraw();
-			
-		}
-	}
+//	class TaskGridNameCellImpl extends TaskGridNameCell {
+//		@Override
+//		public void onExpandCollapse(Task task) {
+//			taskTable.redraw();
+//
+//		}
+//	}
 
     class BodyPanel extends SimplePanel {
             public BodyPanel() {
@@ -319,37 +318,37 @@ public class TaskGrid extends Composite implements HasData<Task> {
     
 //	private String[] columnNameArray = new String[]{"&nbsp;","Task Name","Duration","Start","Finish","Predecessors","Resources"};
 //	private int[] columnWidthArray = new int[]{50, 350,80,110,110,100, 100};
-	private TableColElement[] columnGroupArray = null;
+//	private TableColElement[] columnGroupArray = null;
 	private FlowPanel container = new FlowPanel();
 	private BodyPanel body = new BodyPanel();
 	private FlowPanel header = new FlowPanel();
 	private HeaderTable headerTable = new HeaderTable(1,1);
-	private CellTable<Task> taskTable = null;
-	private CollapsibleRowStyle rowStyle = new CollapsibleRowStyle();
+	private CellTable<T> taskTable = null;
+//	private RowStyles<T> rowStyle = null;//new CollapsibleRowStyle();
 	private ColumnResizeWorker resizeWorker = new ColumnResizeWorker();
 	private TableElement tableElement = null;
 	
 	private List<TaskGridColumn> columns =
 		new ArrayList<TaskGridColumn>();
 
-	public TaskGrid() {
+	public GridView() {
 		initWidget(container);
 		
-		TaskGridResources.INSTANCE.style().ensureInjected();
+		GridViewResources.INSTANCE.style().ensureInjected();
 		CellTableResources.INSTANCE.cellTableStyle().ensureInjected();
 		
-		taskTable = new CellTable<Task>(Integer.MAX_VALUE,CellTableResources.INSTANCE);
+		taskTable = new CellTable<T>(Integer.MAX_VALUE,CellTableResources.INSTANCE);
 //		taskTable.setSelectionModel(selectionModel);
 		taskTable.setKeyboardSelectionPolicy(KeyboardSelectionPolicy.DISABLED);
 		tableElement = taskTable.getElement().cast();
 		
-		container.setStyleName(TaskGridResources.INSTANCE.style().taskGrid());
-		header.setStyleName(TaskGridResources.INSTANCE.style().header());
+		container.setStyleName(GridViewResources.INSTANCE.style().taskGrid());
+		header.setStyleName(GridViewResources.INSTANCE.style().header());
 		headerTable.setCellPadding(0);
 		headerTable.setCellSpacing(0);
 		header.add(headerTable);
 
-		body.setStyleName(TaskGridResources.INSTANCE.style().body());
+		body.setStyleName(GridViewResources.INSTANCE.style().body());
 		body.add(taskTable);
 		
 		container.add(header);
@@ -358,20 +357,22 @@ public class TaskGrid extends Composite implements HasData<Task> {
 //		initTableColumns();
 		
 		
-		taskTable.setRowStyles(rowStyle);
+//		taskTable.setRowStyles(rowStyle);
 		
 		
 		
 	}
 	
-
+        public void setRowStyles(RowStyles<T> styles) {
+            taskTable.setRowStyles(styles);
+        }
 	
 	public void addColumns(List<TaskGridColumn> columns) {
 		this.columns.clear();
 		this.columns.addAll(columns);
 		headerTable.clear();
 		headerTable.resizeColumns(columns.size());
-		columnGroupArray = new TableColElement[columns.size()];
+//		columnGroupArray = new TableColElement[columns.size()];
 		
 		String shortFormatPattern = "MM/dd/yy";//DateTimeFormat.getFormat(PredefinedFormat.DATE_SHORT).getPattern();
 		String dayFormatPattern = "EEE";
@@ -591,17 +592,17 @@ public class TaskGrid extends Composite implements HasData<Task> {
 	}
 
 	@Override
-	public SelectionModel<? super Task> getSelectionModel() {
+	public SelectionModel<? super T> getSelectionModel() {
 		return taskTable.getSelectionModel();
 	}
 
 	@Override
-	public void setRowData(int start, List<? extends Task> values) {
+	public void setRowData(int start, List<? extends T> values) {
 		taskTable.setRowData(start, values);
 	}
 
 	@Override
-	public void setSelectionModel(SelectionModel<? super Task> selectionModel) {
+	public void setSelectionModel(SelectionModel<? super T> selectionModel) {
 		taskTable.setSelectionModel(selectionModel);
 	}
 
