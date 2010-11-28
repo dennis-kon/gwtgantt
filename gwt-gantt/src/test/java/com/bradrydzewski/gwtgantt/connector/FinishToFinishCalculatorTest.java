@@ -18,7 +18,6 @@
 
 package com.bradrydzewski.gwtgantt.connector;
 
-import com.bradrydzewski.gwtgantt.connector.FinishToFinishCalculator;
 import com.bradrydzewski.gwtgantt.geometry.Point;
 import com.bradrydzewski.gwtgantt.geometry.Rectangle;
 import org.junit.Test;

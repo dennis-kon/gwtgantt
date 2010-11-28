@@ -12,6 +12,6 @@ public interface CellTableResources extends Resources {
 	/**
 	 * The styles used in this widget.
 	 */
-	@Source("CellTable.css")
+	@Source("CellTableResources.css")
 	CellTable.Style cellTableStyle();
 }

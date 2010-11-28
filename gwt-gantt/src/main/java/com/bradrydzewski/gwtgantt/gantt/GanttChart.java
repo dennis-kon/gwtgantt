@@ -20,7 +20,10 @@ package com.bradrydzewski.gwtgantt.gantt;
 import java.util.Date;
 import java.util.List;
 
+import com.bradrydzewski.gwtgantt.model.ZoomLevel;
 import com.bradrydzewski.gwtgantt.resources.GanttResources;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.HasScrollHandlers;
 import com.google.gwt.event.dom.client.ScrollEvent;
@@ -54,35 +57,40 @@ public class GanttChart<T> extends ResizeComposite implements HasScrollHandlers,
 		}
 	}
 
-//	private final Scheduler.ScheduledCommand redrawCommand =
-//		new Scheduler.ScheduledCommand() {
-//        @Override
-//		public void execute() {
-//			presenter.redraw();
-//	    }
-//	};
+	private final Scheduler.ScheduledCommand redrawCommand =
+		new Scheduler.ScheduledCommand() {
+        @Override
+		public void execute() {
+			presenter.redraw();
+	    }
+	};
 	
     private SimplePanelWithResize root = new SimplePanelWithResize();
     private final ProvidesTask<T> taskProvider;
     private TaskDisplayPresenter<T> presenter;
-    private TaskDisplayView<T> view;
+    private TaskDisplayPresenter<T> quarterPresenter = GWT.create(GanttChartPresenterQuarterImpl.class);
+    private TaskDisplayPresenter<T> yearPresenter = GWT.create(GanttChartPresenterYearImpl.class);
+    private TaskDisplayPresenter<T> monthPresenter = GWT.create(GanttChartPresenterMonthImpl.class);
+    private TaskDisplayPresenter<T> weekPresenter = GWT.create(GanttChartPresenter.class);
+    private TaskDisplayView<T> view = GWT.create(GanttChartView.class);
     private Date start;
     private Date finish;
     private boolean dirty = false;
     private boolean loaded = false;
 
 
-    public GanttChart(TaskDisplayPresenter<T> presenter,
-            TaskDisplayView<T> view,
+    public GanttChart(
+    		//TaskDisplayPresenter<T> presenter,
+            //TaskDisplayView<T> view,
             ProvidesTask<T> taskProvider) {
 
         initWidget(root);
         
         GanttResources.INSTANCE.taskStyle().ensureInjected();
         
-        this.presenter = presenter;
+        this.presenter = weekPresenter;
         this.taskProvider = taskProvider;
-        this.view = view;
+//        this.view = view;
 
         this.view.bind(this);
         this.presenter.bind(this, view);
@@ -125,8 +133,9 @@ public class GanttChart<T> extends ResizeComposite implements HasScrollHandlers,
 
     @Override
     public void onLoad() {
-    	presenter.redraw();
-//    	redrawCommand.execute();
+//    	presenter.redraw();
+    	
+    	redrawCommand.execute();
     }
 
 
@@ -222,4 +231,82 @@ public class GanttChart<T> extends ResizeComposite implements HasScrollHandlers,
     public int getScrollY() {
         return view.getScrollY();
     }
+
+
+	@Override
+	public void setZoomLevel(ZoomLevel zoom) {
+		
+		TaskDisplayPresenter<T> oldPresenter = this.presenter;
+		
+		switch(zoom) {
+		case Year:    this.presenter = yearPresenter; break;
+		case Quarter: this.presenter = quarterPresenter; break;
+		case Month:   this.presenter = monthPresenter; break;
+		case Week:    this.presenter = weekPresenter; break;
+		case Default: this.presenter = weekPresenter; break;
+		}
+		
+		if(oldPresenter!=null) {
+			this.presenter.bind(this, view);
+			this.presenter.setSelectionModel(oldPresenter.getSelectionModel());
+			this.presenter.setRowData(0, oldPresenter.getRowData());
+		} else {
+			
+		}
+
+	}
+
+
+	@Override
+	public ZoomLevel getZoomLevel() {
+		if(presenter instanceof GanttChartPresenterYearImpl) {
+			return ZoomLevel.Year;
+		} else if(presenter instanceof GanttChartPresenterQuarterImpl) {
+			return ZoomLevel.Quarter;
+		} else if(presenter instanceof GanttChartPresenterMonthImpl) {
+			return ZoomLevel.Month;
+		}  else if(presenter instanceof GanttChartPresenter) {
+			return ZoomLevel.Week;
+		} else return ZoomLevel.Default;
+	}
+	
+	public boolean zoomIn() {
+		ZoomLevel currentZoom = getZoomLevel();
+		ZoomLevel newZoom = currentZoom;
+		
+		switch(currentZoom) {
+		case Year: newZoom = ZoomLevel.Quarter; break;
+		case Quarter: newZoom = ZoomLevel.Month; break;
+		case Month: newZoom = ZoomLevel.Week; break;
+		case Default: break;
+		case Week: break;
+		default: break; //do nothing, can't zoom in any further
+		}
+//		System.out.println("zoomIn(), current zoom: "+currentZoom + "  new zoom: "+newZoom);
+		if(newZoom != currentZoom) {
+			setZoomLevel(newZoom);
+		}
+		
+		return currentZoom != newZoom;
+	}
+
+	public boolean zoomOut() {
+		ZoomLevel currentZoom = getZoomLevel();
+		ZoomLevel newZoom = currentZoom;
+		
+		switch(currentZoom) {
+		case Year: break;
+		case Quarter:  newZoom = ZoomLevel.Year; break;
+		case Month: newZoom = ZoomLevel.Quarter; break;
+		case Week: newZoom = ZoomLevel.Month; break;
+		case Default: newZoom = ZoomLevel.Month; break;
+		}
+//		System.out.println("zoomOut(), current zoom: "+currentZoom + "  new zoom: "+newZoom);
+		
+		if(newZoom != currentZoom) {
+			setZoomLevel(newZoom);
+		}
+		
+		return currentZoom != newZoom;
+	}
 }

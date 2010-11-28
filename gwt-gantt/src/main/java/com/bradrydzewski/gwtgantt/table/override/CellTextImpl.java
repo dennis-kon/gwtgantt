@@ -24,8 +24,8 @@ import com.google.gwt.user.client.ui.Widget;
  * purposes, which is entirely wrong. It should be able to treat it as a proper
  * string (especially since that's all the user can enter).
  */
-public class EditTextCell extends
-    AbstractEditableCell<String, EditTextCell.ViewData> {
+public class CellTextImpl extends
+    AbstractEditableCell<String, CellTextImpl.ViewData> {
 
   interface Template extends SafeHtmlTemplates {
     @Template("<input type=\"text\" value=\"{0}\" tabindex=\"-1\"></input>")
@@ -138,11 +138,11 @@ public class EditTextCell extends
    * Construct a new EditTextCell that will use a
    * {@link SimpleSafeHtmlRenderer}.
    */
-  public EditTextCell() {
+  public CellTextImpl() {
     this(SimpleSafeHtmlRenderer.getInstance(), ALIGN_LEFT);
   }
   
-  public EditTextCell(String align) {
+  public CellTextImpl(String align) {
 	  this(SimpleSafeHtmlRenderer.getInstance(), align);
   }
 
@@ -151,7 +151,7 @@ public class EditTextCell extends
    * 
    * @param renderer a {@link SafeHtmlRenderer SafeHtmlRenderer<String>} instance
    */
-  public EditTextCell(SafeHtmlRenderer<String> renderer, String align) {
+  public CellTextImpl(SafeHtmlRenderer<String> renderer, String align) {
     super("click", "keyup", "keydown", "blur");
     if (template == null) {
       template = GWT.create(Template.class);

@@ -42,7 +42,7 @@ import com.google.gwt.user.datepicker.client.DatePicker;
  * time.
  * </p>
  */
-public class DateCell extends AbstractEditableCell<Date, Date> {
+public class CellDateImpl extends AbstractEditableCell<Date, Date> {
 
 	interface Template extends SafeHtmlTemplates {
 		@Template("<div style='text-align:right;'>{0}</div>")
@@ -69,7 +69,7 @@ public class DateCell extends AbstractEditableCell<Date, Date> {
    * {@link DateTimeFormat#getFullDateFormat}.
    */
   @SuppressWarnings("deprecation")
-  public DateCell() {
+  public CellDateImpl() {
     this(DateTimeFormat.getFullDateFormat(),
         SimpleSafeHtmlRenderer.getInstance());
   }
@@ -80,7 +80,7 @@ public class DateCell extends AbstractEditableCell<Date, Date> {
    *
    * @param format a {@link DateTimeFormat} instance
    */
-  public DateCell(DateTimeFormat format) {
+  public CellDateImpl(DateTimeFormat format) {
     this(format, SimpleSafeHtmlRenderer.getInstance());
   }
 
@@ -91,7 +91,7 @@ public class DateCell extends AbstractEditableCell<Date, Date> {
    *
    * @param renderer a {@link SafeHtmlRenderer SafeHtmlRenderer<String>} instance
    */
-  public DateCell(SafeHtmlRenderer<String> renderer) {
+  public CellDateImpl(SafeHtmlRenderer<String> renderer) {
     this(DateTimeFormat.getFormat(PredefinedFormat.DATE_FULL), renderer);
   }
 
@@ -102,7 +102,7 @@ public class DateCell extends AbstractEditableCell<Date, Date> {
    * @param format a {@link DateTimeFormat} instance
    * @param renderer a {@link SafeHtmlRenderer SafeHtmlRenderer<String>} instance
    */
-  public DateCell(DateTimeFormat format, SafeHtmlRenderer<String> renderer) {
+  public CellDateImpl(DateTimeFormat format, SafeHtmlRenderer<String> renderer) {
     super("click", "keydown");
     if (format == null) {
       throw new IllegalArgumentException("format == null");

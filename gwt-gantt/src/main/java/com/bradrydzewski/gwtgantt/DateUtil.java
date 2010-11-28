@@ -27,6 +27,7 @@ import java.util.Date;
 public class DateUtil {
 
 	public static final int DAYS_PER_WEEK = 7;
+	public static final int MONTHS_PER_QUARTER = 3;
 	public static final long MILLIS_IN_A_DAY = 1000 * 60 * 60 * 24;
 
 	public static int getFullYear(Date date) {
@@ -36,6 +37,12 @@ public class DateUtil {
 	public static Date addDays(Date date, int days) {
 		Date d = (Date) date.clone();
 		d.setDate(d.getDate() + days);
+		return d;
+	}
+	
+	public static Date addMonths(Date date, int months) {
+		Date d = (Date) date.clone();
+		d.setMonth(d.getMonth() + months);
 		return d;
 	}
 
