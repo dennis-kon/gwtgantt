@@ -71,12 +71,13 @@ public class GanttChart<T> extends ResizeComposite implements HasScrollHandlers,
     private TaskDisplayPresenter<T> quarterPresenter = GWT.create(GanttChartPresenterQuarterImpl.class);
     private TaskDisplayPresenter<T> yearPresenter = GWT.create(GanttChartPresenterYearImpl.class);
     private TaskDisplayPresenter<T> monthPresenter = GWT.create(GanttChartPresenterMonthImpl.class);
+    private TaskDisplayPresenter<T> dayPresenter = GWT.create(GanttChartPresenterDayImpl.class);
     private TaskDisplayPresenter<T> weekPresenter = GWT.create(GanttChartPresenter.class);
     private TaskDisplayView<T> view = GWT.create(GanttChartView.class);
     private Date start;
     private Date finish;
-    private boolean dirty = false;
-    private boolean loaded = false;
+//    private boolean dirty = false;
+//    private boolean loaded = false;
 
 
     public GanttChart(
@@ -242,8 +243,9 @@ public class GanttChart<T> extends ResizeComposite implements HasScrollHandlers,
 		case Year:    this.presenter = yearPresenter; break;
 		case Quarter: this.presenter = quarterPresenter; break;
 		case Month:   this.presenter = monthPresenter; break;
-		case Week:    this.presenter = weekPresenter; break;
-		case Default: this.presenter = weekPresenter; break;
+		case Default: 
+		case Week: this.presenter = weekPresenter; break;
+		case Day: this.presenter = dayPresenter; break;
 		}
 		
 		if(oldPresenter!=null) {
@@ -265,7 +267,9 @@ public class GanttChart<T> extends ResizeComposite implements HasScrollHandlers,
 			return ZoomLevel.Quarter;
 		} else if(presenter instanceof GanttChartPresenterMonthImpl) {
 			return ZoomLevel.Month;
-		}  else if(presenter instanceof GanttChartPresenter) {
+		} else if(presenter instanceof GanttChartPresenterDayImpl) {
+			return ZoomLevel.Day;
+		} else if(presenter instanceof GanttChartPresenter) {
 			return ZoomLevel.Week;
 		} else return ZoomLevel.Default;
 	}
@@ -278,8 +282,9 @@ public class GanttChart<T> extends ResizeComposite implements HasScrollHandlers,
 		case Year: newZoom = ZoomLevel.Quarter; break;
 		case Quarter: newZoom = ZoomLevel.Month; break;
 		case Month: newZoom = ZoomLevel.Week; break;
-		case Default: break;
-		case Week: break;
+		case Default: newZoom = ZoomLevel.Day; break;
+		case Week: newZoom = ZoomLevel.Day; break;
+		case Day: break;
 		default: break; //do nothing, can't zoom in any further
 		}
 //		System.out.println("zoomIn(), current zoom: "+currentZoom + "  new zoom: "+newZoom);
@@ -298,8 +303,9 @@ public class GanttChart<T> extends ResizeComposite implements HasScrollHandlers,
 		case Year: break;
 		case Quarter:  newZoom = ZoomLevel.Year; break;
 		case Month: newZoom = ZoomLevel.Quarter; break;
+		case Default : newZoom = ZoomLevel.Month; break;
 		case Week: newZoom = ZoomLevel.Month; break;
-		case Default: newZoom = ZoomLevel.Month; break;
+		case Day: newZoom = ZoomLevel.Week; break;
 		}
 //		System.out.println("zoomOut(), current zoom: "+currentZoom + "  new zoom: "+newZoom);
 		

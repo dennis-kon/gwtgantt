@@ -22,5 +22,5 @@ package com.bradrydzewski.gwtgantt.model;
  * @author Brad Rydzewski
  */
 public enum ZoomLevel {
-    Default, Year, Quarter, Month, Week
+    Default, Year, Quarter, Month, Week, Day
 }
