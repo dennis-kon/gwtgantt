@@ -7,6 +7,7 @@ import com.bradrydzewski.gwtgantt.DateUtil;
 import com.bradrydzewski.gwtgantt.geometry.Point;
 import com.bradrydzewski.gwtgantt.geometry.Rectangle;
 import com.bradrydzewski.gwtgantt.model.DurationFormat;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
 
 public class GanttChartPresenterDayImpl<T> extends GanttChartPresenter<T> {
@@ -60,7 +61,7 @@ public class GanttChartPresenterDayImpl<T> extends GanttChartPresenter<T> {
 
         int daysFromStart = DateUtil.differenceInDays(start,provider.getStart(task));//+1;
         int daysInLength = DateUtil.differenceInDays(provider.getStart(task), provider.getFinish(task)) + 1;
-
+GWT.log("proj start: " + start + "  task start: "+provider.getStart(task) + "   daysFromDuration: "+daysFromStart);
         daysInLength = Math.max(daysInLength, 1);
 
         int top = TASK_ROW_HEIGHT * order + TASK_PADDING_TOP;//order * TASK_HEIGHT + ((order+1) * TASK_PADDING) + (order * TASK_PADDING);
@@ -219,7 +220,7 @@ public class GanttChartPresenterDayImpl<T> extends GanttChartPresenter<T> {
             adjustedFinish = provider.getFinish(values.get(values.size() - 1));
         }
 
-        adjustedFinish = DateUtil.addDays(adjustedFinish, +10);
+        adjustedFinish = DateUtil.addDays(adjustedFinish, +90);
         return DateUtil.reset(adjustedFinish);
     }
 

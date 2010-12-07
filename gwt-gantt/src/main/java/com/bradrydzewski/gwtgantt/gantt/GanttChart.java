@@ -132,6 +132,11 @@ public class GanttChart<T> extends ResizeComposite implements HasScrollHandlers,
     	presenter.scrollToItem(item);
     }
 
+    public void scrollTo(int x, int y) {
+        view.doScroll(x, y);
+    }
+
+
     @Override
     public void onLoad() {
 //    	presenter.redraw();
@@ -232,6 +237,8 @@ public class GanttChart<T> extends ResizeComposite implements HasScrollHandlers,
     public int getScrollY() {
         return view.getScrollY();
     }
+    
+
 
 
 	@Override
