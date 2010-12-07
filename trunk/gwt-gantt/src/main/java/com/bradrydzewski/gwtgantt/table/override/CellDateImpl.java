@@ -150,6 +150,9 @@ public class CellDateImpl extends AbstractEditableCell<Date, Date> {
 
         // Update the cell and value updater.
         Date date = event.getValue();
+        
+        date = validate(date, oldValue);
+        
         setViewData(key, date);
         setValue(cellParent, oldValue, key);
         if (valueUpdater != null) {
@@ -157,6 +160,10 @@ public class CellDateImpl extends AbstractEditableCell<Date, Date> {
         }
       }
     });
+  }
+  
+  public Date validate(Date newValue, Date originalValue) {
+	  return newValue;
   }
 
   @Override

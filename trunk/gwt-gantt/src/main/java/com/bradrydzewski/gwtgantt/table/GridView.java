@@ -611,4 +611,8 @@ public class GridView<T> extends Composite implements HasData<T> {
 			boolean forceRangeChangeEvent) {
 		taskTable.setVisibleRangeAndClearData(range, forceRangeChangeEvent);
 	}
+	
+	public void redraw() {
+		taskTable.redraw();
+	}
 }

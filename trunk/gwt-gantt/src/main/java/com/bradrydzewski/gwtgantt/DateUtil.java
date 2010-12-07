@@ -19,6 +19,8 @@ package com.bradrydzewski.gwtgantt;
 
 import java.util.Date;
 
+import com.google.gwt.core.client.GWT;
+
 /**
  *
  * @author Brad Rydzewski
@@ -90,7 +92,7 @@ public class DateUtil {
 			long startDateInstant = startDate.getTime() + startDateOffset;
 			double differenceDouble = (double) Math.abs(endDateInstant - startDateInstant) / (double) MILLIS_IN_A_DAY;
 			differenceDouble = Math.max(1.0D, differenceDouble);
-			difference = (int) differenceDouble;
+			difference = (int) Math.ceil(differenceDouble);//added math.ceil
 		}
 		return difference;
 	}

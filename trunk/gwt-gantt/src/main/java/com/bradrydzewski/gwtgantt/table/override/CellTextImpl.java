@@ -277,7 +277,14 @@ public class CellTextImpl extends
    */
   private void commit(Element parent, ViewData viewData,
       ValueUpdater<String> valueUpdater) {
+	  
+	  
+		  
+	String originalText = viewData.getOriginal();
     String value = updateViewData(parent, viewData, false);
+    
+    value = validate(value, originalText);
+    
     clearInput(getInputElement(parent));
     setValue(parent, value, viewData);
     valueUpdater.update(value);
@@ -325,6 +332,10 @@ public class CellTextImpl extends
    */
   private InputElement getInputElement(Element parent) {
     return parent.getFirstChild().<InputElement> cast();
+  }
+  
+  public String validate(String newValue, String oldValue) {
+	  return newValue;
   }
 
   /**
