@@ -18,11 +18,21 @@
 .task-purple { border:1px solid #7A367A; background: #B373B3; border-radius:3px; -moz-border-radius:3px; -webkit-user-select: none; -moz-user-select: none; opacity:0.75; }
 .task-orange { border:1px solid #BE6D00; background: #F2A640; border-radius:3px; -moz-border-radius:3px; -webkit-user-select: none; -moz-user-select: none; opacity:0.75; }
 
-@external taskSelected, taskHovered, pctComplete;
+@external pctComplete;
+.pctComplete { background:black;position:absolute; pointer-events:none; -webkit-user-select: none; -moz-user-select: none; }
+.task-default .pctComplete,
+.task-blue    .pctComplete { background:black; }
+.task-red     .pctComplete { background:black; }
+.task-green   .pctComplete { background:black; }
+.task-purple  .pctComplete { background:black; }
+.task-orange  .pctComplete { background:black; }
+
+@external taskSelected, taskHovered;
 .taskSelected { opacity:1; -webkit-box-shadow: #B8B8B8 3px 3px 3px; -moz-box-shadow: #B8B8B8 3px 3px 3px;}
 .taskHovered { -webkit-box-shadow: #B8B8B8 -2px -2px 2px, #B8B8B8 3px 3px 3px; -moz-box-shadow: #B8B8B8 -2px -2px 2px, #B8B8B8 3px 3px 3px; }
-.pctComplete { position:absolute; pointer-events:none; background: transparent url(http://gwt-web-calendar.appspot.com/Main/line-pattern-template-inverse.gif); -webkit-user-select: none; -moz-user-select: none; }
+	
 		
+
 		
 		
 		@external milestone-default, milestone-blue, milestone-red, milestone-green, milestoneLabel, milestoneHovered, milestoneSelected;

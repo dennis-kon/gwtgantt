@@ -300,6 +300,14 @@ public class GridView<T> extends Composite implements HasData<T> {
             public BodyPanel() {
                 sinkEvents(Event.ONSCROLL);
             }
+            
+            @Override
+        	protected void onAttach() {
+        		super.onAttach();
+        		headerTable.getElement().getStyle().setLeft(0, Unit.PX);
+        		taskTable.getElement().getStyle().setLeft(0, Unit.PX);
+        	}
+            
             @Override
             public void onBrowserEvent(Event event) {
                 switch (DOM.eventGetType(event)) {
@@ -363,7 +371,15 @@ public class GridView<T> extends Composite implements HasData<T> {
 		
 	}
 	
-        public void setRowStyles(RowStyles<T> styles) {
+	
+	
+	
+
+
+
+
+
+		public void setRowStyles(RowStyles<T> styles) {
             taskTable.setRowStyles(styles);
         }
 	
@@ -544,6 +560,8 @@ public class GridView<T> extends Composite implements HasData<T> {
 //            DOM.setElementPropertyInt(body.getElement(), "scrollTop", position);
             taskTable.getElement().getStyle().setTop(position*-1, Unit.PX);
         }
+	
+
 	
 	@Override
 	public HandlerRegistration addRangeChangeHandler(Handler handler) {
