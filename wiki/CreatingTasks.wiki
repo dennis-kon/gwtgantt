@@ -100,6 +100,11 @@ If you make changes to a `Task`, and would like the changes reflected in the `Ga
    dataProvider.refresh();
 }}}
 
-We overload the refresh method allowing you to "force a refresh". Otherwise, gwt-gantt will try to determine if it needs to refresh itself.
+= Selecting Tasks =
 
+In order to manually select or deselect a `Task`, you can use the `SelectionModel`:
+{{{
+   selectionModel.setSelected(task, true);
+}}}
 
+The selection model will handle updating and refreshing the `GanttChart` to reflect the selection changes.
