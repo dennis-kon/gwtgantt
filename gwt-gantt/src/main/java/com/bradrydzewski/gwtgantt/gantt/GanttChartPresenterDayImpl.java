@@ -61,7 +61,7 @@ public class GanttChartPresenterDayImpl<T> extends GanttChartPresenter<T> {
 
         int daysFromStart = DateUtil.differenceInDays(start,provider.getStart(task));//+1;
         int daysInLength = DateUtil.differenceInDays(provider.getStart(task), provider.getFinish(task)) + 1;
-GWT.log("proj start: " + start + "  task start: "+provider.getStart(task) + "   daysFromDuration: "+daysFromStart);
+
         daysInLength = Math.max(daysInLength, 1);
 
         int top = TASK_ROW_HEIGHT * order + TASK_PADDING_TOP;//order * TASK_HEIGHT + ((order+1) * TASK_PADDING) + (order * TASK_PADDING);

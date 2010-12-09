@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.bradrydzewski.gwtgantt.DateUtil;
 import com.bradrydzewski.gwtgantt.geometry.Rectangle;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
 
 public class GanttChartPresenterMonthImpl<T> extends GanttChartPresenter<T> {
@@ -89,6 +90,8 @@ public class GanttChartPresenterMonthImpl<T> extends GanttChartPresenter<T> {
         int left = daysFromStart * UNIT_WIDTH;
         int width = daysInLength * UNIT_WIDTH-2;
         int height = TASK_HEIGHT;
+        
+        GWT.log("proj start: " + start + "  task start: "+provider.getStart(task) + "   daysFromDuration: "+daysFromStart);
 
         //render the task
         Rectangle taskBounds = new Rectangle(left, top, width, height);

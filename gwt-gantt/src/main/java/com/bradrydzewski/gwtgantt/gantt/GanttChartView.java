@@ -56,6 +56,9 @@ public class GanttChartView<T> extends Composite implements TaskDisplayView<T> {
 	interface Template extends SafeHtmlTemplates {
 		@Template("<div style=\"width: {0}px; left: {1}px; \"><div class=\"gwt-Label\">{2}</div></div>")
 		SafeHtml header(int width, int left, String value);
+		
+		@Template("<div style=\"width: {0}px; left: {1}px; \" class=\"{2}\"></div>")
+		SafeHtml column(int width, int left, String style);
 	}
 	
 	private static Template template =
@@ -476,6 +479,12 @@ public class GanttChartView<T> extends Composite implements TaskDisplayView<T> {
 
         taskScrollPanel.setHorizontalScrollPosition(x);
         taskScrollPanel.setScrollPosition(y);
+        
+        int hscroll = x * -1;
+
+        firstHeaderRow.getElement().getStyle().setLeft(hscroll, Unit.PX);
+        secondHeaderRow.getElement().getStyle().setLeft(hscroll, Unit.PX);
+        taskBackgroundPanel.getElement().getStyle().setLeft(hscroll, Unit.PX);
     }
 
     @Override

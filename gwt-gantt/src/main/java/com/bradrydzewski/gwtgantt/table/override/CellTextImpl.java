@@ -284,6 +284,7 @@ public class CellTextImpl extends
     String value = updateViewData(parent, viewData, false);
     
     value = validate(value, originalText);
+    viewData.setText(value);
     
     clearInput(getInputElement(parent));
     setValue(parent, value, viewData);

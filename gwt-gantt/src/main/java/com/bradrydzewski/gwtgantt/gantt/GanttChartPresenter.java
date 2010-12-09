@@ -178,6 +178,7 @@ public class GanttChartPresenter<T> extends TaskDisplayPresenter<T> {
         int left = daysFromStart * ROW2_WIDTH_OFFSET;
         int width = daysInLength * ROW2_WIDTH_OFFSET - 4;
         int height = TASK_HEIGHT;
+        GWT.log("proj start: " + start + "  task start: "+provider.getStart(task) + "   daysFromDuration: "+daysFromStart);
 
         //render the task
         Rectangle taskBounds = new Rectangle(left, top, width, height);

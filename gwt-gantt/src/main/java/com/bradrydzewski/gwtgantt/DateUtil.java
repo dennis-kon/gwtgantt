@@ -91,8 +91,9 @@ public class DateUtil {
 			int startDateOffset = -(startDate.getTimezoneOffset() * 60 * 1000);
 			long startDateInstant = startDate.getTime() + startDateOffset;
 			double differenceDouble = (double) Math.abs(endDateInstant - startDateInstant) / (double) MILLIS_IN_A_DAY;
+			GWT.log("  differenceDouble: "+differenceDouble);
 			differenceDouble = Math.max(1.0D, differenceDouble);
-			difference = (int) Math.ceil(differenceDouble);//added math.ceil
+			difference = (int) Math.floor(differenceDouble);//added math.ceil .. then changed to floor... shit, which one???
 		}
 		return difference;
 	}
