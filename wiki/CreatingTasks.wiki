@@ -9,7 +9,7 @@ This article gives a fairly in-depth overview of working with `Task`s and adding
 The `GanttChart` and `TaskGrid` widgets both take in items of type `Task`, which is a simple interface that defines all the required fields to render a set of `Task`s. You can create your own `Task` implementation, or you can use our default `TaskImpl` that we provide along with the gwt-gantt API.
 
 {{{
-   TaskImpl task1 = new TaskImpl();
+   Task task1 = new TaskImpl();
    task1.setUID(1);
    task1.setName(...);
    task1.setLevel(0);
@@ -92,67 +92,14 @@ There are four different `PredecessorType`s, each of which is rendered different
  * Finish to Finish (FF)
  * Finish to Start (FS)
 
-
-= Adding a Task =
-
-You can add a `Task` to a `GanttChart` or `TaskGrid` using the `addItem` method. IMPORTANT: every time you add a `Task`, by default, it will refresh the `GanntChart` or `TaskGrid`.
-
-{{{
-   TaskImpl task1 = new TaskImpl();
-   task1.setUID(1);
-   task1.setOrder(1);
-   task1.setLevel(0);
-   task1.setStart(...);
-   task1.setFinish(...);
-
-   gantt.addItem(task1);
-}}}
-
-
-== Adding Tasks in Batch ==
-
-As previously stated, every time a `Task` is added to the `GanttChart` the layout is re-calculated. If you plan to add many tasks at once you should suspend the layout and then resume it once you are complete:
-
-{{{
-   gantt.suspendLayout();
-
-   //load 1,000 tasks into the gantt chart
-   for(int i=0;i<1000;i++) {
-        TaskImpl task = new TaskImpl();
-        task.setUID(i);
-        task.setOrder(i+1);
-        ...
-        gantt.addItem(task);
-   }
-
-   gantt.resumeLayout();
-
-}}}
-
-Or you can add an entire list of tasks with a single method call, and the API will handle suspending and resuming the layout for you:
-
-{{{
-   List<Task> taskList ...
-   gantt.addItems(taskList);
-}}}
-
 = Editing Tasks =
 
-If you make changes to a `Task`, and would like the changes reflected in the `GanttChart` or `TaskGrid`, you will need to manually instruct the widget to refresh its layout. This is done by invoking the `refresh()` method:
+If you make changes to a `Task`, and would like the changes reflected in the `GanttChart` or `TaskGrid`, you will need to manually instruct the widget to refresh its layout. This is done by invoking the `ListDataProvider`'s `refresh()` method:
 
 {{{
-   gantt.refresh(true);
+   dataProvider.refresh();
 }}}
 
 We overload the refresh method allowing you to "force a refresh". Otherwise, gwt-gantt will try to determine if it needs to refresh itself.
 
-= Selecting Tasks =
 
-gwt-gannt does not automatically select a `Task` when clicked, double clicked, hovered, etc. It is up to you, the developer, to determine what should trigger a `Task`'s selection. 
-
-The following snippet demonstrates how to select a `Task`:
-{{{
-   gantt.setSelectedItem(task5);
-}}}
-
-See our [HandlingEvents event handling wiki] to learn more about handling mouse events so you can mark an appointment as selected.
