@@ -3,7 +3,7 @@
 = Setup =
 
  # Add the `gwt-gantt` jar file to your project's build path. Right-click on the project node in the Package Explorer and select 'Build Path > Add External Archives...'. Specify the downloaded `gwt-gantt-<version>.jar`
- # Modify `<Your Application>.gwt.xm`l to inherit the `gwt-gantt` module:
+ # Modify `<Your Application>.gwt.xml` to inherit the `gwt-gantt` module:
 {{{
   <inherits name='com.bradrydzewski.Gantt' />
 }}}
@@ -11,13 +11,34 @@
 
 = Creating a Gantt Chart =
 
-You can add the gannt chart to a `Panel` just like any standard GWT widget:
+First we need to create a ListDataProvider and SelectionModel, which are part of GWT 2.1's [http://code.google.com/webtoolkit/doc/latest/DevGuideUiCellWidgets.html data presentation model].
 {{{
-  GanttChart gantt = new GanttChart();
+  ListDataProvider<Task> taskDataProvider = new ListDataProvider<Task>();
+  SelectionModel<Task> selectionModel = new SingleSelectionModel<Task>();
+}}}
+
+Second, we need to create the Data Provider. The data provider is used to map your classes to the `GanttChart`. For now, however, we will use gwt-gantt's default Data Provider.
+{{{
+  ProvidesTask<Task> provider = new ProvidesTaskImpl();
+}}}
+
+Third, we can now create the `GanttChart`, passing the Data Provider into the constructor.
+{{{
+  GanttChart<Task> gantt = new GanttChart<Task>(provider);
   gantt.setWidth("500px");
   gantt.setHeight("400px");
 
-  RootPanel.get().add(gantt);
+}}}
+
+Fourth, we add the `SelectionModel` to the `GanttChart`, and add the `GanttChart` to the `ListDataProvider`. The `SelectionModel` is used to select and deselect tasks. It will also alert you when the selection changes.
+{{{
+  gantt.setSelectionModel(selectionModel);
+  taskDataProvider .addDataDisplay(gantt);
+}}}
+
+Finally we add the `GanttChart` to the `RootPanel`, just like any standard GWT widget:
+{{{
+   RootPanel.get().add(gantt);
 }}}
 
 = Adding Tasks =
@@ -25,7 +46,7 @@ You can add the gannt chart to a `Panel` just like any standard GWT widget:
 The following code snippet demonstrates how to create and add a `Task` to the `GanttChart` widget. Every time a `Task` is added to the `GanttChart` the layout is re-calculated and refreshed.
 
 {{{
-   TaskImpl task = new TaskImpl();
+   Task task = new TaskImpl();
    task.setUID(1);
    task.setSummary(true);
    task.setName("Test Task 1");
