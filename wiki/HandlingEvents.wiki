@@ -1,5 +1,7 @@
 #summary Handling Gantt Chart events
 
+*WARNING:* This page is *out of date*. The event model will continue to change as we iterate. Once we finalize our event model we will update the page.
+
 <wiki:toc max_depth="1" />
 
 = Task Click =
@@ -68,5 +70,3 @@ See our [http://code.google.com/p/gwtgantt/source/browse/trunk/gwt-gantt-demo/gw
       }
    });
 }}}
-
-
