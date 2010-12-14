@@ -93,7 +93,7 @@ public class DateUtil {
 			double differenceDouble = (double) Math.abs(endDateInstant - startDateInstant) / (double) MILLIS_IN_A_DAY;
 			GWT.log("  differenceDouble: "+differenceDouble);
 			differenceDouble = Math.max(1.0D, differenceDouble);
-			difference = (int) Math.floor(differenceDouble);//added math.ceil .. then changed to floor... shit, which one???
+			difference = (int) Math.round(differenceDouble);//added math.ceil .. then changed to floor... shit, which one???
 		}
 		return difference;
 	}
