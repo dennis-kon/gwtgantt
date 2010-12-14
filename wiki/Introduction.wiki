@@ -2,7 +2,7 @@
 
 gwt-gantt is a web-based Gantt Chart component similar to what you see in Microsoft Project. It is built in pure Java / GWT and can be easily integrated into any GWT application.
 
-gwt-gannt was built after many lessons learned creating and maintaining the [http://code.google.com/p/gwt-cal/ gwt-cal] widget library. We hope to make gwt-gannt a simple, *easily customizable* widget library.
+gwt-gannt was built after many lessons learned creating and maintaining the [http://code.google.com/p/gwt-cal/ gwt-cal] widget library. We hope to make gwt-gantt a simple, *easily customizable* widget library.
 
 == Features ==
 
